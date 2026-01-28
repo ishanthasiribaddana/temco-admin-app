@@ -1,0 +1,107 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="head">
+        <h:outputStylesheet name="css/flags/flags.css" library="demo" />
+    </ui:define>
+
+    <style>
+        .outputLabel {
+            font-weight: bold;
+            color: #333;
+            margin-right: 10px;
+            display: inline-block;
+        }
+    </style>
+
+    <ui:define name="title">Temco Bank - Transactions Entry Panel</ui:define>
+
+    <ui:define name="content">
+        <div class="col-12" style="text-align: center">
+            <h2>Transactions Entry Panel</h2>
+        </div>
+        <h:form id="form">
+            <p:growl id="growl" showDetail="true" life="5000"/> 
+            <div class="grid table-demo">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="col-12">
+                            <div class="formgrid grid">
+                                <div class="field col-6">
+                                    <p:outputLabel for="transaction_type" style="font-weight: bolder">Transaction Type  </p:outputLabel>
+                                    <br/>
+                                    <p:selectOneMenu id="transaction_type" style="width: 50%" value="#{transactionsEntryPanel.transactionTypesList}">
+                                        <f:selectItems value="#{transactionsEntryPanel.selectedTransActionTypeId}" />
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="field col-6">
+                                    <!--<span style="font-weight: bolder">2025-6-16 09.29 AM </span>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="col-12">
+                            <div class="formgrid grid">
+                                <div class="field col-6">
+                                    <p:outputLabel for="nic_account_number_field" style="font-weight: bolder">Search By NIC/Account Number   </p:outputLabel>
+                                    <br/>
+                                    <p:autoComplete id="nic_account_number_field" value="#{teacherRegistration.searchNIC}" completeMethod="#{teacherRegistration.LoadNICSearch}" cache="true" minQueryLength="5" style="margin-bottom:10px;width: 70%">
+                                        <p:ajax event="itemSelect" update="@form" listener="#{teacherRegistration.setSearchNIC}"></p:ajax>
+
+                                        <p:ajax event="keyup" listener="#{teacherRegistration.validateNICOnKeyup}" update="growl" />
+
+                                    </p:autoComplete>
+                                </div>
+                                <div class="field col-6"></div>
+                                <div class="field col-6">
+                                    <p:outputLabel for="account_holder" style="font-weight: bolder">Account Holder </p:outputLabel>
+                                    <br/>
+                                    <p:inputText id="account_holder" style="width: 50%" value="#{loanRequestForm.nic}" onclick="#{loanRequestForm.popUpMessage()}" readonly="true"/>
+                                </div>
+                                <div class="field col-6">
+                                    <p:outputLabel for="current_balance" style="font-weight: bolder">Current Balance </p:outputLabel>
+                                    <br/>
+                                    <p:inputText id="current_balance" style="width: 50%" value="#{loanRequestForm.nic}" onclick="#{loanRequestForm.popUpMessage()}" readonly="true"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="col-12">
+                            <div class="formgrid grid">
+                                <div class="field col">
+                                    <p:outputLabel for="enter_amount" style="font-weight: bolder">Enter Amount </p:outputLabel>
+                                    <br/>
+                                    <p:inputText id="enter_amount" value="#{loanRequestForm.nic}" onclick="#{loanRequestForm.popUpMessage()}" readonly="true"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="col-12">
+                            <div class="formgrid grid" style="margin-left: 25%">
+                                <div class="field col-6">
+                                    <p:commandButton value="Clear" icon="pi pi-save" styleClass="ui-button-raised ui-button-warning mr-2 mb-2" style="width: 50%;margin: 6% 0 0 0;font-weight: bolder">
+                                        <f:ajax execute="@form" render="form" listener="#{loanRequestForm.saveUserDetails()}"/>
+                                    </p:commandButton>   
+                                </div>
+                                <div class="field col-6">
+                                    <p:commandButton value="Process Transaction" icon="pi pi-save" styleClass="ui-button-raised ui-button-warning mr-2 mb-2" style="width: 50%;margin: 6% 0 0 0;font-weight: bolder">
+                                        <f:ajax execute="@form" render="form" listener="#{loanRequestForm.saveUserDetails()}"/>
+                                    </p:commandButton>   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

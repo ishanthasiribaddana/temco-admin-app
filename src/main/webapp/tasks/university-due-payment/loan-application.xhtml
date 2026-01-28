@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Temco Bank</title>
+
+        <style>
+            .ui-fileupload-files {
+                width: 100px;
+                height: 100px;
+                display: flex !important;
+                flex-wrap: wrap !important;
+                align-items: center; /* Align items to the center to reduce height */
+                overflow: hidden;
+            }
+
+            .ui-fileupload-filename {
+                writing-mode: horizontal-tb !important;
+                transform: rotate(0) !important;
+                margin: 0 5px !important;
+                white-space: nowrap !important;
+                display: inline-block !important;
+                max-width: 200px; /* Optional: Limit the filename width */
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .ui-fileupload-row {
+                display: flex;
+                align-items: center;
+            }
+
+            .ui-fileupload-preview img {
+                max-width: 20px; /* Set max width for the image */
+                max-height: 20px; /* Set max height for the image */
+                margin-right: 10px; /* Space between image and filename */
+            }
+            .success-message h1 {
+                font-size: 2.5em;
+                color: #4CAF50; /* Green color for success */
+                margin-bottom: 1px;
+                padding: 20px;
+                border-radius: 10px;
+                background: linear-gradient(135deg, #46499c, #8187c7); /* Gradient background */
+                color: #ffffff; /* White text color */
+                text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Text shadow for depth */
+                font-family: 'Arial', sans-serif; /* Font family */
+                font-weight: bold;
+            }
+
+        </style>
+        <!-- Hotjar Tracking Code for Site 5198958 (name missing) -->
+        <script>
+            (function (h, o, t, j, a, r) {
+                h.hj = h.hj || function () {
+                    (h.hj.q = h.hj.q || []).push(arguments)
+                };
+                h._hjSettings = {hjid: 5198958, hjsv: 6};
+                a = o.getElementsByTagName('head')[0];
+                r = o.createElement('script');
+                r.async = 1;
+                r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+        </script>
+    </h:head>
+
+
+    <h:body styleClass="landing-body">
+        <div class="landing-wrapper">
+            <div id="header">
+                <div style="display: flex;justify-content: center;align-items: center">
+                    <p:graphicImage name="images/temco.png" style="width: 35%;height: 125px" library="atlantis-layout" />
+
+                    <a id="menu-button" href="#">
+                        <p:graphicImage name="images/icon-ellipsis-v.svg" alt="Menu" library="atlantis-layout" />
+                    </a>
+                </div>
+            </div>
+
+            <div id="features">
+                <div>
+                    <h:form id="form">
+                        <p:growl id="growl" showDetail="true" life="5000"/> 
+                        <div class="grid">
+                            <div class="col-12 success-message" style="text-align: center">
+                                <h1>Investment Payment Estimator</h1>
+                            </div>
+                            <div class="col-12">
+                                <div class="card ui-fluid">
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <h5>Immediate requirements :</h5>
+                                            <ul>
+                                                <li>Two separate guarantors.</li>
+                                                <li>First guarantor must be your parent or guardian.</li>
+                                                <li>Your monthly investment repayment amount must not exceed 60% of second guarantor's monthly income.</li>
+                                            </ul>  
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="due_course_fee">Due Fee :</p:outputLabel>
+                                            <p:inputText id="due_course_fee" value="#{loanApplication.dueCourseFee}" type="number" readonly="true"/>
+                                        </div>
+                                        <div class="field col">
+                                            <p:outputLabel for="expected_loan_amount">Investment Amount :</p:outputLabel>
+                                            <p:inputText id="expected_loan_amount" value="#{loanApplication.expectedLoanAmount}" type="number" readonly="true"/>
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="guarantor_income">Second guarantor's Monthly Income :</p:outputLabel>
+                                            <p:inputText id="guarantor_income" value="#{loanApplication.grossIncome}" type="number"/>
+                                        </div>
+                                        <div class="field col">
+                                            <p:outputLabel for="monthly_installment">Monthly Installment :</p:outputLabel>
+                                            <p:inputText id="monthly_installment" value="#{loanApplication.actualMonthlyInstallement}" type="number" readonly="true">
+                                                <f:ajax execute="form" listener="#{loanApplication.calculateMonthlyInstallementIsLessThanGuarantorsIncome()}"/>
+                                            </p:inputText>
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+
+                                        <div class="field col">
+                                            <p:outputLabel style="font-weight: bolder;font-size: 1.2em" for="actual_monthly_installement">Investment Repayment Period : </p:outputLabel>
+                                            <p:outputLabel id="actual_monthly_installement" style="font-weight: bolder;font-size: 1.2em">12</p:outputLabel>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="formgrid grid" style="overflow-x: auto">
+                                        <p:dataTable id="loanTable" var="record" value="#{loanApplication.loanStrucure}" rows="50"
+                                                     emptyMessage="No records found" scrollable="true" scrollWidth="100%" style="min-width: 100%">
+                                            <p:column headerText="Month" style="width: 5%">
+                                                <h:outputText value="#{record.monthNumber}" />
+                                            </p:column>
+                                            <p:column headerText="Repayment Date" style="width: 9%">
+                                                <h:outputText value="#{record.repaymentDate}" />
+                                            </p:column>
+                                            <p:column headerText="Opening Balance">
+                                                <h:outputText value="#{record.openingBalance}">
+                                                    <f:convertNumber type="currency" currencySymbol="" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="Principal Amount">
+                                                <h:outputText value="#{record.principalAmount}">
+                                                    <f:convertNumber type="currency" currencySymbol="" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="Monthly Interest">
+                                                <h:outputText value="#{record.monthlyInterest}">
+                                                    <f:convertNumber type="currency" currencySymbol="" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="Monthly Payment">
+                                                <h:outputText value="#{record.monthlyPayment}">
+                                                    <f:convertNumber type="currency" currencySymbol="" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="Paid Capital">
+                                                <h:outputText value="#{record.paidCapital}">
+                                                    <f:convertNumber type="currency" currencySymbol="" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="Total Payment">
+                                                <h:outputText value="#{record.totalPayment}">
+                                                    <f:convertNumber type="currency" currencySymbol="" />
+                                                </h:outputText>
+                                            </p:column>
+                                        </p:dataTable>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid">
+                            <div class="col-12">
+                                <div class="card ui-fluid">
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:selectBooleanCheckbox id="terms" value="#{loanApplication.checkbox}" required="true" requiredMessage="You must agree to the terms and conditions to proceed."/>
+                                            <h:outputLabel for="terms" value="I agree to the terms and conditions of the loan application, including the repayment schedule and applicable interest rates. I confirm that the information provided is accurate to the best of my knowledge." />
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col"></div>
+                                        <div class="field col" style="float: right">
+                                            <p:commandButton value="Save" icon="pi pi-save" styleClass="ui-button-raised ui-button-warning mr-2 mb-2" style="width: 50%;margin: 6% 0 0 0;font-weight: bolder">
+                                                <f:ajax execute="@form" render="form" listener="#{loanApplication.saveLoanDetails()}"/>
+                                            </p:commandButton>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+
+            <div id="footer">
+                <div>
+                    <p:graphicImage name="images/temco.png" library="atlantis-layout" styleClass="logo" style="height: 50px"/>
+                    <!--<p:graphicImage name="images/appname-black.png" library="atlantis-layout" styleClass="appname"/>-->
+                    <div class="social">
+                        <a href="#">
+                            <i class="pi pi-facebook"></i>
+                        </a>
+                        <a href="#">
+                            <i class="pi pi-twitter"></i>
+                        </a>
+                        <a href="#">
+                            <i class="pi pi-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h:outputStylesheet name="css/primeicons.css" library="atlantis-layout"/>
+        <h:outputStylesheet name="css/primeflex.min.css" library="atlantis-layout"/>
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="atlantis-layout" />
+    </h:body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Temco Bank</title>
+        <style>
+            .success-message {
+                text-align: center;
+            }
+
+            .success-message h1 {
+                font-size: 2.5em;
+                color: #4CAF50; /* Green color for success */
+                margin-bottom: 20px;
+                padding: 20px;
+                border-radius: 10px;
+                background: linear-gradient(135deg, #4CAF50, #81C784); /* Gradient background */
+                color: #ffffff; /* White text color */
+                text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Text shadow for depth */
+                font-family: 'Arial', sans-serif; /* Font family */
+                font-weight: bold;
+            }
+
+            .success-message .message-highlight {
+                font-size: 1.5em;
+                font-weight: bold;
+                color: #FF5722; /* Orange color for important messages */
+            }
+
+            .success-message .warning {
+                font-size: 1.3em;
+                font-weight: bold;
+
+            }
+
+            .success-message .note {
+                font-size: 1.2em;
+                font-weight: bold;
+                color: #2196F3; /* Blue color for notes */
+            }
+
+            .success-message p {
+                line-height: 1.6;
+                color: #333;
+                margin-bottom: 15px;
+            }
+
+            .para-tag {
+                font-size: 1.2em;
+            }
+            .data-table{
+                margin: 10% 0 10% 0;
+            }
+        </style>
+    </h:head>
+
+    <h:body styleClass="landing-body">
+        <div class="landing-wrapper">
+            <div id="header">
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    <p:graphicImage name="images/temco.png" style="width: 35%; height: 125px" library="atlantis-layout" />
+
+                    <a id="menu-button" href="#">
+                        <p:graphicImage name="images/icon-ellipsis-v.svg" alt="Menu" library="atlantis-layout" />
+                    </a>
+                </div>
+            </div>
+
+            <div id="features">
+                <div>
+                    <h:form id="form" enctype="multipart/form-data">
+                        <p:growl id="growl" showDetail="true" /> 
+                        <div class="grid">
+                            <div class="success-message col-12">
+                                <h1>Guarantor Details Submission Is Successful</h1>
+                            </div>
+                            <div class="col-12">
+                                <div class="card ui-fluid">
+                                    <div class="formgrid grid">
+                                        <div class="field col-12">
+                                            <div class="container">
+                                                <div class="success-message">
+                                                    <p class="message-highlight">Your Credit Note is ready!</p>
+                                                    <p class="para-tag">Check your email now.</p>
+                                                    <p class="para-tag">Submit the payment order to Java Institute and start your Software Engineering Degree Program.</p>
+                                                    <p class="warning" style="color: red">You are given 90 days to submit your loan documents.</p>
+                                                    <p class="para-tag">Start date of the monthly installments will be communicated to you.</p>
+                                                    <p class="para-tag">You will be informed about an interview by TEMCO Bank.</p>
+                                                    <p class="note">Please follow the steps of the process to prevent suspension of your student portal by the Java Institute.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Service Charge Table -->
+                                    <div class="data-table">
+                                        <h2>1. Service Charge</h2>
+                                        <p><strong>Service Charges will be returned for non-default customers as the last 3 months.</strong></p>
+                                        <p:dataTable var="row" value="" rows="10">
+                                            <p:column headerText="" style="width: 2%">
+                                                <h:outputText value="1" />
+                                            </p:column>
+                                            <p:column headerText="Payment" style="width: 60%">
+                                                <h:outputText value="Payment for the months of #{submissionSuccessPage.startMonth} to #{submissionSuccessPage.endMonth}" />
+                                            </p:column>
+                                            <p:column headerText="Payable Date">
+                                                <h:outputText value="#{submissionSuccessPage.serviceChargePayableDate}" />
+                                            </p:column>
+                                            <p:column headerText="Amount">
+                                                <h:outputText value="#{submissionSuccessPage.payAmount}" />
+                                            </p:column>
+                                        </p:dataTable>
+                                    </div>
+
+                                    <!-- Documents Table -->
+                                    <div class="data-table">
+                                        <h2>2. Documents to be Submitted</h2>
+                                        <p:dataTable var="doc" value="#{submissionSuccessPage.tableList}" rows="10">
+                                            <p:column headerText="Document Name" style="width: 80%">
+                                                <h:outputText value="#{doc.name}" />
+                                            </p:column>
+                                            <p:column headerText="Submission Date" style="">
+                                                <h:outputText value="#{doc.date}" />
+                                            </p:column>
+                                        </p:dataTable>
+                                    </div>
+
+                                    <!-- Signing the Loan Agreement -->
+                                    <div class="data-table">
+                                        <h2>3. Signing the Loan Agreement</h2>
+                                        <p>Please ensure that you sign the loan agreement as part of the process.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+
+            <div id="footer">
+                <div>
+                    <p:graphicImage name="images/temco.png" library="atlantis-layout" styleClass="logo" style="height: 50px"/>
+                    <div class="social">
+                        <a href="#">
+                            <i class="pi pi-facebook"></i>
+                        </a>
+                        <a href="#">
+                            <i class="pi pi-twitter"></i>
+                        </a>
+                        <a href="#">
+                            <i class="pi pi-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h:outputStylesheet name="css/primeicons.css" library="atlantis-layout"/>
+        <h:outputStylesheet name="css/primeflex.min.css" library="atlantis-layout"/>
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="atlantis-layout" />
+    </h:body>
+</html>

@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  temco-payara:
+    container_name: temco_payara_server
+    image: ghcr.io/nilupulnethmina/temco-loan-system:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - /root/temodocs:/root/temodocs
+    restart: unless-stopped
+    ports:
+      - "8082:8080"
+      - "8083:8181"
+      - "4848:4848"
+    networks:
+      - app-network
+      - mysql-software_app-network
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    environment:
+      - MYSQL_HOST=mysql_database
+      - MYSQL_PORT=3306
+
+networks:
+  app-network:
+    driver: bridge
+  mysql-software_app-network:
+    external: true

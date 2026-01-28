@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Sucess</title>
+    </h:head>
+
+    <h:body styleClass="exception-body">
+        <div class="exception-panel">
+            <p:graphicImage name="images/icons8-success.gif" library="atlantis-layout" />
+
+            <h1>Your Loan Application Submission is Successful</h1>
+            <p>Now you need to submit Your guarantor details through TEMCO Portal.We Have send a email with login url to the portal.You can use that link or below link to
+                visit the TEMCO Bank Member Portal</p>
+            <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+                <p:link href="https://lending.temcobank.com/"> <p:outputLabel value="TEMCO Bank Member Portal" /></p:link>
+            </h:panelGroup>
+        </div>
+
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="atlantis-layout" />
+    </h:body>
+
+</html>

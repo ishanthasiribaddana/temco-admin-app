@@ -1,0 +1,116 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="head">
+        <h:outputStylesheet name="css/flags/flags.css" library="demo" />
+    </ui:define>
+
+    <ui:define name="title">Loan Payment Estimator</ui:define>
+    <ui:define name="content">
+        <div id="features">
+            <div class="col-12" style="text-align: center">
+                <h2>Loan Payment Estimator</h2>
+            </div>
+            <div>
+                <h:form id="form">
+                    <p:growl id="growl" showDetail="true" life="5000"/> 
+                    <div class="grid">
+                        <div class="col-12">
+                            <div class="card ui-fluid">
+                                <div class="formgrid grid">
+                                    <div class="field col">
+                                        <p:outputLabel for="expected_loan_amount">Expected Loan Amount :</p:outputLabel>
+                                        <p:inputText id="expected_loan_amount" value="#{calculateLoan.expectedLoanAmount}" type="number"/>
+                                    </div>
+                                </div>
+                                <div class="formgrid grid">
+                                    <div class="field col">
+                                        <p:outputLabel for="monthly_installment">Monthly Installment :</p:outputLabel>
+                                        <p:inputText id="monthly_installment" value="#{calculateLoan.monthlyinstallement}" type="number">
+                                            <f:ajax execute="form" listener="#{calculateLoan.calculateMonthlyInstallementIsLessThanGuarantorsIncome()}"/>
+                                        </p:inputText>
+                                    </div>
+                                </div>
+                                <div class="formgrid grid">
+                                    <div class="field col">
+                                        <p:outputLabel for="repayment_period">Loan Repayment Period :</p:outputLabel>
+                                        <p:selectOneMenu id="repayment_period" value="#{calculateLoan.repayementPeriod}">
+                                            <f:selectItems value="#{calculateLoan.repaymentPeriodList}" />
+                                        </p:selectOneMenu>
+                                    </div>
+                                    <div class="field col" style="align-items: center">
+                                        <p:commandButton  value="Calculate" icon="pi pi-search" styleClass="rounded-button ui-button-info mr-2 mb-2" style="width: 70%;margin: 5% 0 2% 15%;font-weight: bolder;font-size: 15px">
+                                            <f:ajax execute="@all"  render="form" listener="#{calculateLoan.calulateLoan()}"/>
+                                        </p:commandButton>
+                                    </div>
+                                </div>
+                                <div class="formgrid grid" style="margin: 2% 0 2% 0">
+                                    <div class="field col">
+                                        <p:outputLabel style="font-weight: bolder;font-size: 1.2em" for="actual_monthly_installement">Monthly Installment : </p:outputLabel>
+                                        <p:outputLabel id="actual_monthly_installement" style="font-weight: bolder;font-size: 1.2em">Rs. #{calculateLoan.actualMonthlyInstallement}</p:outputLabel>
+                                    </div>
+                                    <div class="field col" style="align-items: center">
+                                        <p:outputLabel style="font-weight: bolder;font-size: 1.2em" for="actual_repayment_period">Loan Repayment Period :</p:outputLabel>
+                                        <p:outputLabel id="actual_repayment_period" style="font-weight: bolder;font-size: 1.2em"> #{calculateLoan.actualLoanTenture} Months</p:outputLabel>
+                                    </div>
+                                </div>
+                                <div class="formgrid grid" style="overflow-x: auto">
+                                    <div style="margin: 0 0 2% 88%" class="button-container">
+                                        <p:commandButton value="Export to PDF" icon="pi pi-file-pdf">
+                                            <p:dataExporter type="pdf" target="loanTable" fileName="Monthly_Installment_Plan" />
+                                        </p:commandButton>
+                                    </div>
+                                    <p:dataTable id="loanTable" var="record" value="#{calculateLoan.loanStrucure}" rows="50"
+                                                 emptyMessage="No records found" scrollable="true" scrollWidth="100%" style="min-width: 100%">
+                                        <!--                                        <p:column headerText="Month" style="width: 5%">
+                                                                                    <h:outputText value="#{record.monthNumber}" />
+                                                                                </p:column>-->
+                                        <!--                                        <p:column headerText="Repayment Date" style="width: 9%">
+                                                                                    <h:outputText value="#{record.repaymentDate}" />
+                                                                                </p:column>-->
+                                        <p:column headerText="Opening Balance (Rs)">
+                                            <h:outputText value="#{record.openingBalance}">
+                                                <f:convertNumber type="currency" currencySymbol="" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Principal Amount Rs)">
+                                            <h:outputText value="#{record.principalAmount}">
+                                                <f:convertNumber type="currency" currencySymbol="" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Monthly Interest Rs)">
+                                            <h:outputText value="#{record.monthlyInterest}">
+                                                <f:convertNumber type="currency" currencySymbol="" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Monthly PaymentRs)">
+                                            <h:outputText value="#{record.monthlyPayment}">
+                                                <f:convertNumber type="currency" currencySymbol="" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Paid Capital Rs)">
+                                            <h:outputText value="#{record.paidCapital}">
+                                                <f:convertNumber type="currency" currencySymbol="" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Total Payment Rs)">
+                                            <h:outputText value="#{record.totalPayment}">
+                                                <f:convertNumber type="currency" currencySymbol="" />
+                                            </h:outputText>
+                                        </p:column>
+                                    </p:dataTable>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

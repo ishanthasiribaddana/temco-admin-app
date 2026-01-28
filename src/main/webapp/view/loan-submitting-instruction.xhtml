@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Temco Bank</title>
+        <style>
+            .ui-fileupload-files {
+                width: 100px;
+                height: 100px;
+                display: flex !important;
+                flex-wrap: wrap !important;
+                align-items: center; /* Align items to the center to reduce height */
+                overflow: hidden;
+            }
+
+            .ui-fileupload-filename {
+                writing-mode: horizontal-tb !important;
+                transform: rotate(0) !important;
+                margin: 0 5px !important;
+                white-space: nowrap !important;
+                display: inline-block !important;
+                max-width: 200px; /* Optional: Limit the filename width */
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .ui-fileupload-row {
+                display: flex;
+                align-items: center;
+            }
+
+            .ui-fileupload-preview img {
+                max-width: 20px; /* Set max width for the image */
+                max-height: 20px; /* Set max height for the image */
+                margin-right: 10px; /* Space between image and filename */
+            }
+            .success-message h1 {
+                font-size: 2.5em;
+                color: #4CAF50; /* Green color for success */
+                margin-bottom: 1px;
+                padding: 20px;
+                border-radius: 10px;
+                background: linear-gradient(135deg, #46499c, #8187c7); /* Gradient background */
+                color: #ffffff; /* White text color */
+                text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Text shadow for depth */
+                font-family: 'Arial', sans-serif; /* Font family */
+                font-weight: bold;
+            }
+            ll{
+                line-height: 5px;
+            }
+        </style>
+
+        <script>
+            function moveToNextDiv(currentDivId, nextDivId) {
+                var currentDiv = document.getElementById(currentDivId);
+                var nextDiv = document.getElementById(nextDivId);
+                currentDiv.style.display = 'none';
+                nextDiv.style.display = 'block';
+            }
+        </script>
+
+    </h:head>
+
+    <h:body styleClass="landing-body">
+        <div class="landing-wrapper">
+            <div id="header">
+                <div style="display: flex;justify-content: center;align-items: center">
+                    <p:graphicImage name="images/temco.png" style="width: 35%;height: 125px" library="atlantis-layout" />
+
+                    <a id="menu-button" href="#">
+                        <p:graphicImage name="images/icon-ellipsis-v.svg" alt="Menu" library="atlantis-layout" />
+                    </a>
+                </div>
+            </div>
+
+            <div id="features">
+                <div>
+                    <h:form id="instruction" enctype="multipart/form-data">
+                        <p:growl id="growl" showDetail="true" life="1000"/> 
+                        <div class="grid">
+                            <div class="col-12 success-message" style="text-align: center">
+                                <h1>Guidelines for Submitting Supporting Documents</h1>
+                            </div>
+                            <div class="col-12">
+                                <div class="card ui-fluid">
+
+                                    <div id="div1" style="display:block;">
+                                        <div class="formgrid grid">
+                                            <div class="field col">
+                                                <h4 style="text-align: center">
+                                                    The process outlined below ensures that you can submit all required documents conveniently and within the specified deadlines. Failure to comply may result in your application being disqualified.</h4>
+                                            </div>
+                                        </div>
+                                        <h5>1) First week : Payment for Membership Registration and Down Payment:</h5>
+                                        <div class="card ui-fluid">
+                                            <div class="formgrid grid">
+                                                <div class="field col">
+                                                    <h5>Deadline Reminder:</h5>
+                                                    <h:panelGroup style="display: inline-flex">
+                                                        <p>
+                                                            <b>Ensure that all payments and proof of payment slips are submitted within 7 days to activate the loan facility and to pursue your studies without interruption.<p:selectBooleanCheckbox value="#{loanSubmitting.checkbox1Selected}" style="margin-left: 5%"/></b>
+                                                        </p>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup>
+                                                        <h5>
+                                                            1. Upload the following documents Before 2024/09/19
+                                                        </h5>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup>
+                                                        <div style="display: inline-flex">
+                                                            <p>
+                                                                1.1 ) Loan facilities are available only for 10 students on a first come first serve basis. Pay your down payment within 7 days to activate your loan facility.<p:selectBooleanCheckbox value="#{loanSubmitting.checkbox2Selected}" style="margin-left: 5%"/>
+                                                            </p>
+                                                        </div>
+                                                        <p>
+                                                            <b>AC No:</b>XXXXXXXXXXX  <b style="margin: 0 0 0 10%">Bank:</b> Commercial Bank <b style="margin: 0 0 0 10%">Branch:</b> Colombo-5
+                                                        </p>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup>
+                                                        <div style="display: inline-flex">
+                                                            <div style="display: inline-flex">
+                                                                <p>
+                                                                    1.2 ) Temco Development Banking Society Limited slip of Rs. 2000/= *3 <p:selectBooleanCheckbox value="#{loanSubmitting.checkbox3Selected}" />
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <p>
+                                                            <b>AC No:</b>XXXXXXXXXXX  <b style="margin: 0 0 0 10%">Bank:</b> Commercial Bank <b style="margin: 0 0 0 10%">Branch:</b> Colombo-5
+                                                        </p>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup>
+                                                        <p:commandButton value="Next" 
+                                                                         actionListener="#{loanSubmitting.checkDiv1}" 
+                                                                         oncomplete="if (#{loanSubmitting.allChecked}) moveToNextDiv('div1', 'div2');"
+                                                                         update="@form" />
+                                                    </h:panelGroup>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="div2" style="display:none;">
+                                        <h5>2) Week 2 and Week 3: Uploading Proof Documentations of Address</h5>
+                                        <div class="card ui-fluid">
+                                            <div class="formgrid grid">
+                                                <div class="field col">
+                                                    <h5>Deadline Reminder:</h5>
+                                                    <h:panelGroup style="display: inline-flex">
+                                                        <p>
+                                                            <b>Complete the proof of address submission by the end of Week 3 on or before to pursue your studies without interruption <p:selectBooleanCheckbox value="#{loanSubmitting.checkbox4Selected}" style="margin-left: 5%"/></b>
+                                                        </p>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup>
+                                                        <h5>
+                                                            2) Upload the following documents Before 2024/10/03
+                                                        </h5>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup >
+                                                        <p>
+                                                            <b>2.1 ) Submit Proof of Address for Loan Requester.</b>
+                                                        </p>
+                                                        <div style="display: inline-flex">
+                                                            <p>
+                                                                Please Upload the proof of the address for Loan requester to Verify given address
+                                                                ( one of  Phone Bill, Water, Electricity bill) <p:selectBooleanCheckbox value="#{loanSubmitting.checkbox5Selected}" style="margin-left: 5%"/>
+                                                            </p>
+                                                        </div>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup>
+                                                        <p>
+                                                            <b> 2.2 ) Submit Proof of Address for First Guarantor:</b>
+                                                        </p>
+                                                        <div style="display: inline-flex">
+                                                            <p>
+                                                                Please Upload the proof of the address for First Guarantor to Verify given address
+                                                                ( one of  Phone Bill, Water, Electricity bill)<p:selectBooleanCheckbox value="#{loanSubmitting.checkbox6Selected}" style="margin-left: 5%"/>
+                                                            </p>
+                                                        </div>
+
+                                                    </h:panelGroup>
+                                                    <h:panelGroup>
+                                                        <p>
+                                                            <b>2.3 ) Submit Proof of Address for Second Guarantor:</b>
+                                                        </p>
+                                                        <div style="display: inline-flex">
+                                                            <p>
+                                                                Please Upload the proof of the address for Second Guarantor to Verify given address
+                                                                ( one of  Phone Bill, Water, Electricity bill) <p:selectBooleanCheckbox value="#{loanSubmitting.checkbox7Selected}" style="margin-left: 5%"/>
+                                                            </p>
+                                                        </div>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup>
+                                                        <p:commandButton value="Next" 
+                                                                         actionListener="#{loanSubmitting.checkDiv2()}" 
+                                                                         onclick="if (#{loanSubmitting.allChecked})
+                                                                                     moveToNextDiv('div2', 'div3');
+                                                                                 return false;"
+                                                                         update="@form"/>
+                                                    </h:panelGroup>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="div3" style="display:none;">
+                                        <h5>3) Week 4 and Week 5 - Collection of employment related main documents From Loan requester and Guarantors</h5>
+                                        <div class="card ui-fluid">
+                                            <div class="formgrid grid">
+                                                <div class="field col">
+                                                    <h5>Deadline Reminder:</h5>
+                                                    <h:panelGroup style="display: inline-flex">
+                                                        <p>
+                                                            <b>All proof of Employment must be submitted before 2024/10/17 to process the loan facility and pursue your studies without interruption<p:selectBooleanCheckbox style="margin-left: 5%"/></b>
+                                                        </p>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup>
+                                                        <h5>
+                                                            3) Upload the following documents Before 2024/10/17
+                                                        </h5>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup>
+                                                        <p>
+                                                            <b> 3.1) Loan applicant Proof of Employment :</b>
+                                                        </p>
+                                                        <p>
+                                                            <b> if employed </b>
+                                                        </p>
+                                                        <ul>
+                                                            <li>Upload a copy of your Employment ID <p:selectBooleanCheckbox value="#{loanSubmitting.checkbox8Selected}" style="margin-left: 5%"/></li>
+                                                            <li>Upload salary slips for the last three months <p:selectBooleanCheckbox value="#{loanSubmitting.checkbox9Selected}" style="margin-left: 5%"/></li>
+                                                        </ul>
+                                                        <p>
+                                                            <b> If Self-Employed</b>
+                                                        </p>
+                                                        <ul>
+                                                            <li>Upload a copy of the Business Registration Certificate</li>
+                                                        </ul>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup>
+                                                        <p>
+                                                            <b> 3.2) Loan First Guarantor Proof of Employment</b>
+                                                        </p>
+                                                        <p>
+                                                            <b> if employed</b>
+                                                        </p>
+                                                        <ul>
+                                                            <li>Upload a copy of your Employment ID <p:selectBooleanCheckbox value="#{loanSubmitting.checkbox10Selected}" style="margin-left: 5%"/></li>
+                                                            <li>Upload salary slips for the last three months <p:selectBooleanCheckbox value="#{loanSubmitting.checkbox11Selected}" style="margin-left: 5%"/></li>
+                                                        </ul>
+                                                        <p>
+                                                            <b>If Self-Employed</b>
+                                                        </p>
+                                                        <ul>
+                                                            <li>Upload a copy of the Business Registration Certificate <p:selectBooleanCheckbox value="#{loanSubmitting.checkbox12Selected}" style="margin-left: 5%"/></li>
+                                                        </ul>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup>
+                                                        <p>
+                                                            <b> 3.3) Loan Second Guarantor Proof of Employment</b>
+                                                        </p>
+                                                        <p>
+                                                            <b> if employed</b>
+                                                        </p>
+                                                        <ul>
+                                                            <li>Upload a copy of your Employment ID <p:selectBooleanCheckbox value="#{loanSubmitting.checkbox10Selected}" style="margin-left: 5%"/></li>
+                                                            <li>Upload salary slips for the last three months <p:selectBooleanCheckbox value="#{loanSubmitting.checkbox11Selected}" style="margin-left: 5%"/></li>
+                                                        </ul>
+                                                        <p>
+                                                            <b>If Self-Employed</b>
+                                                        </p>
+                                                        <ul>
+                                                            <li>Upload a copy of the Business Registration Certificate <p:selectBooleanCheckbox value="#{loanSubmitting.checkbox12Selected}" style="margin-left: 5%"/></li>
+                                                        </ul>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup>
+                                                        <p:commandButton value="Next" 
+                                                                         actionListener="#{loanSubmitting.checkDiv3()}" 
+                                                                         onclick="if (#{loanSubmitting.allChecked})
+                                                                                     moveToNextDiv('div3', 'div4');
+                                                                                 return false;"
+                                                                         update="@form"/>
+                                                    </h:panelGroup>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="div4" style="display:none;">
+                                        <h5> 4) Week 6 and Week 7 - Collecting of employment related proof of income document</h5>
+                                        <div class="card ui-fluid">
+                                            <div class="formgrid grid">
+                                                <div class="field col">
+                                                    <h5>Deadline Reminder:</h5>
+                                                    <h:panelGroup style="display: inline-flex">
+                                                        <p>
+                                                            <b>All employment-related main documents must be submitted by the end of Week 6 to pursue your studies without interruption <p:selectBooleanCheckbox value="#{loanSubmitting.checkbox13Selected}" style="margin-left: 5%"/></b>
+                                                        </p>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup>
+                                                        <h5>
+                                                            4) Upload the following documents Before 2024/10/31
+                                                        </h5>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup>
+                                                        <p>
+                                                            <b>  4.1 ) If Guarantors Employed </b>
+                                                        </p>
+                                                        <ul>
+                                                            <li>Employment Acknowledgment Letter:
+                                                                (Employment acknowledgement letter from employer)<p:selectBooleanCheckbox value="#{loanSubmitting.checkbox13Selected}" style="margin-left: 5%"/>
+                                                            </li>
+                                                            <li>Proof of Additional Income:
+                                                                Details and Proof of income other than salary(If there any)<p:selectBooleanCheckbox value="#{loanSubmitting.checkbox14Selected}" style="margin-left: 5%"/>
+                                                            </li>
+                                                        </ul>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup>
+                                                        <p>
+                                                            <b> 4.2) If Guarantors Self-Employed</b>
+                                                        </p>
+                                                        <ul>
+                                                            <li>Last 6 months Business Account bank statements ( if more than one bank all bank statements )<p:selectBooleanCheckbox value="#{loanSubmitting.checkbox15Selected}" style="margin-left: 5%"/>
+                                                            </li>
+                                                            <li>Salary Slips as a director or a proprietor or as a partner <p:selectBooleanCheckbox value="#{loanSubmitting.checkbox16Selected}" style="margin-left: 5%"/></li>
+                                                            <li>Dividend  recipts director or a proprietor or as a partner <p:selectBooleanCheckbox value="#{loanSubmitting.checkbox17Selected}" style="margin-left: 5%"/></li>
+                                                            <li>Last three years tax payment receipts <p:selectBooleanCheckbox value="#{loanSubmitting.checkbox18Selected}" style="margin-left: 5%"/></li>
+                                                        </ul>
+                                                        <p>
+                                                            Or
+                                                        </p>
+                                                        <ul>
+                                                            <li>Last three years audited financial statements <p:selectBooleanCheckbox value="#{loanSubmitting.checkbox19Selected}" style="margin-left: 5%"/></li>
+                                                        </ul>
+                                                    </h:panelGroup>
+                                                    <div class="grid">
+                                                        <div class="col-12">
+                                                            <div class="card ui-fluid">
+                                                                <div class="formgrid grid">
+                                                                </div>
+                                                                <div class="formgrid grid">
+                                                                    <div class="field col"></div>
+                                                                    <div class="field col" style="float: right">
+                                                                        <p:commandButton value="Let's Upload"
+                                                                                         icon="pi pi-save"
+                                                                                         styleClass="ui-button-raised ui-button-warning mr-2 mb-2"
+                                                                                         style="width: 50%;margin: 6% 0 0 0;font-weight: bolder"
+                                                                                         actionListener="#{loanSubmitting.moveToNextPage()}"
+                                                                                         ajax="false" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+
+            <div id="footer">
+                <div>
+                    <p:graphicImage name="images/temco.png" library="atlantis-layout" styleClass="logo" style="height: 50px"/>
+                    <!--<p:graphicImage name="images/appname-black.png" library="atlantis-layout" styleClass="appname"/>-->
+                    <div class="social">
+                        <a href="#">
+                            <i class="pi pi-facebook"></i>
+                        </a>
+                        <a href="#">
+                            <i class="pi pi-twitter"></i>
+                        </a>
+                        <a href="#">
+                            <i class="pi pi-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h:outputStylesheet name="css/primeicons.css" library="atlantis-layout"/>
+        <h:outputStylesheet name="css/primeflex.min.css" library="atlantis-layout"/>
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="atlantis-layout" />
+    </h:body>
+</html>

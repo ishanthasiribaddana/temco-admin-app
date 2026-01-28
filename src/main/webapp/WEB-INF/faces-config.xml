@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<faces-config version="2.0" xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+    
+    <name>primefaces_atlantis</name>
+    
+    <component>
+        <component-type>org.primefaces.component.AtlantisMenu</component-type>
+        <component-class>org.primefaces.atlantis.component.Menu</component-class>
+    </component>
+    
+    <component>
+        <component-type>org.primefaces.component.AtlantisTabMenu</component-type>
+        <component-class>org.primefaces.atlantis.component.TabMenu</component-class>
+    </component>
+    
+    <component>
+        <component-type>org.primefaces.component.AtlantisTab</component-type>
+        <component-class>org.primefaces.atlantis.component.Tab</component-class>
+    </component>
+    <navigation-rule>
+        <from-view-id>/loan-request-form.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/success.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+
+    <render-kit>
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.AtlantisMenuRenderer</renderer-type>
+            <renderer-class>org.primefaces.atlantis.component.MenuRenderer</renderer-class>
+        </renderer>
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.AtlantisTabMenuRenderer</renderer-type>
+            <renderer-class>org.primefaces.atlantis.component.TabMenuRenderer</renderer-class>
+        </renderer>
+    </render-kit>
+    
+</faces-config>

@@ -1,0 +1,479 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Loan Overview Report</ui:define>
+    <ui:define name="title">
+
+    </ui:define>
+    <ui:define name="content">
+        <div class="col-12" style="text-align: center">
+            <h2>Thirasara Loans Overview Report</h2>
+        </div>
+        <div class="grid dashboard" >
+            <div class="col-12 md:col-6 lg:col-3">
+                <div class="grid grid-nogutter card overview-box overview-box-1">
+                    <div class="col-12 overview-box-icon">
+                        <i class="pi pi-list"></i>
+                    </div>
+                    <div class="col-12" style="text-align: center">
+                        <span class="overview-box-count">#{loanDashboard.loanRequests}</span>
+                    </div>
+                    <div class="col-12 overview-box-footer" >
+                        Total Loan Applications Submitted
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-6 lg:col-3">
+                <div class="grid grid-nogutter card overview-box overview-box-1">
+                    <div class="col-12 overview-box-icon">
+                        <i class="pi pi-list"></i>
+                    </div>
+                    <div class="col-12" style="text-align: center">
+                        <span class="overview-box-count">#{loanDashboard.totalLoanApplicants}</span>
+                    </div>
+                    <div class="col-12 overview-box-footer" >
+                        Total Loan Applicants
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-6 lg:col-3">
+                <div class="grid grid-nogutter card overview-box overview-box-4">
+                    <div class="col-12 overview-box-icon">
+                        <i class="pi pi-money-bill"></i>
+                    </div>
+                    <div class="col-12" style="text-align: center">
+                        <span class="overview-box-count">#{loanDashboard.aggregateDisbursementToJIAT}</span>
+                    </div>
+                    <div class="col-12 overview-box-footer" >
+                        Aggregate Disbursement To JIAT
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-6 lg:col-3">
+                <div class="grid grid-nogutter card overview-box overview-box-2">
+                    <div class="col-12 overview-box-icon">
+                        <i class="pi pi-arrow-circle-right"></i>
+                    </div>
+                    <div class="col-12" style="text-align: center">
+                        <span class="overview-box-count">#{loanDashboard.cumulativeDisbursementToJIAT}</span>
+                    </div>
+                    <div class="col-12 overview-box-footer" >
+                        Cumulative Disbursement To JIAT
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 md:col-6 lg:col-3">
+                <div class="grid grid-nogutter card overview-box overview-box-3">
+                    <div class="col-12 overview-box-icon">
+                        <i class="pi pi-file-o"></i>
+                    </div>
+                    <div class="col-12" style="text-align: center">
+                        <span class="overview-box-count">#{loanDashboard.totalSubmittedPayOrders}</span>
+                    </div>
+                    <div class="col-12 overview-box-footer">
+                        Total Credit Notes Submitted
+                    </div>
+                </div>
+            </div>
+            <!--            <div class="col-12 md:col-6 lg:col-3">
+                            <div class="grid grid-nogutter card overview-box overview-box-4">
+                                <div class="col-12 overview-box-icon">
+                                    <i class="pi pi-users"></i>
+                                </div>
+                                <div class="col-12" style="text-align: center">
+                                    <span class="overview-box-count">#{loanDashboard.classAttenededRequestors}</span>
+                                </div>
+                                <div class="col-12 overview-box-footer">
+                                    Loan Applicants Attending Classes
+                                </div>
+                            </div>
+                        </div>-->
+
+            <!--            <div class="col-12 md:col-6 lg:col-3">
+                            <div class="grid grid-nogutter card overview-box overview-box-4">
+                                <div class="col-12 overview-box-icon">
+                                    <i class="pi pi-users"></i>
+                                </div>
+                                <div class="col-12" style="text-align: center">
+                                    <span class="overview-box-count">#{loanDashboard.classAttenededRequestors}</span>
+                                </div>
+                                <div class="col-12 overview-box-footer">
+                                    Total Dues to Collected
+                                </div>
+                            </div>
+                        </div>-->
+
+            <div class="grid formgrid col-12" style="margin: 3% 0 0 0">
+                <!--                <div class="col-4 mb-2 lg:col-4 mb-lg-0">
+                                    <h6 for="search">Search By NIC / Name</h6>
+                                    <span class="ui-input-icon-right">
+                                        <p:inputText id="search" placeholder="Search"/>
+                                        <i class="pi pi-search"></i>
+                                    </span>
+                                </div>
+                                <div class="col-4 mb-2 lg:col-4 mb-lg-0">
+                                    <p:outputLabel for="payOrder">Pay Order Status</p:outputLabel>
+                                    <p:selectOneMenu id="payOrder" class="col-12">
+                                        <f:selectItem itemLabel="Select" itemValue="" />
+                                        <f:selectItem itemLabel="Option 1" itemValue="1" />
+                                        <f:selectItem itemLabel="Option 2" itemValue="2" />
+                                        <f:selectItem itemLabel="Option 3" itemValue="3" />
+                                    </p:selectOneMenu>
+                                </div>-->
+                <!--                <div class="col-4 mb-2 lg:col-4 mb-lg-0">
+                                    <p:outputLabel for="downPayment">Down Payment Status</p:outputLabel>
+                                    <p:selectOneMenu id="downPayment" class="col-12">
+                                        <f:selectItem itemLabel="Select" itemValue="" />
+                                        <f:selectItem itemLabel="Option 1" itemValue="1" />
+                                        <f:selectItem itemLabel="Option 2" itemValue="2" />
+                                        <f:selectItem itemLabel="Option 3" itemValue="3" />
+                                    </p:selectOneMenu>
+                                </div>-->
+            </div>
+
+            <div class="col-12 md:col-12">
+                <div class="card">
+                    <h:form id="dataTable">
+                        <p:growl id="growl" showDetail="true" life="5000"/> 
+                        <div class="p-mb-3">
+                            <p:commandButton value="Export to PDF" icon="pi pi-file-pdf" 
+                                             ajax="false" style="margin-left: 10px;">
+                                <p:dataExporter type="pdf" target="loansTable" 
+                                                fileName="loans" pageOnly="true"
+                                                preProcessor="#{loanDashboard.preProcessPDF}"/>
+                            </p:commandButton>
+
+                            <p:commandButton value="Export to XLSX" icon="pi pi-file-excel" 
+                                             ajax="false" style="margin-left: 10px;">
+                                <p:dataExporter type="xlsx" target="loansTable" 
+                                                fileName="loans" pageOnly="true"
+                                                postProcessor="#{loanDashboard.postProcessXLSX}"/>
+                            </p:commandButton>
+                        </div>
+
+
+                        <p:dataTable id="loansTable" widgetVar="CustomerDT" var="loan" value="#{loanDashboard.loans}" reflow="true"
+                                     selection="#{dataTableDemoView.selectedCustomers}" rowIndexVar="index"
+                                     paginator="true" rows="100" paginatorPosition="top" rowSelectMode="add" 
+                                     filteredValue="#{loanDashboard.filteredLoans}">
+
+                            <f:facet name="header">
+                                <div class="customers-table-header">
+                                    <span style="font-weight: bold">Enter NIC : </span>
+                                    <span class="ui-input-icon-left filter-container">
+                                        <i class="pi pi-search"/>
+                                        <p:inputText id="globalFilter" value="#{loanDashboard.globalFilter}" 
+                                                     placeholder="Enter NIC . . . . ">
+                                            <!-- Use the dataTable's ID instead of widgetVar -->
+                                            <p:ajax event="keyup" update="loansTable" listener="#{loanDashboard.filterLoans}"/>
+                                        </p:inputText>  
+                                    </span>
+                                </div>
+                            </f:facet>
+
+                            <p:column headerText="" style="width: 2%">
+                                <h:outputText value="#{index + 1}" />
+                            </p:column>
+
+                            <p:column headerText="Loan No:" style="width: 10%">
+                                <h:outputText value="#{loan.loanId}" />
+                            </p:column>
+
+                            <p:column headerText="NIC" style="width: 10%">
+                                <h:outputText value="#{loan.assoNo}" />
+                            </p:column>
+                            <p:column headerText="Name" style="width: 15%">
+                                <h:outputText value="#{loan.name}" />
+                            </p:column>
+                            <p:column headerText="Loan Amount">
+                                <h:outputText style="vertical-align: middle; margin-left: .5rem" value="#{loan.loanAmount}" />
+                            </p:column>
+                            <p:column headerText="Monthly Installment">
+                                <h:outputText style="vertical-align: middle; margin-left: .5rem" value="#{loan.loanMangerObj.loanManagerId.monthlyInstallement}" />
+                            </p:column>
+                            <p:column headerText="Time Period" >
+                                <h:outputText value="#{loan.loanMangerObj.loanManagerId.repaymentPeriodId.period}" />
+                            </p:column>
+                            <p:column headerText="Loan Applied Date" >
+                                <h:outputText value="#{loan.payOrderDate}" />
+                            </p:column>
+                            <p:column headerText="Loan Status">
+                                <h:outputText value="#{loan.payOrderStatus}" />
+                            </p:column>
+                            <p:column headerText="Status Date" >
+                                <h:outputText value="#{loan.payOrderDate}" />
+                            </p:column>
+                            <p:column headerText="" exportable="false">
+                                <p:commandButton actionListener="#{loanDashboard.setSelectedUser(loan)}" 
+                                                 icon="pi pi-eye" update=":dataTable" 
+                                                 oncomplete="PF('dlg').show();"/>
+                            </p:column>
+                        </p:dataTable>
+
+                        <p:dialog responsive="true" style="overflow:auto;" height="600" header="Requested Loan Details" widgetVar="dlg" modal="true" resizable="false" draggable="false" width="1200">
+                            <p:panel>
+                                <p:accordionPanel multiple="false" activeIndex="0">
+                                    <p:tab title="Personal Details">
+                                        <div class="col-12">
+                                            <div class="card ui-fluid">
+                                                <div class="formgrid grid">
+                                                    <div class="field col">
+                                                        <p:outputLabel for="first_name">First Name :</p:outputLabel>
+                                                        <p:inputText id="first_name" value="#{loanDashboard.firstName}"  readonly="true"/>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="last_name">Last Name :</p:outputLabel>
+                                                        <p:inputText id="last_name" value="#{loanDashboard.lastName}" readonly="true"/>
+                                                    </div>
+                                                </div>
+                                                <div class="formgrid grid">
+                                                    <div class="field col">
+                                                        <p:outputLabel for="nic">NIC :</p:outputLabel>
+                                                        <p:inputText id="nic" value="#{loanDashboard.nic}" readonly="true"/>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="mobile">Mobile No :</p:outputLabel>
+                                                        <p:inputText id="mobile" value="#{loanDashboard.mobileNo}"  readonly="true"/>
+                                                    </div>
+                                                </div>
+                                                <div class="formgrid grid">
+                                                    <div class="field col">
+                                                        <p:outputLabel for="dob">Date of Birth :</p:outputLabel>
+                                                        <p:inputText id="dob" value="#{loanDashboard.dateOfBirth}" readonly="true"/>
+                                                    </div>
+                                                    <div class="field col">
+                                                    </div>
+                                                </div>
+                                                <div class="formgrid grid">
+                                                    <div class="field col">
+                                                        <p:outputLabel for="email">Email :</p:outputLabel>
+                                                        <p:inputText id="email" type="email" value="#{loanDashboard.email}" readonly="true"/>
+                                                        <p:message for="email" display="text"/>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="adderssOne">Address 01 :</p:outputLabel>
+                                                        <p:inputText id="adderssOne" value="#{loanDashboard.addressOne}"  readonly="true"/>
+                                                    </div>
+
+                                                </div>
+                                                <div class="formgrid grid">
+                                                    <div class="field col">
+                                                        <p:outputLabel for="addressTwo">Address 02 :</p:outputLabel>
+                                                        <p:inputText id="addressTwo" value="#{loanDashboard.addressTwo}"  readonly="true"/>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="adderssThree">Address 03 :</p:outputLabel>
+                                                        <p:inputText id="adderssThree" value="#{loanDashboard.addressThree}"  readonly="true"/>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </p:tab>
+                                    <p:tab title="Loan Details">
+                                        <div class="col-12">
+                                            <div class="card ui-fluid">
+                                                <div class="formgrid grid">
+                                                    <div class="field col">
+                                                        <p:outputLabel for="loanBrand">Loan Brand :</p:outputLabel>
+                                                        <p:inputText id="loanBrand" value="#{loanDashboard.loanBrandName}"  readonly="true"/>
+                                                    </div>
+                                                    <div class="field col">
+                                                    </div>
+                                                </div>
+                                                <div class="formgrid grid">
+                                                    <div class="field col">
+                                                        <p:outputLabel for="interestRate">Interest Rate :</p:outputLabel>
+                                                        <p:inputText id="interestRate" value="#{loanDashboard.interestRate}"  readonly="true"/>
+                                                    </div>
+                                                    <div class="field col">
+                                                    </div>
+                                                </div>
+                                                <div class="formgrid grid">
+                                                    <div class="field col">
+                                                        <p:outputLabel for="requestedAmount">Loan Amount :</p:outputLabel>
+                                                        <p:inputText id="requestedAmount" value="#{loanDashboard.loanAmount}" readonly="true"/>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="monthlyInstallment">Monthly Installment :</p:outputLabel>
+                                                        <p:inputText id="monthlyInstallment" value="#{loanDashboard.monthlyInstallement}"  readonly="true"/>
+                                                    </div>
+                                                </div>
+                                                <div class="formgrid grid">
+                                                    <div class="field col">
+                                                        <p:outputLabel for="timePeriod">Time Period :</p:outputLabel>
+                                                        <p:inputText id="timePeriod" value="#{loanDashboard.timePeriod}" readonly="true"/>
+                                                    </div>
+                                                    <div class="field col">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        <div  class="formgrid grid" style="overflow-x: auto">
+                                            <div style="margin: 0 0 2% 88%" class="button-container">
+                                                <p:commandButton value="Export to PDF" icon="pi pi-file-pdf">
+                                                    <p:dataExporter type="pdf" target="loanTable" fileName="Monthly_Installment_Plan" />
+                                                </p:commandButton>
+                                            </div>
+                                            <p:dataTable id="loanTable" var="record" value="#{loanDashboard.loanInstallementPlanList}" rows="50"
+                                                         emptyMessage="No records found" scrollable="true" scrollWidth="100%" style="min-width: 100%" paginatorTemplate="{Exporters}">
+
+                                                <p:column headerText="Repayment Date" style="width: 9%">
+                                                    <h:outputText value="#{record.repaymentDate}" />
+                                                </p:column>
+                                                <p:column headerText="Opening Balance Rs)">
+                                                    <h:outputText value="#{record.openingBalance}">
+                                                        <f:convertNumber type="currency" currencySymbol="" />
+                                                    </h:outputText>
+                                                </p:column>
+                                                <p:column headerText="Principal Amount (Rs)">
+                                                    <h:outputText value="#{record.principleAmount}">
+                                                        <f:convertNumber type="currency" currencySymbol="" />
+                                                    </h:outputText>
+                                                </p:column>
+                                                <p:column headerText="Monthly Interest (Rs)">
+                                                    <h:outputText value="#{record.monthlyInterest}">
+                                                        <f:convertNumber type="currency" currencySymbol="" />
+                                                    </h:outputText>
+                                                </p:column>
+                                                <p:column headerText="Monthly Payment (Rs)">
+                                                    <h:outputText value="#{record.monthlyInstallment}">
+                                                        <f:convertNumber type="currency" currencySymbol="" />
+                                                    </h:outputText>
+                                                </p:column>
+                                                <p:column headerText="Paid Capital (Rs)">
+                                                    <h:outputText value="#{record.paidCapital}">
+                                                        <f:convertNumber type="currency" currencySymbol="" />
+                                                    </h:outputText>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </div>
+                                    </p:tab>
+                                    <p:tab title="First Guarantor Details">
+                                        <div class="col-12">
+                                            <div class="card ui-fluid">
+                                                <h5>First Guarantor</h5>
+                                                <div class="formgrid grid">
+                                                    <div class="field col">
+                                                        <p:outputLabel for="ffirst_name">First Name :</p:outputLabel>
+                                                        <p:inputText id="ffirst_name" value="#{loanDashboard.ffirstName}"  readonly="true"/>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="flast_name">Last Name :</p:outputLabel>
+                                                        <p:inputText id="flast_name" value="#{loanDashboard.flastName}" readonly="true"/>
+                                                    </div>
+                                                </div>
+                                                <div class="formgrid grid">
+                                                    <div class="field col">
+                                                        <p:outputLabel for="fnic">NIC :</p:outputLabel>
+                                                        <p:inputText id="fnic" value="#{loanDashboard.fnic}" readonly="true"/>
+                                                    </div>
+                                                    <div class="field col">
+                                                    </div>
+                                                </div>
+                                                <div class="formgrid grid">
+                                                    <div class="field col">
+                                                        <p:outputLabel for="fnicFront" style="display: block; text-align: center; margin-bottom: 10px;">Front of NIC</p:outputLabel>
+                                                        <p:graphicImage id="fnicFront" value="/imageServlet?path=#{loanDashboard.ffrontNic}" alt="Sample Image" style="width: 75%; height: 50%; display: block; margin: 0 0 0 5%;"/>
+
+
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="fnicBack" style="display: block; text-align: center; margin-bottom: 10px;">Back of NIC</p:outputLabel>
+                                                        <p:graphicImage id="fnicBack" value="/imageServlet?path=#{loanDashboard.firstBackNic}" cache="true"  alt="Sample Image" style="width: 75%; height: 50%; display: block; margin: 0 0 0 5%;"/>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </p:tab>
+                                    <p:tab title="Second Guarantor Details">
+                                        <div class="col-12">
+                                            <div class="card ui-fluid">
+                                                <h5>Second Guarantor</h5>
+                                                <div class="formgrid grid">
+                                                    <div class="field col">
+                                                        <p:outputLabel for="sfirst_name">First Name :</p:outputLabel>
+                                                        <p:inputText id="sfirst_name" value="#{loanDashboard.sfirstName}"  readonly="true"/>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="slast_name">Last Name :</p:outputLabel>
+                                                        <p:inputText id="slast_name" value="#{loanDashboard.slastName}" readonly="true"/>
+                                                    </div>
+                                                </div>
+                                                <div class="formgrid grid">
+                                                    <div class="field col">
+                                                        <p:outputLabel for="snic">NIC :</p:outputLabel>
+                                                        <p:inputText id="snic" value="#{loanDashboard.snic}" readonly="true"/>
+                                                    </div>
+                                                    <div class="field col">
+                                                    </div>
+                                                </div>
+                                                <div class="formgrid grid">
+                                                    <div class="field col">
+                                                        <p:outputLabel for="snicFront" style="display: block; text-align: center; margin-bottom: 10px;">Front of NIC</p:outputLabel>
+                                                        <p:graphicImage id="snicFront" value="/imageServlet?path=#{loanDashboard.sfrontNic}" alt="Sample Image" style="width: 75%; height: 50%; display: block; margin: 0 0 0 5%;"/>
+
+
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="snicBack" style="display: block; text-align: center; margin-bottom: 10px;">Back of NIC</p:outputLabel>
+                                                        <p:graphicImage id="snicBack" value="/imageServlet?path=#{loanDashboard.secondBackNic}" alt="Sample Image" style="width: 75%; height: 50%; display: block; margin: 0 0 0 5%;"/>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </p:tab>
+                                </p:accordionPanel>
+                                <!--<div class="col-12" style="display: #{loanDashboard.viewButtons? 'none':'block' }">-->
+                                <div class="col-12">
+                                    <div class="card ui-fluid">
+                                        <div class="formgrid grid">
+                                            <div class="field col">
+                                                <p:commandButton styleClass="ui-button-success mr-2 mb-2" value="Issue Credit note">
+                                                    <f:ajax listener="#{loanDashboard.releaseCreditNote()}" render="growl" execute="@this"/>
+                                                </p:commandButton>
+                                            </div>
+                                            <div class="field col">
+                                                <p:commandButton styleClass="ui-button-danger mr-2 mb-2" value="Reject Request" update=":dataTable" oncomplete="PF('comment').show();"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p:panel>
+                        </p:dialog>
+
+                        <p:dialog responsive="true" style="overflow:auto;" height="150" header="Comment" 
+                                  widgetVar="comment" modal="true" resizable="false" draggable="false" width="600">  
+                            <div class="col-12">
+                                <div class="card ui-fluid">
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:selectOneMenu value="#{loanDashboard.selectedComment}">
+                                                <f:selectItems value="#{loanDashboard.commentType}" /> 
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:commandButton value="Save" actionListener="#{loanDashboard.addRejectComment()}"
+                                                             oncomplete="PF('comment').hide()" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </p:dialog>
+
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

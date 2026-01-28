@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Temco Bank Member Portal</title>
+        <script type="text/javascript">
+            $(function () {
+                $('#menu-button').on('click', function (e) {
+                    $('#header').toggleClass('menu-active');
+                    e.preventDefault();
+                });
+            });
+        </script>
+    </h:head>
+
+    <h:body styleClass="landing-body">
+        <div class="landing-wrapper">
+            <div id="header">
+                <div>
+                    <p:graphicImage name="images/logo-colored.png" library="atlantis-layout" />
+
+                    <a id="menu-button" href="#">
+                        <p:graphicImage name="images/icon-ellipsis-v.svg" alt="Menu" library="atlantis-layout" />
+                    </a>
+
+                    <ul id="menu">
+                        <li>
+                            <a href="#home">HOME</a>
+                        </li>
+                        <li>
+                            <a href="#features">FEATURES</a>
+                        </li>
+                        <li>
+                            <a href="#statistics">STATISTICS</a>
+                        </li>
+                        <li>
+                            <a href="#pricing">PRICING</a>
+                        </li>
+                        <li>
+                            <a href="#video">VIDEO</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="introduction">
+                <h4>PrimeFaces Presents</h4>
+                <h3>Your Application Tagline</h3>
+                <p:commandButton type="button" value="LEARN MORE" />
+            </div>
+
+            <div id="features">
+                <div>
+                    <div class="grid">
+                        <div class="col-12 md:col-6">
+                            <div class="col-2">
+                                <p:graphicImage name="images/landing/feature-responsive.png" library="atlantis-layout" />
+                            </div>
+                            <div class="col-10">
+                                <h3>RESPONSIVE LAYOUT</h3>
+                                <p>Don’t forget to change this dummy text with your favorite IDE for this icon box. 
+                                    Don’t forget to change this dummy text with your favorite IDE for this icon box.</p>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="col-2">
+                                <p:graphicImage name="images/landing/feature-design.png" library="atlantis-layout" />
+                            </div>
+                            <div class="col-10">
+                                <h3>MODERN DESIGN</h3>
+                                <p>Don’t forget to change this dummy text with your favorite IDE for this icon box. 
+                                    Don’t forget to change this dummy text with your favorite IDE for this icon box.</p>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="col-2">
+                                <p:graphicImage name="images/landing/feature-cleancode.png" library="atlantis-layout" />
+                            </div>
+                            <div class="col-10">
+                                <h3>CLEAN CODE</h3>
+                                <p>Don’t forget to change this dummy text with your favorite IDE for this icon box. 
+                                    Don’t forget to change this dummy text with your favorite IDE for this icon box.</p>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="col-2">
+                                <p:graphicImage name="images/landing/feature-doc.png" library="atlantis-layout" />
+                            </div>
+                            <div class="col-10">
+                                <h3>WELL DOCUMENTED</h3>
+                                <p>Don’t forget to change this dummy text with your favorite IDE for this icon box. 
+                                    Don’t forget to change this dummy text with your favorite IDE for this icon box.</p>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="col-2">
+                                <p:graphicImage name="images/landing/feature-grid.png" library="atlantis-layout" />
+                            </div>
+                            <div class="col-10">
+                                <h3>POWERFUL GRID</h3>
+                                <p>Don’t forget to change this dummy text with your favorite IDE for this icon box. 
+                                    Don’t forget to change this dummy text with your favorite IDE for this icon box.</p>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <div class="col-2">
+                                <p:graphicImage name="images/landing/feature-support.png" library="atlantis-layout" />
+                            </div>
+                            <div class="col-10">
+                                <h3>PREMIUM SUPPORT</h3>
+                                <p>Don’t forget to change this dummy text with your favorite IDE for this icon box. 
+                                    Don’t forget to change this dummy text with your favorite IDE for this icon box.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="statistics">
+                <div>
+                    <h2>Atlantis Statistics</h2>
+                    <div class="grid">
+                        <div class="col-12 md:col-3">
+                            <h3>100+</h3>
+                            <p>UI COMPONENTS</p>
+                        </div>
+                        <div class="col-12 md:col-3">
+                            <h3>425</h3>
+                            <p>HOURS OF DEVELOPMENT</p>
+                        </div>
+                        <div class="col-12 md:col-3">
+                            <h3>119</h3>
+                            <p>CUPS OF COFFEE CONSUMED</p>
+                        </div>
+                        <div class="col-12 md:col-3">
+                            <h3>500K+</h3>
+                            <p>DOWNLOADS</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pricing">
+                <div>
+                    <h2>Pricing Options</h2>
+                    <div class="grid">
+                        <div class="col-12 md:col-4">
+                            <h3>BEGINNER</h3>
+                            <span class="price">$5</span>
+                            <p:commandButton value="SELECT PLAN" type="button"/>
+                            <ul>
+                                <li>Responsive</li>
+                                <li>Push Messages</li>
+                            </ul>
+                        </div>
+                        <div class="col-12 md:col-4">
+                            <h3>PRO</h3>
+                            <span class="price">$10</span>
+                            <p:commandButton value="SELECT PLAN" type="button"/>
+                            <ul>
+                                <li>Responsive</li>
+                                <li>Push Messages</li>
+                                <li>7/24 Support</li>
+                                <li>Free Shipping</li>
+                            </ul>
+                        </div>
+                        <div class="col-12 md:col-4">
+                            <h3>ENTERPRISE</h3>
+                            <span class="price">$20</span>
+                            <p:commandButton value="SELECT PLAN" type="button"/>
+                            <ul>
+                                <li>Responsive</li>
+                                <li>Push Messages</li>
+                                <li>7/24 Support</li>
+                                <li>Free Shipping</li>
+                                <li>Unlimited Bandwidth</li>
+                                <li>Unlimited Storage</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="video">
+                <div>
+                    <h2>Video</h2>
+                    <div class="video-container">
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/ErPsyBUCijM" frameborder="0" allow="fullscreen"></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <div id="footer">
+                <div>
+                    <p:graphicImage name="images/logo-black.png" library="atlantis-layout" styleClass="logo"/>
+                    <p:graphicImage name="images/appname-black.png" library="atlantis-layout" styleClass="appname"/>
+                    <div class="social">
+                        <a href="#">
+                            <i class="pi pi-facebook"></i>
+                        </a>
+                        <a href="#">
+                            <i class="pi pi-twitter"></i>
+                        </a>
+                        <a href="#">
+                            <i class="pi pi-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h:outputStylesheet name="css/primeicons.css" library="atlantis-layout"/>
+        <h:outputStylesheet name="css/primeflex.min.css" library="atlantis-layout"/>
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="atlantis-layout" />
+    </h:body>
+
+</html>

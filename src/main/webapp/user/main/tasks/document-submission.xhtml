@@ -1,0 +1,326 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/user-template.xhtml">
+
+    <ui:define name="head">
+        <!-- Hotjar Tracking Code for Site 5198958 (name missing) -->
+        <!-- Hotjar Tracking Code for Site 5198958 (name missing) -->
+        <script>
+            (function (h, o, t, j, a, r) {
+                h.hj = h.hj || function () {
+                    (h.hj.q = h.hj.q || []).push(arguments)
+                };
+                h._hjSettings = {hjid: 5198958, hjsv: 6};
+                a = o.getElementsByTagName('head')[0];
+                r = o.createElement('script');
+                r.async = 1;
+                r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+        </script>
+        <script>
+            let currentIndex = 0;
+            function showSlide(index) {
+//                alert("showSlide");
+                const steps = PrimeFaces.widgets["stepsWidget"];
+                console.log(steps);
+                if (steps) {
+                    steps.setActiveIndex(index);
+                    PrimeFaces.ajax.Request.handle({
+                        source: steps.id,
+                        process: steps.id,
+                        update: steps.id
+                    });
+                }
+            }
+
+            function moveToNextDiv(currentDivId, nextDivId) {
+                var currentDiv = document.getElementById(currentDivId);
+                var nextDiv = document.getElementById(nextDivId);
+                currentDiv.style.display = 'none';
+                nextDiv.style.display = 'block';
+                currentIndex++;
+                showSlide(currentIndex);
+            }
+
+            function moveToPrevDiv(currentDivId, prevDivId) {
+                var currentDiv = document.getElementById(currentDivId);
+                var nextDiv = document.getElementById(prevDivId);
+                currentDiv.style.display = 'none';
+                nextDiv.style.display = 'block';
+                currentIndex--;
+                showSlide(currentIndex);
+            }
+        </script>
+        <h:outputStylesheet name="css/flags/flags.css" library="demo" />
+        <style>
+            .ui-fileupload-files {
+                width: 100px;
+                height: 100px;
+                display: flex !important;
+                flex-wrap: wrap !important;
+                align-items: center; /* Align items to the center to reduce height */
+                overflow: hidden;
+            }
+
+            .ui-fileupload-filename {
+                writing-mode: horizontal-tb !important;
+                transform: rotate(0) !important;
+                margin: 0 5px !important;
+                white-space: nowrap !important;
+                display: inline-block !important;
+                max-width: 200px; /* Optional: Limit the filename width */
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .ui-fileupload-row {
+                display: flex;
+                align-items: center;
+            }
+
+            .ui-fileupload-preview img {
+                max-width: 20px; /* Set max width for the image */
+                max-height: 20px; /* Set max height for the image */
+                margin-right: 10px; /* Space between image and filename */
+            }
+            .success-message h1 {
+                font-size: 2.5em;
+                color: #4CAF50; /* Green color for success */
+                margin-bottom: 1px;
+                padding: 20px;
+                border-radius: 10px;
+                background: linear-gradient(135deg, #46499c, #8187c7); /* Gradient background */
+                color: #ffffff; /* White text color */
+                text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Text shadow for depth */
+                font-family: 'Arial', sans-serif; /* Font family */
+                font-weight: bold;
+            }
+            ll{
+                line-height: 5px;
+            }
+        </style>
+
+    </ui:define>
+
+    <ui:define name="title">Temco Bank Member Portal</ui:define>
+
+    <ui:define name="content">
+        <div class="col-12" style="text-align: center">
+            <h1>Loan Documents Submission Process First Week</h1>
+        </div>
+        <h:form id="form">
+            <p:growl id="growl" showDetail="true" life="5000"/> 
+            <div class="grid table-demo">
+                <div class="col-12">
+                    <!--                    <div class="card">
+                                            <p:steps id="stepsComponent" widgetVar="stepsWidget" activeIndex="0">
+                                                <p:menuitem value="Submit Deposited Bank Account Details" />
+                                                <p:menuitem value="Loan Applicant" />
+                                                <p:menuitem value="First Guarantor" />
+                                                <p:menuitem value="Second Guarantor" />
+                                            </p:steps>
+                                        </div>-->
+
+                    <div id="slider-container" style="overflow: hidden; position: relative;">
+                        <div id="div1" class="grid slide">
+                            <div class="col-12">
+                                <div class="card ui-fluid">
+                                    <h5>Confirmation of payment for membership fee ,Registration fee and payment for last three months installments</h5>
+                                    <div class="card ui-fluid">
+                                        <div class="formgrid grid">
+                                            <div class="field col">
+                                                <h5>Deadline Reminder:</h5>
+                                                <h:panelGroup style="display: inline-flex">
+                                                    <p>
+                                                        <b>Ensure that all payments and proof of payment slips are submitted within 14 days to activate the loan facility and to pursue your studies without interruption.<p:selectBooleanCheckbox style="margin-left: 5%"/></b>
+                                                    </p>
+                                                </h:panelGroup>
+                                                <h4>Upload payment slips</h4>
+                                                <h:panelGroup>
+                                                    <div style="display: inline-flex">
+                                                        <p>
+                                                            <h5>Enter Deposited Bank Account Details</h5>
+                                                        </p>
+                                                    </div>
+                                                    <div class="formgrid grid">
+                                                        <div class="field col-6">
+                                                            <p:outputLabel for="accountNumber">Account Number:</p:outputLabel>
+                                                            <p:inputText id="accountNumber" value="#{firstWeekDocumentsSubmission.accountNo}" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="formgrid grid">
+                                                        <div class="field col-6">
+                                                            <p:outputLabel for="accountName">Account Name</p:outputLabel>
+                                                            <p:inputText id="accountName" value="#{firstWeekDocumentsSubmission.accountName}" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="formgrid grid">
+                                                        <div class="field col-6">
+                                                            <p:outputLabel for="bankName">Bank Name: </p:outputLabel>
+                                                            <p:inputText id="bankName" value="#{firstWeekDocumentsSubmission.bankName}" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="formgrid grid">
+                                                        <div class="field col-6">
+                                                            <p:outputLabel for="branchName">Branch Name:</p:outputLabel>
+                                                            <p:inputText id="branchName" value="#{firstWeekDocumentsSubmission.branchName}" />
+                                                        </div>
+                                                    </div>
+                                                </h:panelGroup>
+                                            </div>
+                                        </div>
+                                        <div class="formgrid grid">
+                                        </div>
+                                        <div class="formgrid grid">
+                                            <div class="field col"></div>
+                                            <div class="field col" style="float: right">
+                                                <p:commandButton value="Next" onclick="moveToNextDiv('div1', 'div2')" type="button" 
+                                                                 styleClass="ui-button-raised ui-button-warning mr-2 mb-2" 
+                                                                 style="width: 50%; margin: 6% 0 0 0; font-weight: bolder" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="div2" class="grid slide" style="display: none;">
+                            <div class="col-12">
+                                <div class="card ui-fluid">
+                                    <h5>Upload payment slips for last three months installments</h5>
+                                    <div class="card ui-fluid">
+                                        <div class="formgrid grid">
+                                            <div class="field col">
+                                                <h:panelGroup>
+                                                    <div style="display: inline-flex">
+                                                        <p>
+                                                            <b> 1) Upload payment slips for last three months installments </b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="memberone">Upload payment slip from here  : </p:outputLabel>
+                                                        <p:fileUpload style="margin: 5% 0 0 3%" id="memberone" mode="simple" accept="image/jpeg,image/png" sizeLimit="10485760" value="#{firstWeekDocumentsSubmission.lastThreeMonthsInstallementsSlip}"/>
+                                                    </div>
+                                                </h:panelGroup>
+                                                <h5 style="margin: 5% 0 0 0">Upload Payment Slip for membership registration fee and share purchase </h5>
+                                                <h:panelGroup style="margin: 5% 0 0 0">
+                                                    <div style="display: inline-flex;margin: 4% 0 0 0">
+                                                        <p>
+                                                            <b> 2) Loan Applicant membership registration fee and share purchase payment slip :</b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="slip1">Upload membership registration fee and share purchase payment slip from here  : </p:outputLabel>
+                                                        <p:fileUpload style="margin: 5% 0 0 3%" id="slip1" mode="simple" accept="image/jpeg,image/png" sizeLimit="10485760" value="#{firstWeekDocumentsSubmission.loanApplicantSlip}"/>
+                                                    </div>
+                                                </h:panelGroup>
+                                            </div>
+                                        </div>
+                                        <div class="formgrid grid">
+                                        </div>
+                                        <div class="formgrid grid">
+                                            <div class="field col">
+                                                <p:commandButton value="Back" onclick="moveToPrevDiv('div2', 'div1')" type="button" 
+                                                                 styleClass="ui-button-raised ui-button-warning mr-2 mb-2" 
+                                                                 style="width: 50%; margin: 6% 0 0 0; font-weight: bolder" />
+                                            </div>
+                                            <div class="field col" style="float: right">
+                                                <p:commandButton value="Next" onclick="moveToNextDiv('div2', 'div3')" type="button" 
+                                                                 styleClass="ui-button-raised ui-button-warning mr-2 mb-2" 
+                                                                 style="width: 50%; margin: 6% 0 0 0; font-weight: bolder" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="div3" class="grid slide" style="display: none;">
+                            <div class="col-12">
+                                <div class="card ui-fluid">
+                                    <h5>Upload First Guarantor's membership registration fee and share purchase payment slip</h5>
+                                    <div class="card ui-fluid">
+                                        <div class="formgrid grid">
+                                            <div class="field col">
+                                                <h:panelGroup>
+                                                    <div style="display: inline-flex">
+                                                        <p>
+                                                            <b> 1) First Guarantor's membership registration fee and share purchase payment slip :</b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="slip2">Upload payment slip from here  : </p:outputLabel>
+                                                        <p:fileUpload style="margin: 5% 0 0 3%" id="slip2" mode="simple" accept="image/jpeg,image/png" sizeLimit="10485760" value="#{firstWeekDocumentsSubmission.guarantorOneSlip}"/>
+                                                    </div>
+                                                </h:panelGroup>
+                                            </div>
+                                        </div>
+                                        <div class="formgrid grid">
+                                        </div>
+                                        <div class="formgrid grid">
+                                            <div class="field col">
+                                                <p:commandButton value="Back" onclick="moveToPrevDiv('div3', 'div2')" type="button" 
+                                                                 styleClass="ui-button-raised ui-button-warning mr-2 mb-2" 
+                                                                 style="width: 50%; margin: 6% 0 0 0; font-weight: bolder" />
+
+                                            </div>
+                                            <div class="field col" style="float: right">
+                                                <p:commandButton value="Next" onclick="moveToNextDiv('div3', 'div4')" type="button" 
+                                                                 styleClass="ui-button-raised ui-button-warning mr-2 mb-2" 
+                                                                 style="width: 50%; margin: 6% 0 0 0; font-weight: bolder" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="div4" class="grid slide" style="display: none;">
+                            <div class="col-12">
+                                <div class="card ui-fluid">
+                                    <h5>Upload second guarantor's membership registration fee and share purchase payment slip</h5>
+                                    <div class="card ui-fluid">
+                                        <div class="formgrid grid">
+                                            <div class="field col">
+                                                <h:panelGroup>
+                                                    <div style="display: inline-flex">
+                                                        <p>
+                                                            <b> 1) Second Guarantor membership registration fee and share purchase payment slip :</b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="slip3">Upload payment slip from here  : </p:outputLabel>
+                                                        <p:fileUpload style="margin: 5% 0 0 3%" id="slip3" mode="simple" accept="image/jpeg,image/png" sizeLimit="10485760" value="#{firstWeekDocumentsSubmission.guarantorTwoSlip}"/>
+                                                    </div>
+                                                </h:panelGroup>
+                                            </div>
+                                        </div>
+                                        <div class="formgrid grid">
+                                        </div>
+                                        <div class="formgrid grid">
+                                            <div class="field col">
+                                                <p:commandButton value="Back" onclick="moveToPrevDiv('div4', 'div3')" type="button" 
+                                                                 styleClass="ui-button-raised ui-button-warning mr-2 mb-2" 
+                                                                 style="width: 50%; margin: 6% 0 0 0; font-weight: bolder" />
+                                            </div>
+                                            <div class="field col" style="float: right">
+                                                <p:commandButton value="Save"  styleClass="ui-button-raised ui-button-warning mr-2 mb-2" style="width: 50%;margin: 6% 0 0 0;font-weight: bolder">
+                                                    <f:ajax execute="@form"  render="form" listener="#{firstWeekDocumentsSubmission.saveDocuments()}"/>
+                                                </p:commandButton>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

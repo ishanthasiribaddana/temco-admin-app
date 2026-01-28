@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Temco Bank</title>
+        <!-- Hotjar Tracking Code for Site 5198958 (name missing) -->
+        <script>
+            (function (h, o, t, j, a, r) {
+                h.hj = h.hj || function () {
+                    (h.hj.q = h.hj.q || []).push(arguments)
+                };
+                h._hjSettings = {hjid: 5198958, hjsv: 6};
+                a = o.getElementsByTagName('head')[0];
+                r = o.createElement('script');
+                r.async = 1;
+                r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+        </script>
+    </h:head>
+
+    <h:body styleClass="landing-body">
+        <div class="landing-wrapper">
+            <div id="header">
+                <div style="display: flex;justify-content: center;align-items: center">
+                    <p:graphicImage name="images/temco.png" style="width: 35%;height: 125px" library="atlantis-layout" />
+
+                    <a id="menu-button" href="#">
+                        <p:graphicImage name="images/icon-ellipsis-v.svg" alt="Menu" library="atlantis-layout" />
+                    </a>
+                </div>
+            </div>
+
+            <div id="introduction">
+                <h2>Achieve Your Dream with a TEMCO* Student Loan #{personalDetailsRegistration.interestRate} %</h2>
+                <h5>Lowest interest, simple process, flexible repayments.
+                    Apply now for your brighter future!
+
+                </h5>
+            </div>
+
+            <div id="features">
+                <div>
+                    <h:form id="form">
+                        <p:growl id="growl" showDetail="true" life="5000"/> 
+                        <div class="grid">
+                            <div class="col-12">
+                                <div class="card ui-fluid">
+                                    <!--<span style="color: red;font-weight: bolder">* මෙය ණය ඉල්ලුම්පතේ ආකෘතියකි. මෙම සාමාජිකයාගේ දත්ත සැබෑ දත්ත නොවේ . ඔබට අවශ්‍ය Real Time  Online TEMCO ණය ක්‍රමය තේරුම් ගැනීමට නම්, ණය ඉල්ලුම්පත්‍රය පිරවීමට Province එක ඇතුලත් කරන තැනින් ආරම්භ කරන්න. ඔබ මේ වන විට TEMCO බැංකුවේ සාමාජිකයෙකු නොවේ නම් ණය ඉල්ලුම් කිරීම පිණිස මුලින් TEMCO සමුපකාර බැංකුවේ සාමාජිකත්වය අයදුම් කල යුතුය. ඒ සඳහා 0777 570 403 අමතන්න</span>-->
+                                    <h5>Personal Details</h5>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="first_name">First Name :</p:outputLabel>
+                                            <p:inputText id="first_name" value="#{personalDetailsRegistration.firstName}" onclick="#{personalDetailsRegistration.popUpMessage()}" readonly="#{personalDetailsRegistration.displayBoolean}"/>
+                                        </div>
+                                        <div class="field col">
+                                            <p:outputLabel for="last_name">Last Name :</p:outputLabel>
+                                            <p:inputText id="last_name" value="#{personalDetailsRegistration.lastName}" onclick="#{personalDetailsRegistration.popUpMessage()}" readonly="#{personalDetailsRegistration.displayBooleanTwo}"/>
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="nic">NIC :</p:outputLabel>
+                                            <p:inputText id="nic" value="#{personalDetailsRegistration.nic}" onclick="#{personalDetailsRegistration.popUpMessage()}" readonly="true"/>
+                                        </div>
+                                        <div class="field col">
+                                            <p:outputLabel for="mobile">Mobile No :</p:outputLabel>
+                                            <p:inputText id="mobile" value="#{personalDetailsRegistration.mobileNo}" onclick="#{personalDetailsRegistration.popUpMessage()}" readonly="#{personalDetailsRegistration.telephone}"/>
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col" style="display: #{personalDetailsRegistration.genderBool? 'block':'none' }">
+                                            <p:outputLabel for="gender">Gender :</p:outputLabel>
+                                            <p:inputText id="gender" value="#{personalDetailsRegistration.userGender}" onclick="#{personalDetailsRegistration.popUpMessage()}" readonly="true"/>
+                                        </div>
+                                        <div class="field col" style="display: #{personalDetailsRegistration.genderBool? 'none':'block' }">
+                                            <p:outputLabel for="gender_list">Gender :</p:outputLabel>
+                                            <p:selectOneMenu id="gender_list" value="#{personalDetailsRegistration.gender_list}">
+                                                <f:selectItems value="#{personalDetailsRegistration.selectedGender}" />
+                                            </p:selectOneMenu>
+                                        </div>
+                                        <div class="field col">
+                                            <p:outputLabel for="dob">Date of Birth :</p:outputLabel>
+                                            <p:datePicker id="dob" showIcon="true" onclick="#{personalDetailsRegistration.popUpMessage()}" value="#{personalDetailsRegistration.dob}" />
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="email">Email :</p:outputLabel>
+                                            <p:inputText id="email" type="email" onclick="#{personalDetailsRegistration.popUpMessage()}" value="#{personalDetailsRegistration.email}" readonly="true"/>
+                                            <p:message for="email" display="text"/>
+                                        </div>
+                                        <div class="field col">
+                                            <p:outputLabel for="adderssOne">Address 01 :</p:outputLabel>
+                                            <p:inputText id="adderssOne" value="#{personalDetailsRegistration.addressOne}" onclick="#{personalDetailsRegistration.popUpMessage()}" readonly="#{personalDetailsRegistration.displayAddress}"/>
+                                        </div>
+
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="addressTwo">Address 02 :</p:outputLabel>
+                                            <p:inputText id="addressTwo" value="#{personalDetailsRegistration.addressTwo}" onclick="#{personalDetailsRegistration.popUpMessage()}" readonly="#{personalDetailsRegistration.displayAddress}"/>
+                                        </div>
+                                        <div class="field col">
+                                            <p:outputLabel for="adderssThree">Address 03 :</p:outputLabel>
+                                            <p:inputText id="adderssThree" value="#{personalDetailsRegistration.addressThree}" onclick="#{personalDetailsRegistration.popUpMessage()}" readonly="#{personalDetailsRegistration.displayAddress}"/>
+                                        </div>
+
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col-6">
+                                            <p:outputLabel for="province">Province :</p:outputLabel>
+                                            <p:selectOneMenu id="province" value="#{personalDetailsRegistration.selectedProvinceId}">
+                                                <f:selectItems value="#{personalDetailsRegistration.provinceList}" />
+                                                <f:ajax event="change" render="district" listener="#{personalDetailsRegistration.district()}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                        <div class="field col-6">
+                                            <p:outputLabel for="district">District :</p:outputLabel>
+                                            <p:selectOneMenu id="district" value="#{personalDetailsRegistration.selectedDistrict}">
+                                                <f:selectItems value="#{personalDetailsRegistration.districtList}" />
+                                                <f:ajax event="change" render="divisionalSecretarial" listener="#{personalDetailsRegistration.divisionalSecretarial()}" />
+                                            </p:selectOneMenu>
+                                        </div>
+                                        <div class="field col-6">
+                                            <p:outputLabel for="divisionalSecretarial">Divisional Secretarial  :</p:outputLabel>
+                                            <p:selectOneMenu id="divisionalSecretarial" value="#{personalDetailsRegistration.selectedDivisionalSecretarial}">
+                                                <f:selectItems value="#{personalDetailsRegistration.divisionalSecretarialList}" />
+                                                <f:ajax event="change" render="gnDivision" listener="#{personalDetailsRegistration.gnDivision()}"/>
+                                            </p:selectOneMenu>
+                                        </div>
+                                        <div class="field col-6">
+                                            <p:outputLabel for="gnDivision">GN Division :</p:outputLabel>
+                                            <p:selectOneMenu id="gnDivision" value="#{personalDetailsRegistration.selectedGnDivision}" styleClass="form-control">
+                                                <f:selectItems value="#{personalDetailsRegistration.gnDivisionList}" />
+                                            </p:selectOneMenu>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="employement">
+                            <div class="card ui-fluid">
+                                <div class="formgrid grid">
+                                    <div class="field col">
+                                        <p:outputLabel for="employment_type">Select your employment Type :</p:outputLabel>
+                                        <p:selectOneMenu id="employment_type" value="#{personalDetailsRegistration.selectedEmployementType}">
+                                            <f:selectItems value="#{personalDetailsRegistration.employementTypeList}" />
+                                            <f:ajax render="employmentSections" listener="#{personalDetailsRegistration.userEmployementType}" />
+                                        </p:selectOneMenu>
+                                    </div>
+                                </div>
+
+                                <!-- Container for Employment Sections -->
+                                <h:panelGroup id="employmentSections">
+                                    <!-- Employed Section -->
+                                    <h:panelGroup rendered="#{personalDetailsRegistration.employed}">
+                                        <div class="formgrid grid">
+                                            <div class="field col">
+                                                <p:outputLabel for="nameOfTheEmployer">Name of the Employer :</p:outputLabel>
+                                                <p:autoComplete id="nameOfTheEmployer" value="#{personalDetailsRegistration.nameOftheEmployerOrBusiness}" completeMethod="#{personalDetailsRegistration.loadEmployers}" style="margin-bottom:10px;">
+                                                    <p:ajax event="itemSelect" listener="#{personalDetailsRegistration.setSelectedEmployer()}" update="form"></p:ajax>
+                                                </p:autoComplete>
+                                            </div>
+                                            <div class="field col">
+                                                <p:outputLabel for="numberOfTheEmployer">Contact number of the Employer :</p:outputLabel>
+                                                <p:inputText id="numberOfTheEmployer" value="#{personalDetailsRegistration.contactNumberOftheEmployerOrBusiness}" />
+                                            </div>
+                                        </div>
+                                        <div class="formgrid grid">
+                                            <div class="field col">
+                                                <p:outputLabel for="employeradderssOne">Address 01 :</p:outputLabel>
+                                                <p:inputText id="employeradderssOne" value="#{personalDetailsRegistration.employerAddressOneOrBusiness}" />
+                                            </div>
+                                            <div class="field col">
+                                                <p:outputLabel for="employeraddressTwo">Address 02 :</p:outputLabel>
+                                                <p:inputText id="employeraddressTwo" value="#{personalDetailsRegistration.employerAddressTwoOrBusiness}" />
+                                            </div>
+                                        </div>
+                                        <div class="formgrid grid">
+                                            <div class="field col">
+                                                <p:outputLabel for="employeradderssThree">Address 03 :</p:outputLabel>
+                                                <p:inputText id="employeradderssThree" value="#{personalDetailsRegistration.employerAddressThreeOrBusiness}" />
+                                            </div>
+                                        </div>
+                                    </h:panelGroup>
+
+                                    <!-- Self-Employed Section -->
+                                    <h:panelGroup rendered="#{personalDetailsRegistration.selfEmployed}">
+                                        <div class="formgrid grid">
+                                            <div class="field col">
+                                                <p:outputLabel for="nameOfTheBusiness">Name of business :</p:outputLabel>
+                                                <p:autoComplete id="nameOfTheBusiness" value="#{personalDetailsRegistration.nameOftheEmployerOrBusiness}" completeMethod="#{personalDetailsRegistration.loadEmployers}" style="margin-bottom:10px;">
+                                                    <p:ajax event="itemSelect" listener="#{personalDetailsRegistration.setSelectedEmployer()}" update="form"></p:ajax>
+                                                </p:autoComplete>
+                                            </div>
+                                            <div class="field col">
+                                                <p:outputLabel for="contactNumberOfTheBusiness">Contact Number of business :</p:outputLabel>
+                                                <p:inputText id="contactNumberOfTheBusiness" value="#{personalDetailsRegistration.contactNumberOftheEmployerOrBusiness}" />
+                                            </div>
+                                        </div>
+                                        <div class="formgrid grid">
+                                            <div class="field col">
+                                                <p:outputLabel for="businessadderssOne">Address 01 :</p:outputLabel>
+                                                <p:inputText id="businessadderssOne" value="#{personalDetailsRegistration.employerAddressOneOrBusiness}" />
+                                            </div>
+                                            <div class="field col">
+                                                <p:outputLabel for="businessaddressTwo">Address 02 :</p:outputLabel>
+                                                <p:inputText id="businessaddressTwo" value="#{personalDetailsRegistration.employerAddressTwoOrBusiness}" />
+                                            </div>
+                                        </div>
+                                        <div class="formgrid grid">
+                                            <div class="field col">
+                                                <p:outputLabel for="businessadderssThree">Address 03 :</p:outputLabel>
+                                                <p:inputText id="businessadderssThree" value="#{personalDetailsRegistration.employerAddressThreeOrBusiness}" />
+                                            </div>
+                                        </div>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+
+                        <div class="grid">
+                            <div class="col-12">
+                                <div class="card ui-fluid">
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:selectBooleanCheckbox id="terms" value="#{personalDetailsRegistration.checkbox}" required="true" requiredMessage="You must agree to the terms and conditions to proceed."/>
+                                            <h:outputLabel for="terms" value="I authorize TEMCO Bank and its representatives to send notifications or  contact me through all available communication channels regarding my loan* application and other matters." />
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col"></div>
+                                        <div class="field col" style="float: right">
+                                            <p:commandButton value="Save" icon="pi pi-save" styleClass="ui-button-raised ui-button-warning mr-2 mb-2" style="width: 50%;margin: 6% 0 0 0;font-weight: bolder">
+                                                <f:ajax execute="@form" render="form" listener="#{personalDetailsRegistration.saveUserDetails()}"/>
+                                            </p:commandButton>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </h:form>
+
+                    <div id="footer">
+                        <div>
+                            <p:graphicImage name="images/temco.png" library="atlantis-layout" styleClass="logo" style="height: 50px"/>
+                            <!--<p:graphicImage name="images/appname-black.png" library="atlantis-layout" styleClass="appname"/>-->
+                            <div class="social">
+                                <a href="#">
+                                    <i class="pi pi-facebook"></i>
+                                </a>
+                                <a href="#">
+                                    <i class="pi pi-twitter"></i>
+                                </a>
+                                <a href="#">
+                                    <i class="pi pi-github"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h:outputStylesheet name="css/primeicons.css" library="atlantis-layout"/>
+        <h:outputStylesheet name="css/primeflex.min.css" library="atlantis-layout"/>
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="atlantis-layout" />
+    </h:body>
+</html>

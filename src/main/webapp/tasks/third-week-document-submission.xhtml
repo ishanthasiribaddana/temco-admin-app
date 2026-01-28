@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Temco Bank</title>
+        <style>
+            .ui-fileupload-files {
+                width: 100px;
+                height: 100px;
+                display: flex !important;
+                flex-wrap: wrap !important;
+                align-items: center; /* Align items to the center to reduce height */
+                overflow: hidden;
+            }
+
+            .ui-fileupload-filename {
+                writing-mode: horizontal-tb !important;
+                transform: rotate(0) !important;
+                margin: 0 5px !important;
+                white-space: nowrap !important;
+                display: inline-block !important;
+                max-width: 200px; /* Optional: Limit the filename width */
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .ui-fileupload-row {
+                display: flex;
+                align-items: center;
+            }
+
+            .ui-fileupload-preview img {
+                max-width: 20px; /* Set max width for the image */
+                max-height: 20px; /* Set max height for the image */
+                margin-right: 10px; /* Space between image and filename */
+            }
+            .success-message h1 {
+                font-size: 2.5em;
+                color: #4CAF50; /* Green color for success */
+                margin-bottom: 1px;
+                padding: 20px;
+                border-radius: 10px;
+                background: linear-gradient(135deg, #46499c, #8187c7); /* Gradient background */
+                color: #ffffff; /* White text color */
+                text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Text shadow for depth */
+                font-family: 'Arial', sans-serif; /* Font family */
+                font-weight: bold;
+            }
+            ll{
+                line-height: 5px;
+            }
+        </style>
+
+        <script>
+            function moveToNextDiv(currentDivId, nextDivId) {
+                var currentDiv = document.getElementById(currentDivId);
+                var nextDiv = document.getElementById(nextDivId);
+                currentDiv.style.display = 'none';
+                nextDiv.style.display = 'block';
+            }
+        </script>
+
+    </h:head>
+
+    <h:body styleClass="landing-body">
+        <div class="landing-wrapper">
+            <div id="header">
+                <div style="display: flex;justify-content: center;align-items: center">
+                    <p:graphicImage name="images/temco.png" style="width: 35%;height: 125px" library="atlantis-layout" />
+
+                    <a id="menu-button" href="#">
+                        <p:graphicImage name="images/icon-ellipsis-v.svg" alt="Menu" library="atlantis-layout" />
+                    </a>
+                </div>
+            </div>
+
+            <div id="features">
+                <div>
+                    <h:form id="instruction" enctype="multipart/form-data">
+                        <p:growl id="growl" showDetail="true" /> 
+                        <div class="grid">
+                            <div class="col-12 success-message" style="text-align: center">
+                                <h1>Loan Documents Submission Process <br/> Fourth Week</h1>
+                            </div>
+
+                            <div id="div1" style="display:block;">
+                                <div class="card ui-fluid">
+                                    <h5>3) Week 4 and Week 5 - Collection of employment related main documents From Loan requester and Guarantors</h5>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <h5>Deadline Reminder:</h5>
+                                            <h:panelGroup style="display: inline-flex">
+                                                <p>
+                                                    <b>All employment-related main documents must be submitted by the end of Week 4 to pursue your studies without interruption <p:selectBooleanCheckbox value="#{thirdWeek.checkbox5Selected}" style="margin-left: 5%"/></b>
+                                                </p>
+                                            </h:panelGroup>
+                                            <h:panelGroup>
+                                                <p>
+                                                    <b> 1) Documents for Loan Requester:</b>
+                                                </p>
+                                                <p>
+                                                    <b> if employed </b>
+                                                </p>
+                                                <ul>
+                                                    <li>Upload a copy of your Employment ID <p:selectBooleanCheckbox value="#{thirdWeek.checkbox6Selected}" style="margin-left: 5%"/></li>
+                                                    <li>Upload salary slips for the last three months <p:selectBooleanCheckbox value="#{thirdWeek.checkbox7Selected}" style="margin-left: 5%"/></li>
+                                                </ul>
+                                                <p>
+                                                    <b> If Self-Employed</b>
+                                                </p>
+                                                <ul>
+                                                    <li>Upload a copy of the Business Registration Certificate</li>
+                                                </ul>
+                                            </h:panelGroup>
+                                            <h:panelGroup>
+                                                <p>
+                                                    <b> Guarantors Employment Related Documents(You need to upload both Guarantors documents):</b>
+                                                </p>
+                                                <p>
+                                                    <b> if employed</b>
+                                                </p>
+                                                <ul>
+                                                    <li>Upload a copy of your Employment ID <p:selectBooleanCheckbox value="#{thirdWeek.checkbox8Selected}" style="margin-left: 5%"/></li>
+                                                    <li>Upload salary slips for the last three months <p:selectBooleanCheckbox value="#{thirdWeek.checkbox9Selected}" style="margin-left: 5%"/></li>
+                                                </ul>
+                                                <p>
+                                                    <b>If Self-Employed</b>
+                                                </p>
+                                                <ul>
+                                                    <li>Upload a copy of the Business Registration Certificate <p:selectBooleanCheckbox value="#{thirdWeek.checkbox10Selected}" style="margin-left: 5%"/></li>
+                                                </ul>
+                                            </h:panelGroup>
+                                            <h:panelGroup>
+                                                <p:commandButton value="Next" 
+                                                             actionListener="#{thirdWeek.checkDiv3}" 
+                                                             oncomplete="if (#{thirdWeek.allChecked}) moveToNextDiv('div1', 'div2');"
+                                                             update="@form" />
+                                            </h:panelGroup>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="div2" style="display:none;" class="col-12">
+                                <div class="card ui-fluid">
+                                    <h5>Collection of employment related main documents From Loan requester and Guarantors</h5>
+                                    <div class="card ui-fluid">
+                                        <div class="formgrid grid">
+                                            <div class="field col">
+                                                <h5>Deadline Reminder:</h5>
+                                                <h:panelGroup style="display: inline-flex">
+                                                    <p>
+                                                        <b>All employment-related main documents must be submitted by the end of Week 4 to pursue your studies without interruption.<p:selectBooleanCheckbox style="margin-left: 5%"/></b>
+                                                    </p>
+                                                </h:panelGroup>
+                                                <h5>Documents for Loan Requester</h5>
+                                                <h:panelGroup>
+                                                    <h6>If Employed</h6>
+                                                    <div style="display: inline-flex">
+                                                        <p>
+                                                            <b> 1) Upload a copy of your Employment ID </b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="downpayment_slip1">Upload document from here  : </p:outputLabel>
+                                                        <p:fileUpload style="margin: 5% 0 0 3%" id="downpayment_slip1" mode="simple" accept="image/jpeg,image/png" sizeLimit="10485760" value="#{guarantorDetails.secondGuarantorUploadFIleOne}"/>
+                                                    </div>
+                                                    <div style="display: inline-flex">
+                                                        <p>
+                                                            <b> 2) Upload salary slips for the last three months </b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="downpayment_slip2">Upload document from here  : </p:outputLabel>
+                                                        <p:fileUpload style="margin: 5% 0 0 3%" id="downpayment_slip2" mode="simple" accept="image/jpeg,image/png" sizeLimit="10485760" value="#{guarantorDetails.secondGuarantorUploadFIleOne}"/>
+                                                    </div>
+                                                    <h6>If Self-Employed</h6>
+                                                    <div style="display: inline-flex">
+                                                        <p>
+                                                            <b> 1) Upload a copy of the Business Registration Certificate </b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="downpayment_slip3">Upload document from here  : </p:outputLabel>
+                                                        <p:fileUpload style="margin: 5% 0 0 3%" id="downpayment_slip3" mode="simple" accept="image/jpeg,image/png" sizeLimit="10485760" value="#{guarantorDetails.secondGuarantorUploadFIleOne}"/>
+                                                    </div>
+                                                </h:panelGroup>
+                                                <h5 style="margin: 5% 0 0 0">Guarantors Proof of Address Documents</h5>
+                                                <h:panelGroup>
+                                                    <h6>If First Guarantor Employed</h6>
+                                                    <div style="display: inline-flex">
+                                                        <p>
+                                                            <b> 1) Upload a copy of your Employment ID </b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="downpayment_slip4">Upload document from here  : </p:outputLabel>
+                                                        <p:fileUpload style="margin: 5% 0 0 3%" id="downpayment_slip4" mode="simple" accept="image/jpeg,image/png" sizeLimit="10485760" value="#{guarantorDetails.secondGuarantorUploadFIleOne}"/>
+                                                    </div>
+                                                    <div style="display: inline-flex">
+                                                        <p>
+                                                            <b> 2) Upload salary slips for the last three months </b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="downpayment_slip5">Upload document from here  : </p:outputLabel>
+                                                        <p:fileUpload style="margin: 5% 0 0 3%" id="downpayment_slip5" mode="simple" accept="image/jpeg,image/png" sizeLimit="10485760" value="#{guarantorDetails.secondGuarantorUploadFIleOne}"/>
+                                                    </div>
+                                                    <h6>If First Guarantor Self-Employed</h6>
+                                                    <div style="display: inline-flex">
+                                                        <p>
+                                                            <b> 1) Upload a copy of the Business Registration Certificate </b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="downpayment_slip6">Upload document from here  : </p:outputLabel>
+                                                        <p:fileUpload style="margin: 5% 0 0 3%" id="downpayment_slip6" mode="simple" accept="image/jpeg,image/png" sizeLimit="10485760" value="#{guarantorDetails.secondGuarantorUploadFIleOne}"/>
+                                                    </div>
+                                                </h:panelGroup>
+                                                <h:panelGroup>
+                                                    <h6>If Second Guarantor Employed</h6>
+                                                    <div style="display: inline-flex">
+                                                        <p>
+                                                            <b> 1) Upload a copy of your Employment ID </b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="downpayment_slip7">Upload document from here  : </p:outputLabel>
+                                                        <p:fileUpload style="margin: 5% 0 0 3%" id="downpayment_slip7" mode="simple" accept="image/jpeg,image/png" sizeLimit="10485760" value="#{guarantorDetails.secondGuarantorUploadFIleOne}"/>
+                                                    </div>
+                                                    <div style="display: inline-flex">
+                                                        <p>
+                                                            <b> 2) Upload salary slips for the last three months </b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="downpayment_slip8">Upload document from here  : </p:outputLabel>
+                                                        <p:fileUpload style="margin: 5% 0 0 3%" id="downpayment_slip8" mode="simple" accept="image/jpeg,image/png" sizeLimit="10485760" value="#{guarantorDetails.secondGuarantorUploadFIleOne}"/>
+                                                    </div>
+                                                    <h6>If Second Guarantor Self-Employed</h6>
+                                                    <div style="display: inline-flex">
+                                                        <p>
+                                                            <b> 1) Upload a copy of the Business Registration Certificate </b>
+                                                        </p>
+                                                    </div>
+                                                    <div class="field col">
+                                                        <p:outputLabel for="downpayment_slip9">Upload document from here  : </p:outputLabel>
+                                                        <p:fileUpload style="margin: 5% 0 0 3%" id="downpayment_slip9" mode="simple" accept="image/jpeg,image/png" sizeLimit="10485760" value="#{guarantorDetails.secondGuarantorUploadFIleOne}"/>
+                                                    </div>
+                                                </h:panelGroup>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="grid">
+                                    <div class="col-12">
+                                        <div class="card ui-fluid">
+                                            <div class="formgrid grid">
+                                            </div>
+                                            <div class="formgrid grid">
+                                                <div class="field col"></div>
+                                                <div class="field col" style="float: right">
+                                                    <p:commandButton value="Submit Documents" icon="pi pi-save" styleClass="ui-button-raised ui-button-warning mr-2 mb-2" style="width: 50%;margin: 6% 0 0 0;font-weight: bolder">
+                                                        <f:ajax execute="@form" render="saveform" listener="#{guarantorDetails.saveGuarantorDetails()}"/>
+                                                    </p:commandButton>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+
+            <div id="footer">
+                <div>
+                    <p:graphicImage name="images/temco.png" library="atlantis-layout" styleClass="logo" style="height: 50px"/>
+                    <!--<p:graphicImage name="images/appname-black.png" library="atlantis-layout" styleClass="appname"/>-->
+                    <div class="social">
+                        <a href="#">
+                            <i class="pi pi-facebook"></i>
+                        </a>
+                        <a href="#">
+                            <i class="pi pi-twitter"></i>
+                        </a>
+                        <a href="#">
+                            <i class="pi pi-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h:outputStylesheet name="css/primeicons.css" library="atlantis-layout"/>
+        <h:outputStylesheet name="css/primeflex.min.css" library="atlantis-layout"/>
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="atlantis-layout" />
+    </h:body>
+</html>

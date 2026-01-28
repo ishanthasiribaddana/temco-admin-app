@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Temco Bank</title>
+        <style>
+            .ui-fileupload-files {
+                width: 100px;
+                height: 100px;
+                display: flex !important;
+                flex-wrap: wrap !important;
+                align-items: center; /* Align items to the center to reduce height */
+                overflow: hidden;
+            }
+
+            .ui-fileupload-filename {
+                writing-mode: horizontal-tb !important;
+                transform: rotate(0) !important;
+                margin: 0 5px !important;
+                white-space: nowrap !important;
+                display: inline-block !important;
+                max-width: 200px; /* Optional: Limit the filename width */
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .ui-fileupload-row {
+                display: flex;
+                align-items: center;
+            }
+
+            .ui-fileupload-preview img {
+                max-width: 20px; /* Set max width for the image */
+                max-height: 20px; /* Set max height for the image */
+                margin-right: 10px; /* Space between image and filename */
+            }
+            .success-message h1 {
+                font-size: 2.5em;
+                color: #4CAF50; /* Green color for success */
+                margin-bottom: 1px;
+                padding: 20px;
+                border-radius: 10px;
+                background: linear-gradient(135deg, #46499c, #8187c7); /* Gradient background */
+                color: #ffffff; /* White text color */
+                text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Text shadow for depth */
+                font-family: 'Arial', sans-serif; /* Font family */
+                font-weight: bold;
+            }
+
+        </style>
+        <script type="text/javascript">
+            function submitForm() {
+                document.getElementById('uploadButton').click(); // Trigger the hidden button
+            }
+        </script>
+        <!-- Hotjar Tracking Code for Site 5198958 (name missing) -->
+        <script>
+            (function (h, o, t, j, a, r) {
+                h.hj = h.hj || function () {
+                    (h.hj.q = h.hj.q || []).push(arguments)
+                };
+                h._hjSettings = {hjid: 5198958, hjsv: 6};
+                a = o.getElementsByTagName('head')[0];
+                r = o.createElement('script');
+                r.async = 1;
+                r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+        </script>
+    </h:head>
+
+    <h:body styleClass="landing-body">
+        <div class="landing-wrapper">
+            <div id="header">
+                <div style="display: flex;justify-content: center;align-items: center">
+                    <p:graphicImage name="images/temco.png" style="width: 35%;height: 125px" library="atlantis-layout" />
+
+                    <a id="menu-button" href="#">
+                        <p:graphicImage name="images/icon-ellipsis-v.svg" alt="Menu" library="atlantis-layout" />
+                    </a>
+                </div>
+            </div>
+
+            <div id="features">
+                <div>
+                    <h:form id="saveform" enctype="multipart/form-data">
+                        <p:growl id="growl" showDetail="true" life="5000"/> 
+                        <div class="grid">
+                            <div class="col-12 success-message" style="text-align: center">
+                                <h1>Submit Guarantor Details</h1>
+                            </div>
+                            <h:panelGroup id="firstGurantor">
+                                <div  class="col-12">
+                                    <div class="card ui-fluid">
+                                        <h5>First Guarantor Details</h5>
+                                        <ul>
+                                            <li>First guarantor must be your parent or guardian.<span style="color: red"> *</span></li>
+                                        </ul>
+                                        <div class="formgrid grid">
+                                            <div class="field col-6">
+                                                <p:outputLabel for="nic">NIC : </p:outputLabel>
+                                                <p:inputText id="nic" value="#{guarantorDetails.firstGuarantorNic}" type="text">
+                                                    <p:ajax event="change" update="saveform:firstGurantor" listener="#{guarantorDetails.searchGuarantorAlreadyEntered(1)}"/>
+                                                </p:inputText>
+                                            </div>
+                                        </div>
+                                        <div class="formgrid grid">
+                                            <div class="field col">
+                                                <p:outputLabel for="first_name">First Name : </p:outputLabel>
+                                                <p:inputText id="first_name" value="#{guarantorDetails.firstGuarantorFirstName}" type="text"/>
+                                            </div>
+                                            <div class="field col">
+                                                <p:outputLabel for="last_name">Last Name : </p:outputLabel>
+                                                <p:inputText id="last_name" value="#{guarantorDetails.firstGuarantorlastName}" type="text"/>
+                                            </div>
+                                        </div>
+                                        <div class="formgrid grid">
+                                            <div class="field col">
+                                                <p:outputLabel for="mobile_no">Mobile No : </p:outputLabel>
+                                                <p:inputText id="mobile_no" value="#{guarantorDetails.firstGuarantorMobileNo}" type="telephone"/>
+                                            </div>
+                                            <div class="field col">
+                                            </div>
+                                        </div>
+                                        <div class="formgrid grid">
+                                            <div class="field col-6">
+                                                <p:outputLabel for="province">Province :</p:outputLabel>
+                                                <p:selectOneMenu id="province" value="#{guarantorDetails.selectedProvinceId}">
+                                                    <f:selectItems value="#{guarantorDetails.provinceList}" />
+                                                    <f:ajax event="change" render="district" listener="#{guarantorDetails.district()}"/>
+                                                </p:selectOneMenu>
+                                            </div>
+                                            <div class="field col-6">
+                                                <p:outputLabel for="district">District :</p:outputLabel>
+                                                <p:selectOneMenu id="district" value="#{guarantorDetails.selectedDistrict}">
+                                                    <f:selectItems value="#{guarantorDetails.districtList}" />
+                                                    <f:ajax event="change" render="divisionalSecretarial" listener="#{guarantorDetails.divisionalSecretarial()}" />
+                                                </p:selectOneMenu>
+                                            </div>
+                                            <div class="field col-6">
+                                                <p:outputLabel for="divisionalSecretarial">Divisional Secretarial  :</p:outputLabel>
+                                                <p:selectOneMenu id="divisionalSecretarial" value="#{guarantorDetails.selectedDivisionalSecretarial}">
+                                                    <f:selectItems value="#{guarantorDetails.divisionalSecretarialList}" />
+                                                    <f:ajax event="change" render="gnDivision" listener="#{guarantorDetails.gnDivision()}"/>
+                                                </p:selectOneMenu>
+                                            </div>
+                                            <div class="field col-6">
+                                                <p:outputLabel for="gnDivision">GN Division :</p:outputLabel>
+                                                <p:selectOneMenu id="gnDivision" value="#{guarantorDetails.selectedGnDivision}" styleClass="form-control">
+                                                    <f:selectItems value="#{guarantorDetails.gnDivisionList}" />
+                                                </p:selectOneMenu>
+                                            </div>
+                                        </div>
+                                        <div class="formgrid grid">
+                                            <div class="field col-12">
+                                                <h6>Please upload images of both sides of the first guarantor's NIC or Driving License</h6>
+                                            </div>
+                                            <div class="field col">
+                                                <p:outputLabel for="front_one">Front side  : </p:outputLabel>
+                                                <p:fileUpload 
+                                                    id="front_one" 
+                                                    mode="simple" 
+                                                    accept="image/jpeg,image/png" 
+                                                    sizeLimit="2097152"
+                                                    fileLimitMessage="File size exceeds 2 MB limit. Please upload a smaller file."
+                                                    value="#{guarantorDetails.firstGuarantorUploadFIleOne}"
+                                                    update="growl"/>
+                                            </div>
+                                            <div class="field col">
+                                                <p:outputLabel for="back_one">Back side  : </p:outputLabel>
+                                                <p:fileUpload id="back_one" mode="simple" accept="image/jpeg,image/png" fileLimitMessage="File size exceeds 2 MB limit. Please upload a smaller file." sizeLimit="2097152" value="#{guarantorDetails.firstGuarantorUploadFIleTwo}"/>
+                                            </div>
+                                        </div>
+                                        <div id="employement">
+                                            <div class="card ui-fluid">
+                                                <div class="formgrid grid">
+                                                    <div class="field col">
+                                                        <p:outputLabel for="employment_type_one">Select employment Type :</p:outputLabel>
+                                                        <p:selectOneMenu id="employment_type_one" value="#{guarantorDetails.firstGuarantorSelectedEmployementType}">
+                                                            <f:selectItems value="#{guarantorDetails.firstGuarantoremployementTypeList}" />
+                                                            <f:ajax render="employmentSectionsOne" listener="#{guarantorDetails.firstUserEmployementType}"/>
+                                                        </p:selectOneMenu>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Container for Employment Sections -->
+                                                <h:panelGroup id="employmentSectionsOne">
+                                                    <!-- Employed Section -->
+                                                    <h:panelGroup rendered="#{guarantorDetails.firstGuarantoremlpoyed}">
+                                                        <div class="formgrid grid">
+                                                            <div class="field col">
+                                                                <p:outputLabel for="nameOfTheEmployer_one">Name of the Employer :</p:outputLabel>
+                                                                <p:autoComplete id="nameOfTheEmployer_one" value="#{guarantorDetails.firstGnameOftheEmployerOrBusiness}" completeMethod="#{guarantorDetails.firstGuarantorLoadEmployers}" style="margin-bottom:10px;">
+                                                                    <p:ajax event="itemSelect" listener="#{guarantorDetails.setFirstGuarantorSelectedEmployer()}" update="saveform:employmentSectionsOne"></p:ajax>
+                                                                </p:autoComplete>
+                                                            </div>
+                                                            <div class="field col">
+                                                                <p:outputLabel for="numberOfTheEmployer_one">Contact number of the Employer :</p:outputLabel>
+                                                                <p:inputText id="numberOfTheEmployer_one" value="#{guarantorDetails.firstGcontactNumberOftheEmployerOrBusiness}" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="formgrid grid">
+                                                            <div class="field col">
+                                                                <p:outputLabel for="employeradderssOne_one">Address 01 :</p:outputLabel>
+                                                                <p:inputText id="employeradderssOne_one" value="#{guarantorDetails.firstGemployerAddressOneOrBusiness}" />
+                                                            </div>
+                                                            <div class="field col">
+                                                                <p:outputLabel for="employeraddressTwo_one">Address 02 :</p:outputLabel>
+                                                                <p:inputText id="employeraddressTwo_one" value="#{guarantorDetails.firstGemployerAddressTwoOrBusiness}" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="formgrid grid">
+                                                            <div class="field col">
+                                                                <p:outputLabel for="employeradderssThree_one">Address 03 :</p:outputLabel>
+                                                                <p:inputText id="employeradderssThree_one" value="#{guarantorDetails.firstGemployerAddressThreeOrBusiness}" />
+                                                            </div>
+                                                        </div>
+                                                    </h:panelGroup>
+
+                                                    <!-- Self-Employed Section -->
+                                                    <h:panelGroup rendered="#{guarantorDetails.firstGuarantorselfEmlpoyed}">
+                                                        <div class="formgrid grid">
+                                                            <div class="field col">
+                                                                <p:outputLabel for="nameOfTheBusiness_one">Name of business :</p:outputLabel>
+                                                                <p:autoComplete id="nameOfTheBusiness_one" value="#{guarantorDetails.firstGnameOftheEmployerOrBusiness}" completeMethod="#{guarantorDetails.firstGuarantorLoadEmployers(query)}" style="margin-bottom:10px;">
+                                                                    <p:ajax event="itemSelect" listener="#{guarantorDetails.setFirstGuarantorSelectedEmployer}" update="saveform:employmentSectionsOne"></p:ajax>
+                                                                </p:autoComplete>
+                                                            </div>
+                                                            <div class="field col">
+                                                                <p:outputLabel for="contactNumberOfTheBusiness_one">Contact Number of business :</p:outputLabel>
+                                                                <p:inputText id="contactNumberOfTheBusiness_one" value="#{guarantorDetails.firstGcontactNumberOftheEmployerOrBusiness}" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="formgrid grid">
+                                                            <div class="field col">
+                                                                <p:outputLabel for="businessadderssOne_one">Address 01 :</p:outputLabel>
+                                                                <p:inputText id="businessadderssOne_one" value="#{guarantorDetails.firstGemployerAddressOneOrBusiness}" />
+                                                            </div>
+                                                            <div class="field col">
+                                                                <p:outputLabel for="businessaddressTwo_one">Address 02 :</p:outputLabel>
+                                                                <p:inputText id="businessaddressTwo_one" value="#{guarantorDetails.firstGemployerAddressTwoOrBusiness}" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="formgrid grid">
+                                                            <div class="field col">
+                                                                <p:outputLabel for="businessadderssThree_one">Address 03 :</p:outputLabel>
+                                                                <p:inputText id="businessadderssThree_one" value="#{guarantorDetails.firstGemployerAddressThreeOrBusiness}" />
+                                                            </div>
+                                                        </div>
+                                                    </h:panelGroup>
+                                                    <div class="formgrid grid">
+                                                        <div class="field col"></div>
+                                                        <div class="field col" style="float: right">
+                                                            <p:commandButton value="Save" icon="" styleClass="ui-button-raised ui-button-warning mr-2 mb-2" style="width: 50%;margin: 6% 0 0 50%;font-weight: bolder">
+                                                                <f:ajax execute="@form"  listener="#{guarantorDetails.saveFirstGuarantorDetails()}" render="@form"/>
+                                                            </p:commandButton>
+                                                        </div>
+                                                    </div>
+                                                </h:panelGroup>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+
+            <div id="footer">
+                <div>
+                    <p:graphicImage name="images/temco.png" library="atlantis-layout" styleClass="logo" style="height: 50px"/>
+                    <!--<p:graphicImage name="images/appname-black.png" library="atlantis-layout" styleClass="appname"/>-->
+                    <div class="social">
+                        <a href="#">
+                            <i class="pi pi-facebook"></i>
+                        </a>
+                        <a href="#">
+                            <i class="pi pi-twitter"></i>
+                        </a>
+                        <a href="#">
+                            <i class="pi pi-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h:outputStylesheet name="css/primeicons.css" library="atlantis-layout"/>
+        <h:outputStylesheet name="css/primeflex.min.css" library="atlantis-layout"/>
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="atlantis-layout" />
+    </h:body>
+</html>

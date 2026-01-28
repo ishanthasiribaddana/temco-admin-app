@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Temco Bank Portal</title>
+        <!-- Hotjar Tracking Code for Site 5198958 (name missing) -->
+        <script>
+            (function (h, o, t, j, a, r) {
+                h.hj = h.hj || function () {
+                    (h.hj.q = h.hj.q || []).push(arguments)
+                };
+                h._hjSettings = {hjid: 5198958, hjsv: 6};
+                a = o.getElementsByTagName('head')[0];
+                r = o.createElement('script');
+                r.async = 1;
+                r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+        </script>
+    </h:head>
+
+    <h:body styleClass="login-body">
+        <div class="login-panel ui-fluid">
+            <h:form id="form">
+                <p:growl id="growl" showDetail="true" life="1000" />
+                <div class="grid">
+                    <div class="col-12 logo-container">
+                        <p:graphicImage  name="images/temco.png" library="atlantis-layout" />
+                        <h1>Login to Your Account</h1>
+                        <h2>WELCOME TO TEMCO Bank Portal</h2>
+                    </div>
+                    <div class="col-12">
+                        <p:inputText placeholder="Username" value="#{adminLogin.username}"/>
+                    </div>
+                    <div class="col-12">
+                        <p:password placeholder="Password" value="#{adminLogin.password}"/>
+                    </div>
+                    <div class="col-12 button-container">
+                        <p:commandButton value="Sign In" icon="pi pi-user" styleClass="ui-button-success">
+                            <f:ajax execute="@form" render="growl" listener="#{adminLogin.verifyLogin()}"/>
+                        </p:commandButton>
+                        <!--<p:outputLabel value="Use Java Institute Credentials" />-->
+                        <!--<p:button outcome="/dashboard" value="Forgot Password" icon="pi pi-question-circle" styleClass="ui-button-info" />-->
+                    </div>
+                </div>
+            </h:form>
+        </div>
+
+        <h:outputStylesheet name="css/primeicons.css" library="atlantis-layout"/>
+        <h:outputStylesheet name="css/primeflex.min.css" library="atlantis-layout"/>
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="atlantis-layout" />
+    </h:body>
+
+</html>

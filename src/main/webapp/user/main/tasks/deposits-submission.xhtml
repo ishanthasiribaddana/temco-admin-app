@@ -1,0 +1,96 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/user-template.xhtml">
+
+    <ui:define name="head">
+        <!-- Hotjar Tracking Code for Site 5198958 (name missing) -->
+        <!-- Hotjar Tracking Code for Site 5198958 (name missing) -->
+        <script>
+            (function (h, o, t, j, a, r) {
+                h.hj = h.hj || function () {
+                    (h.hj.q = h.hj.q || []).push(arguments)
+                };
+                h._hjSettings = {hjid: 5198958, hjsv: 6};
+                a = o.getElementsByTagName('head')[0];
+                r = o.createElement('script');
+                r.async = 1;
+                r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+        </script>
+        <h:outputStylesheet name="css/flags/flags.css" library="demo" />
+    </ui:define>
+
+    <ui:define name="title">User Loans</ui:define>
+
+    <ui:define name="content">
+        <div class="col-12" style="text-align: center">
+            <h2>Deposits Receipts Submission</h2>
+        </div>
+        <h:form id="form" enctype="multipart/form-data">
+            <p:growl id="growl" showDetail="true" life="5000"/> 
+            <div class="grid table-demo">
+                <div class="col-12">
+                    <div class="card">
+                        <p:panel class="col-12" style="text-align: center">
+
+                            <h:panelGrid class="col-12" columns="2" style="text-align: left">
+                                <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+                                    <div class="field col-6">
+                                        <p:outputLabel style="font-weight: bolder">Account No : </p:outputLabel>
+                                        <p:outputLabel style="margin: 0 0 0 5px" >#{depositsSubmission.memberLoanAccount.accountNo}</p:outputLabel>
+                                    </div>
+                                </h:panelGroup>
+                                <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+                                    <div class="field col-6">
+                                        <p:outputLabel style="font-weight: bolder">Account Name : </p:outputLabel>
+                                        <p:outputLabel style="margin: 0 0 0 5px" >#{depositsSubmission.accountName}</p:outputLabel>
+                                    </div>
+                                </h:panelGroup>
+                            </h:panelGrid>
+                            <h:panelGrid class="col-12" columns="2" style="text-align: left">
+                                <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+                                    <div class="field col-12">
+                                        <p:outputLabel style="font-weight: bolder">Deposit Slip Uploading Date : </p:outputLabel>
+                                        <p:calendar style="margin: 0 0 0 5px;width: 100%" value="#{depositsSubmission.depositedDate}" readonly="true" pattern="yyyy-MM-dd" required="true"/>
+                                    </div>
+                                </h:panelGroup>
+                                <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+                                    <div class="field col-12">
+                                        <p:outputLabel style="font-weight: bolder">Deposited Total Amount (Rs.) : </p:outputLabel>
+                                        <p:inputText style="margin: 0 0 0 5px" id="totalAmount" value="#{depositsSubmission.depositedTotalAmount}" required="true"/>
+                                    </div>
+                                </h:panelGroup>
+                            </h:panelGrid>
+                            <h:panelGrid class="col-12" columns="2" style="text-align: left">
+                                <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+                                    <div class="field col-6">
+                                        <p:outputLabel style="font-weight: bolder">Upload Receipt : </p:outputLabel>
+                                        <p:fileUpload style="margin: 0 0 0 5px" value="#{depositsSubmission.uploadeReceipt}" mode="simple" fileLimitMessage="File size exceeds 2 MB limit. Please upload a smaller file." accept="image/jpeg,image/png" sizeLimit="2097152" required="true"/>
+                                    </div>
+                                </h:panelGroup>
+                            </h:panelGrid>
+                            <h:panelGrid class="col-12" columns="2" style="text-align: left">
+                                <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+                                    <div class="formgrid grid">
+                                        <div class="field col"></div>
+                                        <div class="field col" style="float: right">
+                                            <p:commandButton value="Save" icon="" styleClass="ui-button-raised ui-button-warning mr-2 mb-2" style="width: 50%;margin: 6% 0 0 50%;font-weight: bolder">
+                                                <f:ajax execute="@form" listener="#{depositsSubmission.save()}" render="form"/>
+                                            </p:commandButton>
+                                        </div>
+                                    </div>
+                                </h:panelGroup>
+                            </h:panelGrid>
+                        </p:panel>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

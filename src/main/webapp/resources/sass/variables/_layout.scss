@@ -1,0 +1,39 @@
+$fontSize:13px !default;
+$fontFamily:'Open Sans','Helvetica Neue',sans-serif !default;
+$textColor:#2d353c !default;
+$textSecondaryColor:lighten($textColor,25%) !default;
+$borderRadius:2px !default;
+$dividerColor:#e3e3e3 !default;
+$iconWidth:16px !default;
+$iconHeight:16px !default;
+$tabletBreakpoint: 991px !default;
+$phoneBreakpoint: 576px !default;
+$highlightTextColor:#ffffff !default;
+$transitionDuration:.3s !default;
+
+/* Layout */
+$bodyBgColor:#f1f3f6 !default;
+$logoBgColor:#2d353c !default;
+$footerBgColor:#dee0e3 !default;
+
+/* Topbar */
+$topbarMenuTextColor:#ffffff !default;
+$topbarMenuTextHoverColor:#e3e3e3 !default;
+$topbarSubmenuBgColor:#f7f7f7 !default;
+$topbarSubmenuItemHoverBgColor:#e3e3e3 !default;
+
+/* Menu */
+$menuItemHoverBgColor:#e3e3e3 !default;
+$darkSidemenuBgColor:#545b61 !default;
+$darkMenuBgColor:#63696e !default;
+$darkMenuItemTextColor:#dee0e3 !default;
+$darkMenuItemHoverBgColor:#767b7f !default;
+$menuitemColor:#545b61 !default;
+
+/* List Items */
+$listItemPadding:.5em 1em !default;
+
+/* Predefined Colors */
+$orange:#ff9c59 !default;
+$green:#5ea980 !default;
+$steel:#58799f !default;

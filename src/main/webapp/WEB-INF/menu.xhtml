@@ -1,0 +1,59 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pa="http://primefaces.org/atlantis">
+
+    <div class="layout-sidebar #{guestPreferences.menuColor}">
+        <pa:tabMenu id="tabMenu">
+
+            <pa:tab id="tab1" icon="pi pi-th-large" title="System">
+                <h:form id="menu-form1">
+                    <pa:menu widgetVar="AtlantisMenuWidget">
+                        <!--<p:submenu id="m_dashboard_components" label="Dashboard" icon="pi pi-fw pi-home">-->
+
+                        <!--</p:submenu>-->
+                        <p:submenu id="m_tasks_components" label="Admin" icon="pi pi-fw pi-star">
+                            <p:menuitem id="m_formlayouttasksOne" value="Loan Offers Dashboard" icon="pi pi-fw pi-id-card"
+                                        outcome="/admin/tasks/email-send-dashboard.xhtml"/>
+                        </p:submenu>
+                        <p:submenu id="m_reports_components" label="Loans" icon="pi pi-fw pi-star">
+
+                            <p:submenu id="temcoOverview" 
+                                       label="TEMCO Loans Overview Report"
+                                       icon="pi pi-fw pi-id-card">
+
+                                <p:menuitem id="m_thirasaraLoan"
+                                            value="Thirasara Loan Scheme"
+                                            icon="pi pi-fw pi-angle-right"
+                                            outcome="/admin/view/thirasara-loan"/>
+
+                                <p:menuitem id="m_internationalUniPayment"
+                                            value="International University Payment"
+                                            icon="pi pi-fw pi-angle-right"
+                                            outcome="/admin/view/international-university-payment"/>
+
+                            </p:submenu>
+
+                            <p:menuitem id="m_formlayoutTwo"
+                                        value="Loan Calculator"
+                                        icon="pi pi-fw pi-id-card"
+                                        outcome="/admin/tasks/calculate-loan"/>
+
+                        </p:submenu>
+
+
+                        <!--                        <p:submenu id="m_funds_management_components" label="Funds Management" icon="pi pi-fw pi-star">
+                                                    <p:menuitem id="m_formlayoutfundsmanagementone" value="Transaction Entry Panel" icon="pi pi-fw pi-id-card"
+                                                                outcome="/admin/tasks/transaction-entry-panel"/>
+                                                </p:submenu>-->
+                    </pa:menu>
+                </h:form>
+            </pa:tab>
+
+        </pa:tabMenu>
+    </div>
+
+</ui:composition>

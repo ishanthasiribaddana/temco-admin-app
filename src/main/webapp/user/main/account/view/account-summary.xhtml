@@ -1,0 +1,126 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/user-template.xhtml">
+
+    <ui:define name="head">
+        <!-- Hotjar Tracking Code for Site 5198958 (name missing) -->
+        <!-- Hotjar Tracking Code for Site 5198958 (name missing) -->
+        <script>
+            (function (h, o, t, j, a, r) {
+                h.hj = h.hj || function () {
+                    (h.hj.q = h.hj.q || []).push(arguments)
+                };
+                h._hjSettings = {hjid: 5198958, hjsv: 6};
+                a = o.getElementsByTagName('head')[0];
+                r = o.createElement('script');
+                r.async = 1;
+                r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+        </script>
+        <h:outputStylesheet name="css/flags/flags.css" library="demo" />
+    </ui:define>
+
+    <ui:define name="title">User Loans</ui:define>
+
+    <ui:define name="content">
+        <div class="col-12" style="text-align: center">
+            <h2>Accounts Summary</h2>
+        </div>
+        <h:form id="form">
+            <p:growl id="growl" showDetail="true" life="5000"/> 
+            <div class="grid table-demo">
+                <div class="col-12">
+                    <div class="card">
+                        <p:panel class="col-12" style="text-align: center">
+                            <h5>Loan Account Details</h5>
+                            <h:panelGrid class="col-12" columns="2" style="text-align: left">
+                                <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+                                    <div class="field col-6">
+                                        <p:outputLabel style="font-weight: bolder">Account No : </p:outputLabel>
+                                        <div>
+                                            <p:outputLabel>#{accountSummary.memberLoanAccount.accountNo}</p:outputLabel>
+                                        </div>
+                                    </div>
+                                </h:panelGroup>
+                                <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+                                    <div class="field col-6">
+                                        <p:outputLabel style="font-weight: bolder">Account Status : </p:outputLabel>
+                                        <div>
+                                            <p:outputLabel>Active</p:outputLabel>
+                                        </div>
+                                    </div>
+                                </h:panelGroup>
+                                <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+                                    <div class="field col-6">
+                                        <p:outputLabel style="font-weight: bolder">Currency Type : </p:outputLabel>
+                                        <div>
+                                            <p:outputLabel>LKR</p:outputLabel>
+                                        </div>
+                                    </div>
+                                </h:panelGroup>
+                                <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+                                    <div class="field col-6">
+                                        <p:outputLabel style="font-weight: bolder">Account Type : </p:outputLabel>
+                                        <div>
+                                            <p:outputLabel>#{accountSummary.memberLoanAccount.accountTypeId.type}</p:outputLabel>
+                                        </div>
+                                    </div>
+                                </h:panelGroup>
+                                <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+                                    <div class="field col-6">
+                                        <p:outputLabel style="font-weight: bolder">Account Balance : </p:outputLabel>
+                                        <div>
+                                            <p:outputLabel>LKR 40000</p:outputLabel>
+                                        </div>
+                                    </div>
+                                </h:panelGroup>
+                            </h:panelGrid>
+                        </p:panel>
+                    </div>
+                </div>
+            </div>
+            <div class="grid table-demo">
+                <div class="col-12">
+                    <div class="card">
+                        <p:panel class="col-12" style="text-align: center">
+                            <h5>Transaction History</h5>
+                            <h:panelGrid class="col-12" columns="2" style="text-align: left">
+                                <p:dataTable widgetVar="customersDT" var="customer" value="#{userLoans.userLoansArrayList}" reflow="true"
+                                             selection="#{dataTableDemoView.selectedCustomers}" rowIndexVar="index"
+                                             paginator="true" rows="10" paginatorPosition="bottom" rowSelectMode="add">
+                                    <p:column headerText="Date" style="width: 10%">
+                                        <h:outputText value="" />
+                                    </p:column>
+                                    <p:column headerText="Remarks" style="width: 10%">
+                                        <h:outputText value="" />
+                                    </p:column>
+                                    <p:column headerText="cheque No">
+                                        <h:outputText value="" />
+                                    </p:column>
+                                    <p:column headerText="Currency">
+                                        <h:outputText value="" />
+                                    </p:column>
+                                    <p:column headerText="Amount(CR/DR)">
+                                        <h:outputText value="" />
+                                    </p:column>
+                                    <p:column headerText="CR/DR">
+                                        <h:outputText value="" />
+                                    </p:column>
+                                    <p:column headerText="Account Balance">
+                                        <h:outputText value="" />
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGrid>
+                        </p:panel>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,35 @@
+# Build
+/target/
+*.class
+*.jar
+*.war
+
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Environment
+.env
+.env.local
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build output
+frontend/dist/
+Backend/target/
+
+# Secrets
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!tsconfig.node.json
+instant-guard*.json

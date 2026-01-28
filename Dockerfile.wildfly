@@ -1,0 +1,26 @@
+FROM quay.io/wildfly/wildfly:27.0.1.Final-jdk17
+
+# Environment variables
+ENV DB_HOST=mariadb
+ENV DB_PORT=3306
+ENV DB_NAME=temco_system
+ENV DB_USER=root
+ENV DB_PASSWORD=6qZB6d@pIvj
+
+# Copy MariaDB driver
+COPY mysql-connector-java-8.1.0.jar /opt/jboss/wildfly/standalone/deployments/
+
+# Add management user
+RUN /opt/jboss/wildfly/bin/add-user.sh admin admin123 --silent
+
+# Configure datasource using CLI
+RUN /opt/jboss/wildfly/bin/jboss-cli.sh --commands="embed-server,\
+/subsystem=datasources/jdbc-driver=mariadb:add(driver-name=mariadb,driver-module-name=com.mysql,driver-class-name=com.mysql.cj.jdbc.Driver),\
+/subsystem=datasources/data-source=TemcoDS:add(jndi-name=java:jboss/datasources/TemcoDS,driver-name=mariadb,connection-url=jdbc:mysql://\${env.DB_HOST}:\${env.DB_PORT}/\${env.DB_NAME}?useSSL=false&allowPublicKeyRetrieval=true,user-name=\${env.DB_USER},password=\${env.DB_PASSWORD},min-pool-size=5,max-pool-size=20),\
+stop-embedded-server"
+
+# Expose ports
+EXPOSE 8080 9990 8787
+
+# Start WildFly with management and debug
+CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", "--debug"]

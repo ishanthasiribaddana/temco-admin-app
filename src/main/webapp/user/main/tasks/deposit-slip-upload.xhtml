@@ -1,0 +1,515 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/user-template.xhtml">
+
+    <ui:define name="head">
+        <style>
+            .step-wizard {
+                margin: 30px 0;
+            }
+
+            .step-item {
+                text-align: center;
+                position: relative;
+            }
+
+            .step-circle {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background: #e9ecef;
+                border: 3px solid #dee2e6;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                color: #6c757d;
+                margin-bottom: 10px;
+            }
+
+            .step-item.active .step-circle {
+                background: #667eea;
+                border-color: #667eea;
+                color: white;
+            }
+
+            .step-item.completed .step-circle {
+                background: #28a745;
+                border-color: #28a745;
+                color: white;
+            }
+
+            .step-label {
+                font-size: 13px;
+                color: #6c757d;
+                font-weight: 500;
+            }
+
+            .step-item.active .step-label {
+                color: #667eea;
+                font-weight: 600;
+            }
+
+            .section-card {
+                background: white;
+                border-radius: 12px;
+                padding: 30px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                margin-bottom: 20px;
+            }
+
+            .section-title {
+                font-size: 20px;
+                color: #2c3e50;
+                margin-bottom: 20px;
+                padding-bottom: 10px;
+                border-bottom: 2px solid #e9ecef;
+            }
+
+            /* Custom CSS Spinner for PrimeFaces 11.0 compatibility */
+            .custom-spinner {
+                border: 5px solid #f3f3f3;
+                border-top: 5px solid #667eea;
+                border-radius: 50%;
+                width: 60px;
+                height: 60px;
+                animation: spin 1s linear infinite;
+                margin: 0 auto;
+            }
+
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+
+            .upload-area {
+                border: 3px dashed #dee2e6;
+                border-radius: 12px;
+                padding: 40px;
+                text-align: center;
+                background: #f8f9fa;
+                margin: 20px 0;
+            }
+
+            .upload-icon {
+                font-size: 48px;
+                color: #667eea;
+                margin-bottom: 15px;
+            }
+
+            .comparison-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+                margin: 20px 0;
+            }
+
+            .comparison-card {
+                background: #f8f9fa;
+                border: 2px solid #e9ecef;
+                border-radius: 8px;
+                padding: 20px;
+            }
+
+            .comparison-card.highlight {
+                border-color: #ffc107;
+                background: #fff9e6;
+            }
+
+            .comparison-header {
+                font-weight: 600;
+                color: #495057;
+                margin-bottom: 15px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #dee2e6;
+            }
+
+            .comparison-field {
+                margin-bottom: 12px;
+            }
+
+            .comparison-label {
+                font-size: 11px;
+                color: #6c757d;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .comparison-value {
+                font-size: 16px;
+                color: #2c3e50;
+                font-weight: 600;
+                margin-top: 4px;
+            }
+
+            .confidence-badge {
+                display: inline-block;
+                padding: 3px 10px;
+                border-radius: 12px;
+                font-size: 11px;
+                font-weight: 600;
+                margin-top: 8px;
+            }
+
+            .confidence-high {
+                background: #d4edda;
+                color: #155724;
+            }
+
+            .confidence-medium {
+                background: #fff3cd;
+                color: #856404;
+            }
+
+            .confidence-low {
+                background: #f8d7da;
+                color: #721c24;
+            }
+
+            .success-icon {
+                width: 80px;
+                height: 80px;
+                background: #28a745;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 20px;
+            }
+
+            .success-icon i {
+                font-size: 40px;
+                color: white;
+            }
+
+            .tracking-id {
+                background: #f8f9fa;
+                border: 2px solid #e9ecef;
+                border-radius: 8px;
+                padding: 15px;
+                font-size: 18px;
+                font-weight: 600;
+                color: #667eea;
+                margin: 20px 0;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="title">Temco Bank - Deposit Slip Upload</ui:define>
+
+    <ui:define name="content">
+        <h:form id="depositForm" enctype="multipart/form-data">
+            <p:growl id="growl" showDetail="true" life="5000" sticky="false"/>
+
+            <!-- Header -->
+            <div class="col-12" style="text-align: center; margin-bottom: 20px;">
+                <h2 style="color: #2c3e50; margin-bottom: 8px;">Deposit Slip Upload</h2>
+                <p style="color: #6c757d;">Upload your bank deposit slip for verification</p>
+            </div>
+
+            <!-- Progress Steps -->
+            <div class="step-wizard">
+                <div class="grid">
+                    <div class="col step-item #{depositSlipBean.currentStep >= 1 ? 'active' : ''} #{depositSlipBean.currentStep > 1 ? 'completed' : ''}">
+                        <div class="step-circle">1</div>
+                        <div class="step-label">Basic Info</div>
+                    </div>
+                    <div class="col step-item #{depositSlipBean.currentStep >= 2 ? 'active' : ''} #{depositSlipBean.currentStep > 2 ? 'completed' : ''}">
+                        <div class="step-circle">2</div>
+                        <div class="step-label">Upload Slip</div>
+                    </div>
+                    <div class="col step-item #{depositSlipBean.currentStep >= 3 ? 'active' : ''} #{depositSlipBean.currentStep > 3 ? 'completed' : ''}">
+                        <div class="step-circle">3</div>
+                        <div class="step-label">AI Processing</div>
+                    </div>
+                    <div class="col step-item #{depositSlipBean.currentStep >= 4 ? 'active' : ''} #{depositSlipBean.currentStep > 4 ? 'completed' : ''}">
+                        <div class="step-circle">4</div>
+                        <div class="step-label">Verification</div>
+                    </div>
+                    <div class="col step-item #{depositSlipBean.currentStep == 5 ? 'active' : ''}">
+                        <div class="step-circle">5</div>
+                        <div class="step-label">Complete</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 1: Basic Deposit Information -->
+            <p:panel rendered="#{depositSlipBean.currentStep == 1}" styleClass="section-card">
+                <h3 class="section-title">Basic Deposit Information</h3>
+
+                <div class="formgrid grid">
+                    <div class="field col-12 md:col-6">
+                        <p:outputLabel for="paymentPurpose" value="Payment Purpose" styleClass="required"/>
+                        <p:selectOneMenu id="paymentPurpose" value="#{depositSlipBean.selectedPaymentPurpose}" 
+                                         required="true" requiredMessage="Payment purpose is required"
+                                         style="width: 100%">
+                            <f:selectItem itemLabel="Select Payment Purpose" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{depositSlipBean.paymentPurposes}" 
+                                           var="purpose" 
+                                           itemLabel="#{purpose.name}" 
+                                           itemValue="#{purpose}"/>
+                        </p:selectOneMenu>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <p:outputLabel for="depositDate" value="Deposit Date" styleClass="required"/>
+                        <p:datePicker id="depositDate" value="#{depositSlipBean.depositDate}" 
+                                      required="true" requiredMessage="Deposit date is required"
+                                      maxdate="#{depositSlipBean.depositDate}"
+                                      showIcon="true" pattern="yyyy-MM-dd"
+                                      style="width: 100%"/>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <p:outputLabel for="depositAmount" value="Deposit Amount (Rs.)" styleClass="required"/>
+                        <p:inputNumber id="depositAmount" value="#{depositSlipBean.depositAmount}" 
+                                       required="true" requiredMessage="Deposit amount is required"
+                                       minValue="100" decimalPlaces="2"
+                                       style="width: 100%">
+                            <f:convertNumber type="currency" currencySymbol="Rs. "/>
+                        </p:inputNumber>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <p:outputLabel for="referenceNumber" value="Bank Slip Reference Number" styleClass="required"/>
+                        <p:inputText id="referenceNumber" value="#{depositSlipBean.referenceNumber}" 
+                                     required="true" requiredMessage="Reference number is required"
+                                     style="width: 100%"/>
+                    </div>
+                </div>
+
+                <p:messages id="step1Messages" showDetail="true" closable="true"/>
+
+                <div class="formgrid grid" style="margin-top: 20px;">
+                    <div class="field col-12" style="text-align: center;">
+                        <p:commandButton value="Next" icon="pi pi-arrow-right" 
+                                         action="#{depositSlipBean.proceedToUpload}"
+                                         update="depositForm"
+                                         styleClass="ui-button-primary" style="min-width: 150px;"/>
+                    </div>
+                </div>
+            </p:panel>
+
+            <!-- Step 2: Upload Deposit Slip -->
+            <p:panel rendered="#{depositSlipBean.currentStep == 2}" styleClass="section-card">
+                <h3 class="section-title">Upload Deposit Slip</h3>
+
+                <div class="upload-area">
+                    <i class="pi pi-cloud-upload upload-icon"></i>
+                    <h:panelGroup rendered="#{!depositSlipBean.fileUploaded}">
+                        <p:fileUpload id="fileUpload" 
+                                      listener="#{depositSlipBean.handleFileUpload}"
+                                      mode="advanced" 
+                                      dragDropSupport="true"
+                                      allowTypes="/(\.|\/)(jpe?g|png|pdf)$/"
+                                      sizeLimit="5242880"
+                                      fileLimit="1"
+                                      auto="true"
+                                      update="depositForm growl"
+                                      label="Choose File"
+                                      uploadLabel="Upload"
+                                      cancelLabel="Cancel"/>
+                        <p style="color: #6c757d; margin-top: 10px;">JPG, PNG, or PDF (Max 5MB)</p>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{depositSlipBean.fileUploaded}">
+                        <i class="pi pi-check-circle" style="font-size: 48px; color: #28a745;"></i>
+                        <p style="color: #28a745; font-weight: 600; margin-top: 10px;">
+                            File Uploaded: #{depositSlipBean.uploadedFileName}
+                        </p>
+                    </h:panelGroup>
+                </div>
+
+                <p:messages id="step2Messages" showDetail="true" closable="true"/>
+
+                <div class="formgrid grid" style="margin-top: 20px;">
+                    <div class="field col-6">
+                        <p:commandButton value="Previous" icon="pi pi-arrow-left" 
+                                         action="#{depositSlipBean.previousStep}"
+                                         update="depositForm"
+                                         styleClass="ui-button-secondary" style="width: 100%;"/>
+                    </div>
+                    <div class="field col-6">
+                        <p:commandButton value="Process with AI" icon="pi pi-arrow-right" 
+                                         action="#{depositSlipBean.processWithOCR}"
+                                         update="depositForm growl"
+                                         disabled="#{!depositSlipBean.fileUploaded}"
+                                         styleClass="ui-button-primary" style="width: 100%;"/>
+                    </div>
+                </div>
+            </p:panel>
+
+            <!-- Step 3: AI Processing -->
+            <p:panel rendered="#{depositSlipBean.currentStep == 3}" styleClass="section-card">
+                <h3 class="section-title">AI-Assisted Data Extraction</h3>
+
+                <div style="text-align: center; padding: 60px 0;">
+                    <!-- Custom CSS Spinner for PrimeFaces 11.0 -->
+                    <div class="custom-spinner"></div>
+                    <h4 style="color: #495057; margin: 20px 0 10px 0;">Processing deposit slip...</h4>
+                    <p style="color: #6c757d;">Extracting amount, reference number, and date</p>
+                </div>
+
+                <p:poll interval="2" listener="#{depositSlipBean.processWithOCR}" 
+                        update="depositForm growl" 
+                        rendered="#{depositSlipBean.ocrProcessing}"
+                        autoStart="true"/>
+            </p:panel>
+
+            <!-- Step 4: Verification & Confirmation -->
+            <p:panel rendered="#{depositSlipBean.currentStep == 4}" styleClass="section-card">
+                <h3 class="section-title">Verification and Confirmation</h3>
+
+                <!-- Discrepancy Warning - PrimeFaces 11.0 Compatible -->
+                <h:panelGroup rendered="#{depositSlipBean.hasDiscrepancy}">
+                    <div style="padding: 15px; margin-bottom: 20px; background-color: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; display: flex; align-items: center;">
+                        <i class="pi pi-exclamation-triangle" style="font-size: 20px; color: #856404; margin-right: 12px;"></i>
+                        <div>
+                            <strong style="color: #856404;">Discrepancy Detected</strong><br/>
+                            <span style="color: #856404; font-size: 14px;">There are differences between your input and AI-extracted data. Please verify carefully.</span>
+                        </div>
+                    </div>
+                </h:panelGroup>
+
+                <div class="comparison-grid">
+                    <!-- Manual Entry Card -->
+                    <div class="comparison-card">
+                        <div class="comparison-header">
+                            <i class="pi pi-user" style="color: #667eea; margin-right: 8px;"></i>
+                            Your Manual Entry
+                        </div>
+                        <div class="comparison-field">
+                            <div class="comparison-label">Deposit Amount</div>
+                            <div class="comparison-value">
+                                <h:outputText value="#{depositSlipBean.depositAmount}">
+                                    <f:convertNumber type="currency" currencySymbol="Rs. "/>
+                                </h:outputText>
+                            </div>
+                        </div>
+                        <div class="comparison-field">
+                            <div class="comparison-label">Reference Number</div>
+                            <div class="comparison-value">#{depositSlipBean.referenceNumber}</div>
+                        </div>
+                        <div class="comparison-field">
+                            <div class="comparison-label">Deposit Date</div>
+                            <div class="comparison-value">
+                                <h:outputText value="#{depositSlipBean.depositDate}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd"/>
+                                </h:outputText>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Extracted Card -->
+                    <div class="comparison-card #{depositSlipBean.hasDiscrepancy ? 'highlight' : ''}">
+                        <div class="comparison-header">
+                            <i class="pi pi-eye" style="color: #764ba2; margin-right: 8px;"></i>
+                            AI Extracted Data
+                        </div>
+                        <div class="comparison-field">
+                            <div class="comparison-label">Deposit Amount</div>
+                            <div class="comparison-value">
+                                <h:outputText value="#{depositSlipBean.ocrResult.extractedAmount}" 
+                                              rendered="#{depositSlipBean.ocrResult.extractedAmount != null}">
+                                    <f:convertNumber type="currency" currencySymbol="Rs. "/>
+                                </h:outputText>
+                                <span rendered="#{depositSlipBean.ocrResult.extractedAmount == null}">Not detected</span>
+                            </div>
+                            <span class="confidence-badge #{depositSlipBean.ocrResult.amountConfidence >= 80 ? 'confidence-high' : (depositSlipBean.ocrResult.amountConfidence >= 60 ? 'confidence-medium' : 'confidence-low')}"
+                                  rendered="#{depositSlipBean.ocrResult.amountConfidence != null}">
+                                <h:outputText value="#{depositSlipBean.ocrResult.amountConfidence}"/>% Confidence
+                            </span>
+                        </div>
+                        <div class="comparison-field">
+                            <div class="comparison-label">Reference Number</div>
+                            <div class="comparison-value">
+                                #{depositSlipBean.ocrResult.extractedReference != null ? depositSlipBean.ocrResult.extractedReference : 'Not detected'}
+                            </div>
+                            <span class="confidence-badge #{depositSlipBean.ocrResult.referenceConfidence >= 80 ? 'confidence-high' : (depositSlipBean.ocrResult.referenceConfidence >= 60 ? 'confidence-medium' : 'confidence-low')}"
+                                  rendered="#{depositSlipBean.ocrResult.referenceConfidence != null}">
+                                <h:outputText value="#{depositSlipBean.ocrResult.referenceConfidence}"/>% Confidence
+                            </span>
+                        </div>
+                        <div class="comparison-field">
+                            <div class="comparison-label">Deposit Date</div>
+                            <div class="comparison-value">
+                                <h:outputText value="#{depositSlipBean.ocrResult.extractedDate}" 
+                                              rendered="#{depositSlipBean.ocrResult.extractedDate != null}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd"/>
+                                </h:outputText>
+                                <span rendered="#{depositSlipBean.ocrResult.extractedDate == null}">Not detected</span>
+                            </div>
+                            <span class="confidence-badge #{depositSlipBean.ocrResult.dateConfidence >= 80 ? 'confidence-high' : (depositSlipBean.ocrResult.dateConfidence >= 60 ? 'confidence-medium' : 'confidence-low')}"
+                                  rendered="#{depositSlipBean.ocrResult.dateConfidence != null}">
+                                <h:outputText value="#{depositSlipBean.ocrResult.dateConfidence}"/>% Confidence
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="formgrid grid">
+                    <div class="field col-12">
+                        <p:outputLabel for="remarks" value="Remarks (Optional)"/>
+                        <p:inputTextarea id="remarks" value="#{depositSlipBean.remarks}" 
+                                         rows="3" style="width: 100%"
+                                         placeholder="Add any additional notes or corrections..."/>
+                    </div>
+                </div>
+
+                <div class="formgrid grid" style="margin-top: 20px;">
+                    <div class="field col-6">
+                        <p:commandButton value="Previous" icon="pi pi-arrow-left" 
+                                         action="#{depositSlipBean.goToStep(2)}"
+                                         update="depositForm"
+                                         styleClass="ui-button-secondary" style="width: 100%;"/>
+                    </div>
+                    <div class="field col-6">
+                        <p:commandButton value="Submit for Processing" icon="pi pi-check" 
+                                         action="#{depositSlipBean.submitDepositSlip}"
+                                         update="depositForm growl"
+                                         styleClass="ui-button-success" style="width: 100%;"/>
+                    </div>
+                </div>
+            </p:panel>
+
+            <!-- Step 5: Success -->
+            <p:panel rendered="#{depositSlipBean.currentStep == 5}" styleClass="section-card">
+                <div style="text-align: center; padding: 40px;">
+                    <div class="success-icon">
+                        <i class="pi pi-check"></i>
+                    </div>
+                    <h2 style="color: #2c3e50; margin-bottom: 10px;">Deposit Slip Submitted Successfully!</h2>
+                    <p style="color: #6c757d; margin-bottom: 20px;">Your deposit has been submitted for verification</p>
+
+                    <div class="tracking-id">
+                        Tracking ID: #DS-#{depositSlipBean.depositSlip.id}
+                    </div>
+
+                    <p:messages id="successMessages" showDetail="true" closable="false"/>
+
+                    <p style="color: #6c757d; margin: 30px 0;">
+                        You will receive an email notification once your deposit is verified and approved.<br/>
+                        This typically takes 1-2 business days.
+                    </p>
+
+                    <p:commandButton value="Back to Dashboard" icon="pi pi-home" 
+                                     action="dashboard"
+                                     styleClass="ui-button-primary" style="margin-right: 10px;"/>
+                    <p:commandButton value="Upload Another" icon="pi pi-plus" 
+                                     action="#{depositSlipBean.resetForm}"
+                                     update="depositForm"
+                                     styleClass="ui-button-secondary"/>
+                </div>
+            </p:panel>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

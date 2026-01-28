@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Temco Bank</title>
+        <!-- Hotjar Tracking Code for Site 5198958 (name missing) -->
+        <script>
+            (function (h, o, t, j, a, r) {
+                h.hj = h.hj || function () {
+                    (h.hj.q = h.hj.q || []).push(arguments)
+                };
+                h._hjSettings = {hjid: 5198958, hjsv: 6};
+                a = o.getElementsByTagName('head')[0];
+                r = o.createElement('script');
+                r.async = 1;
+                r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+        </script>
+    </h:head>
+
+    <h:body styleClass="landing-body">
+        <div class="landing-wrapper">
+            <div id="header">
+                <div style="display: flex;justify-content: center;align-items: center">
+                    <p:graphicImage name="images/temco.png" style="width: 35%;height: 125px" library="atlantis-layout" />
+
+                    <a id="menu-button" href="#">
+                        <p:graphicImage name="images/icon-ellipsis-v.svg" alt="Menu" library="atlantis-layout" />
+                    </a>
+                </div>
+            </div>
+
+            <div id="features" style="col-12">
+                <div class="col-12">
+                    <div class="grid" style="text-align: center">
+                        <h2>Acknowledgment and Assurance</h2>
+                    </div>
+                    <h:form id="form">
+                        <p:growl id="growl" showDetail="true" life="2000"/> 
+
+                        <div class="grid">
+                            <div class="col-12">
+                                <div class="card ui-fluid">
+                                    <div class="formgrid grid">
+                                        <p:dataTable style="font-size: 1.3em" id="loanTable" rowIndexVar="index" var="record" value="#{loanDetails.tableDetailses}" rows="50" emptyMessage="No records found.">
+                                            <p:column headerText="" style="width: 5%">
+                                                <h:outputText value="#{index + 1})" />
+                                            </p:column>
+                                            <p:column headerText="" style="width: 75%">
+                                                <h:outputText value="#{record.text}" />
+                                            </p:column>
+                                            <p:column headerText="">
+                                                <p:selectBooleanCheckbox value="#{record.checked}">
+                                                    <p:ajax event="change" process="@this" update="loanTable" />
+                                                </p:selectBooleanCheckbox>
+                                            </p:column>
+                                        </p:dataTable>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid">
+                            <div class="col-12">
+                                <div class="card ui-fluid">
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:selectBooleanCheckbox id="terms" value="#{loanDetails.checkbox}" required="true" requiredMessage="You must agree to the terms and conditions to proceed.">
+                                                <p:ajax event="change" process="@this" update="form:growl form:terms" />
+                                            </p:selectBooleanCheckbox>
+                                            <h:outputLabel for="terms" value="I agree that my loan* application will only be processed if I meet all the above conditions. Should I fail to comply, I agree to reimburse TEMCO Bank for all costs incurred, and I acknowledge that my loan* application will be considered cancelled." />
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col"></div>
+                                        <div class="field col" style="float: right">
+                                            <p:commandButton value="Submit Application" action="#{loanDetails.nextPage()}" 
+                                                             icon="pi pi-save" styleClass="ui-button-raised ui-button-warning mr-2 mb-2" 
+                                                             style="width: 50%;margin: 6% 0 0 0;font-weight: bolder" 
+                                                             update="growl" process="@this"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </h:form>
+                </div>
+            </div>
+
+            <div id="footer">
+                <div>
+                    <p:graphicImage name="images/temco.png" library="atlantis-layout" styleClass="logo" style="height: 50px"/>
+                    <!--<p:graphicImage name="images/appname-black.png" library="atlantis-layout" styleClass="appname"/>-->
+                    <div class="social">
+                        <a href="#">
+                            <i class="pi pi-facebook"></i>
+                        </a>
+                        <a href="#">
+                            <i class="pi pi-twitter"></i>
+                        </a>
+                        <a href="#">
+                            <i class="pi pi-github"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h:outputStylesheet name="css/primeicons.css" library="atlantis-layout"/>
+        <h:outputStylesheet name="css/primeflex.min.css" library="atlantis-layout"/>
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="atlantis-layout" />
+    </h:body>
+</html>

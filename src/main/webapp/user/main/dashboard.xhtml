@@ -1,0 +1,317 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/user-template.xhtml">
+
+    <ui:define name="title">Dashboard</ui:define>
+
+    <ui:define name="head">
+        <h:outputScript name="js/chart.js" library="demo"/>
+        <!-- Hotjar Tracking Code for Site 5198958 (name missing) -->
+        <script>
+            (function (h, o, t, j, a, r) {
+                h.hj = h.hj || function () {
+                    (h.hj.q = h.hj.q || []).push(arguments)
+                };
+                h._hjSettings = {hjid: 5198958, hjsv: 6};
+                a = o.getElementsByTagName('head')[0];
+                r = o.createElement('script');
+                r.async = 1;
+                r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+        </script>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="form">
+            <div class="grid dashboard">
+
+                <p:panel class="col-12" style="text-align: center;height: auto">
+                    <h3>Hi, #{dashboardBean.firstName} Welcome to TEMCO Member Portal</h3>
+                    <h6>"Your One-Stop Destination for Seamless Banking – Anytime, Anywhere."</h6>
+                    <h6 style="text-align: left">TEMCO Bank Member Id : #{dashboardBean.memberId}</h6>
+                </p:panel>
+                <p:panel class="col-6" style="text-align: center;height: 200px;display: #{dashboardBean.urlViewForApplyLoan? 'block':'none' }">
+                    <h5>Apply For You Loan</h5>
+                    <h:panelGrid class="col-12" columns="2" style="text-align: left">
+                        <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+                            <p:link href="#{dashboardBean.urlThree}"> <p:outputLabel value="Apply From Here >" /></p:link>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                </p:panel>
+                <p:panel class="col-6" style="text-align: center">
+                    <h5>Loan Application Milestones</h5>
+                    <h:panelGrid class="col-12" columns="2" style="text-align: left">
+                        <h:panelGroup style="width: 100%;margin: 0 0 5% 0">
+                            <p:outputLabel value="Loan Name" />
+                        </h:panelGroup>
+                        <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+                            <p:outputLabel value="#{dashboardBean.loanName}" />
+                        </h:panelGroup>
+                        <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+                            <p:outputLabel value="Requested Loan Amount" />
+                        </h:panelGroup>
+                        <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+                            <p:outputLabel value="Rs.#{dashboardBean.requestedAmount}" />
+                        </h:panelGroup>
+                        <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+                            <p:outputLabel value="Loan Progression" />
+                        </h:panelGroup>
+                        <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+                            <p:outputLabel value="#{dashboardBean.loanProgression}" />
+                        </h:panelGroup>
+                        <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+
+                        </h:panelGroup>
+                        <h:panelGroup style="width: 100%;margin: 5% 0 5% 0;display: #{dashboardBean.urlView? 'block':'none' }">
+                            <p:link href="#{dashboardBean.url}"> <p:outputLabel value="Edit Details From here >>" /></p:link>
+                        </h:panelGroup>
+                        <h:panelGroup style="width: 100%;margin: 5% 0 0% 100%;display: #{dashboardBean.urlView? 'none':'block' }">
+                            <p:commandButton style="font-weight: bolder" value="See More Details >>" update=":form" oncomplete="PF('dlg').show();"/>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                </p:panel>
+                <p:panel class="col-6" style="height: ;text-align: center;display: #{dashboardBean.urlView? 'none':'block' }">
+                    <h5>Document Submission</h5>
+                    <h:panelGrid class="col-12" columns="2" style="text-align: left">
+                        <h:panelGroup style="width: 100%;margin: 0 0 5% 0">
+                            <p:outputLabel value="Document Process:" />
+                        </h:panelGroup>
+                        <h:panelGroup style="width: 100%;margin: 5% 0 5% 0;font-weight: bolder">
+                            <p:outputLabel value="First Week Document Submission" />
+                        </h:panelGroup>
+                        <h:panelGroup style="width: 100%;margin: 5% 0 5% 0">
+
+                        </h:panelGroup>
+                        <h:panelGroup style="width: 100%;margin: 10% 0 5% 0">
+                            <p:link href="#{dashboardBean.urlTwo}">
+                                <p:commandButton style="font-weight: bolder" value="Upload your documents from here >>" />
+                            </p:link>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                </p:panel>
+            </div>
+        </h:form>
+
+        <p:dialog responsive="true" style="overflow:auto;" height="600" header="Loan Application" widgetVar="dlg" modal="true" resizable="false" draggable="false" width="1200">
+
+            <div class="col-12">
+                <div class="card">
+                    <h5>Loan Application Details</h5>
+                    <p:accordionPanel multiple="false" activeIndex="0">
+                        <p:tab title="Personal Details">
+                            <div class="col-12">
+                                <div class="card ui-fluid">
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="memberId">Temco Bank Member Id :</p:outputLabel>
+                                            <p:inputText id="memberId" value="#{dashboardBean.memberId}"  readonly="true"/>
+                                        </div>
+                                        <div class="field col">
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="first_name">First Name :</p:outputLabel>
+                                            <p:inputText id="first_name" value="#{dashboardBean.loanApplicantFirstName}"  readonly="false"/>
+                                        </div>
+                                        <div class="field col">
+                                            <p:outputLabel for="last_name">Last Name :</p:outputLabel>
+                                            <p:inputText id="last_name" value="#{dashboardBean.loanApplicantLastName}" readonly="false"/>
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="nic">NIC :</p:outputLabel>
+                                            <p:inputText id="nic" value="#{dashboardBean.loanApplicantNic}" readonly="false"/>
+                                        </div>
+                                        <div class="field col">
+                                            <p:outputLabel for="mobile">Mobile No :</p:outputLabel>
+                                            <p:inputText id="mobile" value="#{dashboardBean.loanApplicantMobileNo}"  readonly="false"/>
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="dob">Date of Birth :</p:outputLabel>
+                                            <p:inputText id="dob" value="#{dashboardBean.loanApplicantDob}" readonly="true"/>
+                                        </div>
+                                        <div class="field col">
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="email">Email :</p:outputLabel>
+                                            <p:inputText id="email" type="email" value="#{dashboardBean.loanApplicantEmail}" readonly="false"/>
+                                            <p:message for="email" display="text"/>
+                                        </div>
+                                        <div class="field col">
+                                            <p:outputLabel for="adderssOne">Address 01 :</p:outputLabel>
+                                            <p:inputText id="adderssOne" value="#{dashboardBean.loanApplicantAddress01}"  readonly="false"/>
+                                        </div>
+
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="addressTwo">Address 02 :</p:outputLabel>
+                                            <p:inputText id="addressTwo" value="#{dashboardBean.loanApplicantAddress02}"  readonly="false"/>
+                                        </div>
+                                        <div class="field col">
+                                            <p:outputLabel for="adderssThree">Address 03 :</p:outputLabel>
+                                            <p:inputText id="adderssThree" value="#{dashboardBean.loanApplicantAddress03}"  readonly="false"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>    
+                        </p:tab>
+                        <p:tab title="Loan Details">
+                            <div class="col-12">
+                                <div class="card ui-fluid">
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="loanBrand">Loan Brand :</p:outputLabel>
+                                            <p:inputText id="loanBrand" value="#{dashboardBean.memberId}"  readonly="true"/>
+                                        </div>
+                                        <div class="field col">
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="interestRate">Interest Rate :</p:outputLabel>
+                                            <p:inputText id="interestRate" value="#{dashboardBean.loanApplicantFirstName}"  readonly="false"/>
+                                        </div>
+                                        <div class="field col">
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="requestedAmount">Loan Amount :</p:outputLabel>
+                                            <p:inputText id="requestedAmount" value="#{dashboardBean.loanApplicantNic}" readonly="false"/>
+                                        </div>
+                                        <div class="field col">
+                                            <p:outputLabel for="monthlyInstallment">Monthly Installment :</p:outputLabel>
+                                            <p:inputText id="monthlyInstallment" value="#{dashboardBean.loanApplicantMobileNo}"  readonly="false"/>
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="timePeriod">Time Period :</p:outputLabel>
+                                            <p:inputText id="timePeriod" value="#{dashboardBean.loanApplicantDob}" readonly="true"/>
+                                        </div>
+                                        <div class="field col">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>    
+                        </p:tab>
+                        <p:tab title="First Guarantor Details">
+                            <div class="col-12">
+                                <div class="card ui-fluid"   >
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="firstguarantorMid">Temco Bank Member Id :</p:outputLabel>
+                                            <p:inputText id="firstguarantorMid" value="#{dashboardBean.firstGuarantorMemberId}"  readonly="false"/>
+                                        </div>
+                                        <div class="field col">
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="ffirst_name">First Name :</p:outputLabel>
+                                            <p:inputText id="ffirst_name" value="#{dashboardBean.firstGuarantorFirstName}"  readonly="false"/>
+                                        </div>
+                                        <div class="field col">
+                                            <p:outputLabel for="flast_name">Last Name :</p:outputLabel>
+                                            <p:inputText id="flast_name" value="#{dashboardBean.firstGuarantorLastName}" readonly="false"/>
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="fnic">NIC :</p:outputLabel>
+                                            <p:inputText id="fnic" value="#{dashboardBean.firstGuarantorNic}" readonly="false"/>
+                                        </div>
+                                        <div class="field col">
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="fnicFront" style="display: block; text-align: center; margin-bottom: 10px;">Front of NIC</p:outputLabel>
+                                            <p:graphicImage id="fnicFront" value="/imageServlet?path=#{dashboardBean.ffrontNic}" alt="Sample Image" style="width: 75%; height: 50%; display: block; margin: 0 0 0 5%;"/>
+                                            <p:fileUpload 
+                                                id="front_one" 
+                                                mode="simple" 
+                                                accept="image/jpeg,image/png" 
+                                                sizeLimit="2097152"
+                                                fileLimitMessage="File size exceeds 2 MB limit. Please upload a smaller file."
+                                                value="#{dashboardBean.firstGuarantorUploadFIleOne}"
+                                                style="margin: 2% 0 0 5%"/>
+                                        </div>
+                                        <div class="field col">
+                                            <p:outputLabel for="fnicBack" style="display: block; text-align: center; margin-bottom: 10px;">Back of NIC</p:outputLabel>
+                                            <p:graphicImage id="fnicBack" value="/imageServlet?path=#{dashboardBean.firstBackNic}" alt="Sample Image" style="width: 75%; height: 50%; display: block; margin: 0 0 0 5%;"/>
+                                            <p:fileUpload style="margin: 2% 0 0 5%" id="back_one" mode="simple" accept="image/jpeg,image/png" sizeLimit="2097152"
+                                                          fileLimitMessage="File size exceeds 2 MB limit. Please upload a smaller file." value="#{dashboardBean.firstGuarantorUploadFIleTwo}"/>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>    
+                        </p:tab>
+                        <p:tab title="Second Guarantor Details">
+                            <div class="col-12">
+                                <div class="card ui-fluid" >
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="secondGuarantorMid">Temco Bank Member Id :</p:outputLabel>
+                                            <p:inputText id="secondGuarantorMid" value="#{dashboardBean.secondGuarantorMemberId}"  readonly="false"/>
+                                        </div>
+                                        <div class="field col">
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="sfirst_name">First Name :</p:outputLabel>
+                                            <p:inputText id="sfirst_name" value="#{dashboardBean.secondGuarantorFirstName}"  readonly="false"/>
+                                        </div>
+                                        <div class="field col">
+                                            <p:outputLabel for="slast_name">Last Name :</p:outputLabel>
+                                            <p:inputText id="slast_name" value="#{dashboardBean.secondGuarantorFirstName}" readonly="false"/>
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="snic">NIC :</p:outputLabel>
+                                            <p:inputText id="snic" value="#{dashboardBean.secondGuarantorNic}" readonly="false"/>
+                                        </div>
+                                        <div class="field col">
+                                        </div>
+                                    </div>
+                                    <div class="formgrid grid">
+                                        <div class="field col">
+                                            <p:outputLabel for="snicFront" style="display: block; text-align: center; margin-bottom: 10px;">Front of NIC</p:outputLabel>
+                                            <p:graphicImage id="snicFront" value="/imageServlet?path=#{dashboardBean.sfrontNic}" alt="Sample Image" style="width: 75%; height: 50%; display: block; margin: 0 0 0 5%;"/>
+                                            <p:fileUpload style="margin: 2% 0 0 5%" id="guarantor_front_two" mode="simple" accept="image/jpeg,image/png" sizeLimit="2097152"
+                                                          fileLimitMessage="File size exceeds 2 MB limit. Please upload a smaller file." value="#{dashboardBean.secondGuarantorUploadFIleOne}"/>
+
+                                        </div>
+                                        <div class="field col">
+                                            <p:outputLabel for="snicBack" style="display: block; text-align: center; margin-bottom: 10px;">Back of NIC</p:outputLabel>
+                                            <p:graphicImage id="snicBack" value="/imageServlet?path=#{dashboardBean.secondBackNic}" alt="Sample Image" style="width: 75%; height: 50%; display: block; margin: 0 0 0 5%;"/>
+                                            <p:fileUpload style="margin: 2% 0 0 5%" id="guarantor_back_two" mode="simple" accept="image/jpeg,image/png" sizeLimit="2097152"
+                                                          fileLimitMessage="File size exceeds 2 MB limit. Please upload a smaller file." value="#{dashboardBean.secondGuarantorUploadFIleTwo}"/>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </p:tab>
+                    </p:accordionPanel>
+                </div>
+            </div>
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

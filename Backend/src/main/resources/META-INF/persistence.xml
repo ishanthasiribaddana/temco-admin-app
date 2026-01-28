@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.0"
+             xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+                                 https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+
+    <!-- ============================================== -->
+    <!-- TEMCO Bank Persistence Unit -->
+    <!-- ============================================== -->
+    <persistence-unit name="TemcoBankPU" transaction-type="JTA">
+        
+        <!-- JTA DataSource (configured in WildFly) -->
+        <jta-data-source>java:jboss/datasources/TemcoDB</jta-data-source>
+        
+        <!-- JPA Provider -->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        
+        <!-- Entity Classes -->
+        <!-- Core Entities -->
+        <class>lk.temcobank.entity.Country</class>
+        <class>lk.temcobank.entity.Province</class>
+        <class>lk.temcobank.entity.District</class>
+        <class>lk.temcobank.entity.City</class>
+        <class>lk.temcobank.entity.Gender</class>
+        <class>lk.temcobank.entity.Currency</class>
+        <class>lk.temcobank.entity.ExchangeRateHistory</class>
+        <class>lk.temcobank.entity.EducationLevel</class>
+        <class>lk.temcobank.entity.Bank</class>
+        <class>lk.temcobank.entity.AccountType</class>
+        <class>lk.temcobank.entity.DueCategory</class>
+        <class>lk.temcobank.entity.LoanStatus</class>
+        <class>lk.temcobank.entity.GeneralUserProfile</class>
+        <class>lk.temcobank.entity.LoanCustomer</class>
+        
+        <!-- Academic Entities -->
+        <class>lk.temcobank.entity.Program</class>
+        <class>lk.temcobank.entity.PaymentOption</class>
+        <class>lk.temcobank.entity.Enrollment</class>
+        <class>lk.temcobank.entity.PaymentSchedule</class>
+        <class>lk.temcobank.entity.AwardingBody</class>
+        <class>lk.temcobank.entity.CertificateFee</class>
+        <class>lk.temcobank.entity.AdditionalFeeType</class>
+        <class>lk.temcobank.entity.StudentDue</class>
+        <class>lk.temcobank.entity.PaymentHistory</class>
+        <class>lk.temcobank.entity.LatePaymentPenalty</class>
+        
+        <!-- Invoice & Cashier Entities -->
+        <class>lk.temcobank.entity.Cashier</class>
+        <class>lk.temcobank.entity.CashierSession</class>
+        <class>lk.temcobank.entity.CashierTransactionLog</class>
+        <class>lk.temcobank.entity.Invoice</class>
+        <class>lk.temcobank.entity.InvoiceLineItem</class>
+        <class>lk.temcobank.entity.PaymentGateway</class>
+        <class>lk.temcobank.entity.PaymentGatewayTransaction</class>
+        <class>lk.temcobank.entity.PaymentGatewayConfig</class>
+        <class>lk.temcobank.entity.StudentDocument</class>
+        <class>lk.temcobank.entity.ApiTransactionLog</class>
+        
+        <!-- User Management Entities -->
+        <class>lk.temcobank.entity.UserAccount</class>
+        <class>lk.temcobank.entity.UserRole</class>
+        <class>lk.temcobank.entity.UserPermission</class>
+        <class>lk.temcobank.entity.UserRolePermission</class>
+        <class>lk.temcobank.entity.UserAccountRole</class>
+        <class>lk.temcobank.entity.UserSession</class>
+        <class>lk.temcobank.entity.UserLoginHistory</class>
+        
+        <!-- Notification Entities -->
+        <class>lk.temcobank.entity.NotificationTemplate</class>
+        <class>lk.temcobank.entity.EmailQueue</class>
+        <class>lk.temcobank.entity.SmsQueue</class>
+        <class>lk.temcobank.entity.NotificationLog</class>
+        
+        <!-- Audit & Job Entities -->
+        <class>lk.temcobank.entity.AuditLog</class>
+        <class>lk.temcobank.entity.ScheduledJob</class>
+        <class>lk.temcobank.entity.ScheduledJobExecution</class>
+        
+        <!-- Exclude unlisted classes -->
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        
+        <!-- Hibernate Properties -->
+        <properties>
+            <!-- Hibernate Dialect -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+            
+            <!-- Schema Generation (validate in production) -->
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
+            
+            <!-- SQL Logging (disable in production) -->
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.use_sql_comments" value="true"/>
+            
+            <!-- Connection Pool (managed by WildFly) -->
+            <property name="hibernate.connection.pool_size" value="50"/>
+            
+            <!-- Batch Processing -->
+            <property name="hibernate.jdbc.batch_size" value="50"/>
+            <property name="hibernate.order_inserts" value="true"/>
+            <property name="hibernate.order_updates" value="true"/>
+            <property name="hibernate.jdbc.batch_versioned_data" value="true"/>
+            
+            <!-- Second Level Cache (Redis) -->
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <property name="hibernate.cache.use_query_cache" value="true"/>
+            <property name="hibernate.cache.region.factory_class" 
+                      value="org.hibernate.cache.jcache.JCacheRegionFactory"/>
+            
+            <!-- Statistics (disable in production) -->
+            <property name="hibernate.generate_statistics" value="false"/>
+            
+            <!-- Timezone -->
+            <property name="hibernate.jdbc.time_zone" value="Asia/Colombo"/>
+        </properties>
+    </persistence-unit>
+</persistence>

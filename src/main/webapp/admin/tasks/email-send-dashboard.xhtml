@@ -1,0 +1,95 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="head">
+        <h:outputStylesheet name="css/flags/flags.css" library="demo" />
+    </ui:define>
+
+    <ui:define name="title">Send Loan Offers</ui:define>
+
+    <ui:define name="content">
+        <div class="col-12" style="text-align: center">
+            <h2>Loan Offers Control Panel</h2>
+        </div>
+        <h:form id="form">
+            <p:growl id="growl" showDetail="true" life="5000"/> 
+            <div class="grid table-demo">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="col-12">
+                            <div class="formgrid grid">
+                                <div class="field col">
+                                    <p:outputLabel for="student_intake">Students Intake : </p:outputLabel>
+                                    <p:selectOneMenu id="student_intake" style="margin: 0 0 0 2%;width: 65%;height: 30px" value="#{emailSendingBean.selectedIntake}">
+                                        <f:selectItems value="#{emailSendingBean.studentsIntakeList}"/>
+                                        <f:ajax render="form" execute="@form" listener="#{emailSendingBean.loadSelectedIntakeStudents}" />
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="field col">
+                                    <p:outputLabel for="count">Email Sending Count : </p:outputLabel>
+                                    <p:inputText style="margin: 0 0 0 2%" id="count" value="#{emailSendingBean.count}"/>
+                                </div>
+                                <div class="field col" >
+                                    <p:commandButton value="Send Email"  icon="pi pi-letter" class="">
+                                        <f:ajax render="growl" execute="@form" listener="#{emailSendingBean.sendEmails()}"/>
+                                    </p:commandButton>   
+                                </div>
+                            </div>
+                        </div>
+                        <p:dataTable widgetVar="customersDT" var="customer" value="#{emailSendingBean.studentLoanExpecitngStudentList}" reflow="true"
+                                     selection="#{dataTableDemoView.selectedCustomers}" rowIndexVar="index"
+                                     paginator="true" rows="500" paginatorPosition="top" rowSelectMode="add">
+                            <f:facet name="header">
+                                <div class="customers-table-header">
+                                    <span style="font-weight: bold">Students</span>
+
+                                    <span class="ui-input-icon-left filter-container">
+                                        <i class="pi pi-search"/>
+                                        <p:inputText id="globalFilter" onkeyup="PF('customersDT').filter()" placeholder=" Search"/>
+                                    </span>
+                                </div>
+                            </f:facet>
+                            <p:column headerText="" style="width: 2%">
+                                <h:outputText value="#{index + 1}" />
+                            </p:column>
+                            <p:column headerText="" style="width: 2%">
+                                <p:selectBooleanCheckbox value="#{customer.studentSelected}" />
+                            </p:column>
+
+                            <p:column headerText="NIC" sortBy="#{customer.nic}" filterBy="#{customer.nic}" style="width: 10%">
+                                <h:outputText value="#{customer.nic}" />
+                            </p:column>
+                            <p:column headerText="Name" sortBy="#{customer.studentName}" filterBy="#{customer.studentName}">
+                                <h:outputText value="#{customer.studentName}" />
+                            </p:column>
+                            <p:column headerText="Email" filterBy="#{customer.email}">
+                                <h:outputText style="vertical-align: middle; margin-left: .5rem" value="#{customer.email}" />
+                            </p:column>
+                            <p:column headerText="Intake" sortBy="#{customer.intake}" filterBy="#{customer.intake}">
+                                <h:outputText style="vertical-align: middle; margin-left: .5rem" value="#{customer.intake}" />
+                            </p:column>
+                            <p:column headerText="Mobile No" sortBy="#{customer.mobileNo}" filterBy="#{customer.mobileNo}">
+                                <h:outputText value="#{customer.mobileNo}" />
+                            </p:column>
+                            <p:column headerText="Java Institute Course fee Due"  filterBy="#{customer.totalDue}">
+                                <h:outputText value="#{customer.totalDue}" />
+                            </p:column>
+                            <p:column headerText="International University Payment Due"  filterBy="#{customer.totalintunipaymentdue}">
+                                <h:outputText value="#{customer.totalintunipaymentdue}" />
+                            </p:column>
+                            <p:column headerText="Transfer Date and Time" sortBy="#{customer.transferDate}"  filterBy="#{customer.transferDate}">
+                                <h:outputText value="#{customer.transferDate}" />
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

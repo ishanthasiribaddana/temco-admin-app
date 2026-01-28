@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Loan Application Submitted</title>
+    </h:head>
+
+    <h:body>
+
+        <div style="max-width: 650px; margin: 60px auto;">
+            <p:card style="padding: 30px;">
+
+                <h2 style="margin-bottom: 20px;">Loan Application Submitted Successfully</h2>
+
+                <p style="font-size: 15px; line-height: 1.6; text-align: justify;">
+                    Your loan application for the <strong>Java Institute Course Fee</strong> has been successfully submitted.
+                </p>
+
+                <p style="font-size: 15px; line-height: 1.6; text-align: justify; margin-top: 15px;">
+                    According to our records, the <strong>International University Fee</strong> is still pending.  
+                    You are eligible to apply for a separate loan to cover this payment with a convenient <strong>12-month repayment plan</strong>.
+                </p>
+
+                <p style="font-size: 15px; margin-top: 15px;">
+                    Would you like to proceed with applying for this loan now?
+                </p>
+
+                <p:separator style="margin: 20px 0;" />
+
+                <h:panelGroup layout="block" style="text-align: center;">
+
+                    <!-- Apply Loan Button -->
+                    <p:button 
+                        value="Apply for International University Fee Loan"
+                        icon="pi pi-check"
+                        styleClass="p-button-success"
+                        onclick="window.location.href = 'https://lending.temcobank.com/tasks/university-due-payment/loan-application.xhtml?en=#{loanSelection.token}'; return false;"
+                        style="margin-right: 15px; min-width: 260px;" />
+
+                    <!-- Maybe Later Button -->
+                    <p:button 
+                        value="Maybe Later"
+                        icon="pi pi-times"
+                        styleClass="p-button-secondary"
+                        href="https://lending.temcobank.com/view/details-submission-success.xhtml"
+                        style="min-width: 150px;" />
+
+                </h:panelGroup>
+
+            </p:card>
+        </div>
+
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" 
+                            library="atlantis-layout"/>
+    </h:body>
+
+</html>

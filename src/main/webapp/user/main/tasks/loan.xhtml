@@ -1,0 +1,278 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/user-template.xhtml">
+
+    <ui:define name="head">
+        <!-- Hotjar Tracking Code for Site 5198958 (name missing) -->
+        <!-- Hotjar Tracking Code for Site 5198958 (name missing) -->
+        <script>
+            (function (h, o, t, j, a, r) {
+                h.hj = h.hj || function () {
+                    (h.hj.q = h.hj.q || []).push(arguments)
+                };
+                h._hjSettings = {hjid: 5198958, hjsv: 6};
+                a = o.getElementsByTagName('head')[0];
+                r = o.createElement('script');
+                r.async = 1;
+                r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+        </script>
+        <h:outputStylesheet name="css/flags/flags.css" library="demo" />
+    </ui:define>
+
+    <ui:define name="title">User Loans</ui:define>
+
+    <ui:define name="content">
+        <div class="col-12" style="text-align: center">
+            <h2>Loans DashBoard</h2>
+        </div>
+        <h:form id="form">
+            <p:growl id="growl" showDetail="true" life="5000"/> 
+            <div class="grid table-demo">
+                <div class="col-12">
+                    <div class="card">
+
+                        <p:dataTable widgetVar="customersDT" var="customer" value="#{userLoans.userLoansArrayList}" reflow="true"
+                                     selection="#{dataTableDemoView.selectedCustomers}" rowIndexVar="index"
+                                     paginator="true" rows="10" paginatorPosition="bottom" rowSelectMode="add">
+                            <f:facet name="header">
+                                <div class="customers-table-header">
+
+                                    <span class="ui-input-icon-left filter-container">
+                                        <i class="pi pi-search"/>
+                                        <p:inputText id="globalFilter" onkeyup="PF('customersDT').filter()" placeholder=" Search"/>
+                                    </span>
+                                </div>
+                            </f:facet>
+                            <p:column headerText="" style="width: 2%">
+                                <h:outputText value="#{index + 1}" />
+                            </p:column>
+                            <!--                            <p:column headerText="" style="width: 2%">
+                                                            <p:selectBooleanCheckbox value="#{customer.studentSelected}" />
+                                                        </p:column>-->
+
+                            <p:column headerText="Loan" style="width: 10%">
+                                <h:outputText value="#{customer.loanId}" />
+                            </p:column>
+                            <p:column headerText="Amount">
+                                <h:outputText value="#{customer.loanAmount}" />
+                            </p:column>
+                            <p:column headerText="Monthly Installement">
+                                <h:outputText value="#{customer.loanManager.monthlyInstallement}" />
+                            </p:column>
+                            <p:column headerText="Time Period">
+                                <h:outputText value="#{customer.loanManager.repaymentPeriodId.period}" />
+                            </p:column>
+                            <p:column headerText="Status">
+                                <h:outputText value="#{customer.loanStatus}" />
+                            </p:column>
+                            <p:column headerText="" >
+                                <p:commandButton actionListener="#{userLoans.setSelectedLoan(customer)}" icon="pi pi-eye" update=":form" oncomplete="PF('dlg').show();"/>
+                            </p:column>
+                        </p:dataTable>
+
+                        <p:dialog responsive="true" style="overflow:auto;" height="600" header="Loan Application" widgetVar="dlg" modal="true" resizable="false" draggable="false" width="1200">
+
+                            <div class="col-12">
+                                <div class="card">
+                                    <h5>Loan Application Details</h5>
+                                    <p:accordionPanel multiple="false" activeIndex="0">
+                                        <p:tab title="Personal Details">
+                                            <div class="col-12">
+                                                <div class="card ui-fluid">
+                                                    <div class="formgrid grid">
+                                                        <div class="field col">
+                                                            <p:outputLabel for="first_name">First Name :</p:outputLabel>
+                                                            <p:inputText id="first_name" value="#{userLoans.firstName}"  readonly="false"/>
+                                                        </div>
+                                                        <div class="field col">
+                                                            <p:outputLabel for="last_name">Last Name :</p:outputLabel>
+                                                            <p:inputText id="last_name" value="#{userLoans.lastName}" readonly="false"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="formgrid grid">
+                                                        <div class="field col">
+                                                            <p:outputLabel for="nic">NIC :</p:outputLabel>
+                                                            <p:inputText id="nic" value="#{userLoans.nic}" readonly="false"/>
+                                                        </div>
+                                                        <div class="field col">
+                                                            <p:outputLabel for="mobile">Mobile No :</p:outputLabel>
+                                                            <p:inputText id="mobile" value="#{userLoans.mobileNo}"  readonly="false"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="formgrid grid">
+                                                        <div class="field col">
+                                                            <p:outputLabel for="dob">Date of Birth :</p:outputLabel>
+                                                            <p:inputText id="dob" value="#{userLoans.dateOfBirth}" readonly="true"/>
+                                                        </div>
+                                                        <div class="field col">
+                                                        </div>
+                                                    </div>
+                                                    <div class="formgrid grid">
+                                                        <div class="field col">
+                                                            <p:outputLabel for="email">Email :</p:outputLabel>
+                                                            <p:inputText id="email" type="email" value="#{userLoans.email}" readonly="false"/>
+                                                            <p:message for="email" display="text"/>
+                                                        </div>
+                                                        <div class="field col">
+                                                            <p:outputLabel for="adderssOne">Address 01 :</p:outputLabel>
+                                                            <p:inputText id="adderssOne" value="#{userLoans.addressOne}"  readonly="false"/>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="formgrid grid">
+                                                        <div class="field col">
+                                                            <p:outputLabel for="addressTwo">Address 02 :</p:outputLabel>
+                                                            <p:inputText id="addressTwo" value="#{userLoans.addressTwo}"  readonly="false"/>
+                                                        </div>
+                                                        <div class="field col">
+                                                            <p:outputLabel for="adderssThree">Address 03 :</p:outputLabel>
+                                                            <p:inputText id="adderssThree" value="#{userLoans.addressThree}"  readonly="false"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="card ui-fluid">
+                                                            <div class="formgrid grid">
+                                                                <div class="field col">
+
+                                                                </div>
+                                                                <div class="field col">
+                                                                    <p:commandButton styleClass="ui-button-danger mr-2 mb-2" value="Update Details" update="form" actionListener="#{userLoans.updateLoanDetails()}"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>    
+                                        </p:tab>
+                                        <p:tab title="First Guarantor Details">
+                                            <div class="col-12">
+                                                <div class="card ui-fluid"   style="#{userLoans.firstGuarantorAvailable ? 'display: none;' : 'display: block;'}">
+                                                    <p>You does not have uploaded the First Guarantor Details.<p:link href="https://lending.temcobank.com/tasks/gurantor-details.xhtml?l=#{userLoans.loanToken}"><b>Click here to submit</b></p:link> First Guarantor Details.</p>
+                                                </div>
+                                                <div class="card ui-fluid"   style="#{userLoans.firstGuarantorAvailable ? 'display: block;' : 'display: none;'}">
+                                                    <div class="formgrid grid">
+                                                        <div class="field col">
+                                                            <p:outputLabel for="ffirst_name">First Name :</p:outputLabel>
+                                                            <p:inputText id="ffirst_name" value="#{userLoans.ffirstName}"  readonly="false"/>
+                                                        </div>
+                                                        <div class="field col">
+                                                            <p:outputLabel for="flast_name">Last Name :</p:outputLabel>
+                                                            <p:inputText id="flast_name" value="#{userLoans.flastName}" readonly="false"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="formgrid grid">
+                                                        <div class="field col">
+                                                            <p:outputLabel for="fnic">NIC :</p:outputLabel>
+                                                            <p:inputText id="fnic" value="#{userLoans.fnic}" readonly="false"/>
+                                                        </div>
+                                                        <div class="field col">
+                                                        </div>
+                                                    </div>
+                                                    <div class="formgrid grid">
+                                                        <div class="field col">
+                                                            <p:outputLabel for="fnicFront" style="display: block; text-align: center; margin-bottom: 10px;">Front of NIC</p:outputLabel>
+                                                            <p:graphicImage id="fnicFront" value="/imageServlet?path=#{userLoans.ffrontNic}" alt="Sample Image" style="width: 75%; height: 50%; display: block; margin: 0 0 0 5%;"/>
+                                                            <p:fileUpload 
+                                                                id="front_one" 
+                                                                mode="simple" 
+                                                                accept="image/jpeg,image/png" 
+                                                                sizeLimit="2097152"
+                                                                fileLimitMessage="File size exceeds 2 MB limit. Please upload a smaller file."
+                                                                value="#{userLoans.firstGuarantorUploadFIleOne}"
+                                                                style="margin: 2% 0 0 5%"/>
+                                                        </div>
+                                                        <div class="field col">
+                                                            <p:outputLabel for="fnicBack" style="display: block; text-align: center; margin-bottom: 10px;">Back of NIC</p:outputLabel>
+                                                            <p:graphicImage id="fnicBack" value="/imageServlet?path=#{userLoans.firstBackNic}" alt="Sample Image" style="width: 75%; height: 50%; display: block; margin: 0 0 0 5%;"/>
+                                                            <p:fileUpload style="margin: 2% 0 0 5%" id="back_one" mode="simple" accept="image/jpeg,image/png" sizeLimit="2097152"
+                                                                          fileLimitMessage="File size exceeds 2 MB limit. Please upload a smaller file." value="#{userLoans.firstGuarantorUploadFIleTwo}"/>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="card ui-fluid">
+                                                            <div class="formgrid grid">
+                                                                <div class="field col">
+
+                                                                </div>
+                                                                <div class="field col">
+                                                                    <p:commandButton styleClass="ui-button-danger mr-2 mb-2" value="Update Details" update="form" actionListener="#{userLoans.updateLoanDetails()}"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>    
+                                        </p:tab>
+                                        <p:tab title="Second Guarantor Details">
+                                            <div class="col-12">
+                                                <div class="card ui-fluid"   style="#{userLoans.secondGuaranotrAvailable ? 'display: none;' : 'display: block;'}">
+                                                    <p>You does not have uploaded the Second Guarantor Details.<p:link href="https://lending.temcobank.com/tasks/second-guarantor-details.xhtml?l=#{userLoans.loanToken}"><b>Click here to submit</b></p:link> Second Guarantor Details.</p>
+                                                </div>
+                                                <div class="card ui-fluid"   style="#{userLoans.secondGuaranotrAvailable ? 'display: block;' : 'display: none;'}">
+                                                    <div class="formgrid grid">
+                                                        <div class="field col">
+                                                            <p:outputLabel for="sfirst_name">First Name :</p:outputLabel>
+                                                            <p:inputText id="sfirst_name" value="#{userLoans.sfirstName}"  readonly="false"/>
+                                                        </div>
+                                                        <div class="field col">
+                                                            <p:outputLabel for="slast_name">Last Name :</p:outputLabel>
+                                                            <p:inputText id="slast_name" value="#{userLoans.slastName}" readonly="false"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="formgrid grid">
+                                                        <div class="field col">
+                                                            <p:outputLabel for="snic">NIC :</p:outputLabel>
+                                                            <p:inputText id="snic" value="#{userLoans.snic}" readonly="false"/>
+                                                        </div>
+                                                        <div class="field col">
+                                                        </div>
+                                                    </div>
+                                                    <div class="formgrid grid">
+                                                        <div class="field col">
+                                                            <p:outputLabel for="snicFront" style="display: block; text-align: center; margin-bottom: 10px;">Front of NIC</p:outputLabel>
+                                                            <p:graphicImage id="snicFront" value="/imageServlet?path=#{userLoans.sfrontNic}" alt="Sample Image" style="width: 75%; height: 50%; display: block; margin: 0 0 0 5%;"/>
+                                                            <p:fileUpload style="margin: 2% 0 0 5%" id="guarantor_front_two" mode="simple" accept="image/jpeg,image/png" sizeLimit="2097152"
+                                                                          fileLimitMessage="File size exceeds 2 MB limit. Please upload a smaller file." value="#{userLoans.secondGuarantorUploadFIleOne}"/>
+
+                                                        </div>
+                                                        <div class="field col">
+                                                            <p:outputLabel for="snicBack" style="display: block; text-align: center; margin-bottom: 10px;">Back of NIC</p:outputLabel>
+                                                            <p:graphicImage id="snicBack" value="/imageServlet?path=#{userLoans.secondBackNic}" alt="Sample Image" style="width: 75%; height: 50%; display: block; margin: 0 0 0 5%;"/>
+                                                            <p:fileUpload style="margin: 2% 0 0 5%" id="guarantor_back_two" mode="simple" accept="image/jpeg,image/png" sizeLimit="2097152"
+                                                                          fileLimitMessage="File size exceeds 2 MB limit. Please upload a smaller file." value="#{userLoans.secondGuarantorUploadFIleTwo}"/>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="card ui-fluid">
+                                                            <div class="formgrid grid">
+                                                                <div class="field col">
+
+                                                                </div>
+                                                                <div class="field col">
+                                                                    <p:commandButton styleClass="ui-button-danger mr-2 mb-2" value="Update Details" update="form" actionListener="#{userLoans.updateLoanDetails()}"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </p:tab>
+                                    </p:accordionPanel>
+                                </div>
+                            </div>
+                        </p:dialog>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
