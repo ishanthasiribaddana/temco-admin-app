@@ -19,7 +19,7 @@ const mockMenus: MenuItem[] = [
 ]
 
 export default function MenuManagement() {
-  const [menus, setMenus] = useState(mockMenus)
+  const [menus] = useState(mockMenus)
   const [expanded, setExpanded] = useState<number[]>([2, 3])
 
   const toggleExpand = (id: number) => {

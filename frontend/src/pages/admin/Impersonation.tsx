@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Search, UserCog, AlertTriangle, Loader2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useAuthStore } from '../../stores/authStore'
 import { memberService, Member } from '../../api/memberService'
@@ -17,7 +16,6 @@ export default function Impersonation() {
   const [page, setPage] = useState(0)
   const [totalPages, setTotalPages] = useState(1)
   const [totalElements, setTotalElements] = useState(0)
-  const navigate = useNavigate()
   const { user, startImpersonation } = useAuthStore()
 
   const loadMembers = useCallback(async () => {
