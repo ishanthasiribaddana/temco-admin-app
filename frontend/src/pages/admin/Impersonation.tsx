@@ -22,9 +22,9 @@ export default function Impersonation() {
     setIsLoadingMembers(true)
     try {
       const response = await memberService.getMembers(page, PAGE_SIZE, searchTerm)
-      setMembers(response.content)
-      setTotalPages(response.totalPages)
-      setTotalElements(response.totalElements)
+      setMembers(response?.content || [])
+      setTotalPages(response?.totalPages || 1)
+      setTotalElements(response?.totalElements || 0)
       setUseMockData(false)
     } catch (error) {
       console.error('Failed to load members from API, using local data:', error)

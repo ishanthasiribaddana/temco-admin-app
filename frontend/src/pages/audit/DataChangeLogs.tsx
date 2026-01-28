@@ -26,9 +26,9 @@ export default function DataChangeLogs() {
     setIsLoading(true)
     try {
       const response = await auditService.getDataChangeLogs(page, 20, searchTerm)
-      setLogs(response.content as DataChangeLog[])
-      setTotalPages(response.totalPages)
-      setTotalElements(response.totalElements)
+      setLogs((response?.content || []) as DataChangeLog[])
+      setTotalPages(response?.totalPages || 1)
+      setTotalElements(response?.totalElements || 0)
     } catch (error) {
       console.error('Failed to load data change logs:', error)
       toast.error('Failed to load data change logs')

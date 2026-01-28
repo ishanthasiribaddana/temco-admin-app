@@ -37,11 +37,19 @@ export default function EmailCompose() {
     setIsLoading(true)
     try {
       const [templatesData, membersData] = await Promise.all([
-        emailService.getTemplates(),
-        emailService.getMembersWithEmail()
+        emailService.getTemplates().catch(() => null),
+        emailService.getMembersWithEmail().catch(() => null)
       ])
-      setTemplates(templatesData)
-      setMembers(membersData.content)
+      if (Array.isArray(templatesData) && templatesData.length > 0) {
+        setTemplates(templatesData)
+      } else {
+        throw new Error('No templates from API')
+      }
+      if (membersData?.content && Array.isArray(membersData.content)) {
+        setMembers(membersData.content)
+      } else {
+        throw new Error('No members from API')
+      }
     } catch (error) {
       console.error('Failed to load data from API, using local data:', error)
       // Use local members data as fallback

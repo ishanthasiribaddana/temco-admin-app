@@ -29,7 +29,7 @@ export default function RoleList() {
     setIsLoading(true)
     try {
       const response = await roleService.getAll(0, 100, searchTerm || undefined)
-      setRoles(response.content)
+      setRoles(response?.content || [])
       setUseMockData(false)
     } catch (error) {
       console.warn('API unavailable, using mock data')

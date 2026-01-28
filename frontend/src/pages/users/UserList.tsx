@@ -23,9 +23,9 @@ export default function UserList() {
     setIsLoading(true)
     try {
       const response = await userService.getUsers(page, 20, searchTerm, selectedStatus)
-      setUsers(response.content)
-      setTotalPages(response.totalPages)
-      setTotalElements(response.totalElements)
+      setUsers(response.content || [])
+      setTotalPages(response.totalPages || 1)
+      setTotalElements(response.totalElements || 0)
       setUseMockData(false)
     } catch (error) {
       console.error('Failed to load users:', error)

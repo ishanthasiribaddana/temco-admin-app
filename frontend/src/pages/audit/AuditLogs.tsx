@@ -26,9 +26,9 @@ export default function AuditLogs() {
     setIsLoading(true)
     try {
       const response = await auditService.getActivityLogs(page, 20, searchTerm, selectedAction)
-      setLogs(response.content)
-      setTotalPages(response.totalPages)
-      setTotalElements(response.totalElements)
+      setLogs(response?.content || [])
+      setTotalPages(response?.totalPages || 1)
+      setTotalElements(response?.totalElements || 0)
       setUseMockData(false)
     } catch (error) {
       console.error('Failed to load logs:', error)
