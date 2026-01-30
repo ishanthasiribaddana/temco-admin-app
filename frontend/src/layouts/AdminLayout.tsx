@@ -19,6 +19,10 @@ import {
   X,
   Building2,
   Mail,
+  Wallet,
+  BarChart3,
+  BellRing,
+  BookOpen,
 } from 'lucide-react'
 import clsx from 'clsx'
 
@@ -40,12 +44,31 @@ const navigation: NavItem[] = [
     ],
   },
   {
+    name: 'Loan Management',
+    icon: Wallet,
+    children: [
+      { name: 'Applications', href: '/loans/applications' },
+      { name: 'Active Loans', href: '/loans/active' },
+      { name: 'Payments', href: '/loans/payments' },
+      { name: 'Defaults', href: '/loans/defaults' },
+    ],
+  },
+  {
     name: 'Access Control',
     icon: Shield,
     children: [
       { name: 'Roles', href: '/roles' },
       { name: 'Permissions', href: '/permissions' },
       { name: 'Menu Management', href: '/menus' },
+    ],
+  },
+  {
+    name: 'Reports',
+    icon: BarChart3,
+    children: [
+      { name: 'Financial Reports', href: '/reports/financial' },
+      { name: 'User Activity', href: '/reports/user-activity' },
+      { name: 'Loan Statistics', href: '/reports/loan-stats' },
     ],
   },
   {
@@ -66,7 +89,16 @@ const navigation: NavItem[] = [
       { name: 'General', href: '/reference/general' },
     ],
   },
+  {
+    name: 'Notifications',
+    icon: BellRing,
+    children: [
+      { name: 'Notification Center', href: '/notifications' },
+      { name: 'Templates', href: '/notifications/templates' },
+    ],
+  },
   { name: 'Email', href: '/email', icon: Mail },
+  { name: 'Developer Guide', href: '/developer-guide', icon: BookOpen },
   { name: 'Settings', href: '/settings', icon: Settings },
   { name: 'Impersonation', href: '/impersonation', icon: UserCog },
 ]

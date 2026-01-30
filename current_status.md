@@ -1,6 +1,25 @@
 # TEMCO AdminApp - Development Status
 
-**Last Updated:** January 29, 2026 12:07 AM (UTC+05:30)
+**Last Updated:** January 29, 2026 3:27 AM (UTC+05:30)
+**Version:** v1.1.0
+
+---
+
+## 🚀 Production Deployment Status
+
+| Component | Status | URL/Location |
+|-----------|--------|--------------|
+| **Frontend** | ✅ Deployed | https://adminpanel.temcobank.com |
+| **Backend (temco-admin.war)** | ✅ Running | WildFly Docker container |
+| **API Backend (temco-api.war)** | ✅ Running | WildFly Docker container |
+| **Database** | ✅ Connected | MariaDB via temco-api |
+| **Git Tag** | ✅ v1.1.0 | https://github.com/ishanthasiribaddana/temco-admin-app |
+
+### Nginx Configuration
+- Frontend served from `/usr/share/nginx/html/admin/`
+- API proxy: `/api/v1/*` → `temco-wildfly:8080/temco-api/api/`
+- SPA routing with `try_files` fallback
+- Config file: `admin-nginx-api.conf`
 
 ---
 
@@ -169,15 +188,41 @@ Reply-To: secretary@temcobanklanka.com
 
 ---
 
-## 📋 Potential Next Tasks
+## � Recent Fixes (v1.1.0)
+
+### Null Safety for API Responses
+Fixed "Cannot read properties of undefined" errors on page refresh:
+- `UserList.tsx` - `response?.content || []`
+- `RoleList.tsx` - `response?.content || []`
+- `EmailCompose.tsx` - Array validation with fallback
+- `AuditLogs.tsx` - `response?.content || []`
+- `DataChangeLogs.tsx` - `response?.content || []`
+- `Impersonation.tsx` - `response?.content || []`
+
+### Hibernate Duplicate JoinColumn Fixes
+Fixed deployment errors in legacy backend entities:
+- `DataChangedLogManager.java`
+- `LoginSession.java`
+- `UserLogin.java`
+- `Voucher.java`
+- `VoucherItem.java`
+- `GeneralOrganizationProfile.java`
+
+### Error Boundary
+Added React Error Boundary to `main.tsx` for better error handling.
+
+---
+
+## �📋 Potential Next Tasks
 
 - [ ] Implement Customer Portal impersonation handler (read URL params, auto-login)
 - [ ] Add email history/logs page
 - [ ] Connect Dashboard statistics to real database
-- [ ] Role management CRUD with database
+- [ ] Role management CRUD with database (add backend endpoints)
 - [ ] Connect Settings to persist configuration
 - [ ] Add SMS notifications integration
 - [ ] Implement real authentication (replace mock login)
+- [ ] Add backend endpoints for roles, audit logs, data change logs
 
 ---
 

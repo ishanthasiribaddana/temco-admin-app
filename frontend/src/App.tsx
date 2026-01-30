@@ -11,6 +11,7 @@ import UserEdit from './pages/users/UserEdit'
 import RoleList from './pages/roles/RoleList'
 import RoleCreate from './pages/roles/RoleCreate'
 import RoleEdit from './pages/roles/RoleEdit'
+import FinanceTeamSetup from './pages/roles/FinanceTeamSetup'
 import PermissionMatrix from './pages/permissions/PermissionMatrix'
 import MenuManagement from './pages/menus/MenuManagement'
 import Settings from './pages/settings/Settings'
@@ -20,6 +21,16 @@ import ReferenceData from './pages/reference/ReferenceData'
 import Impersonation from './pages/admin/Impersonation'
 import Profile from './pages/profile/Profile'
 import EmailCompose from './pages/email/EmailCompose'
+import LoanApplications from './pages/loans/LoanApplications'
+import ActiveLoans from './pages/loans/ActiveLoans'
+import LoanPayments from './pages/loans/LoanPayments'
+import LoanDefaults from './pages/loans/LoanDefaults'
+import FinancialReports from './pages/reports/FinancialReports'
+import UserActivityReport from './pages/reports/UserActivityReport'
+import LoanStatistics from './pages/reports/LoanStatistics'
+import NotificationCenter from './pages/notifications/NotificationCenter'
+import NotificationTemplates from './pages/notifications/NotificationTemplates'
+import DeveloperGuide from './pages/developer/DeveloperGuide'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuthStore()
@@ -59,6 +70,7 @@ function App() {
         <Route path="roles" element={<RoleList />} />
         <Route path="roles/create" element={<RoleCreate />} />
         <Route path="roles/:id/edit" element={<RoleEdit />} />
+        <Route path="roles/finance-team" element={<FinanceTeamSetup />} />
         
         {/* Permissions */}
         <Route path="permissions" element={<PermissionMatrix />} />
@@ -79,11 +91,29 @@ function App() {
         {/* Admin Tools */}
         <Route path="impersonation" element={<Impersonation />} />
         
+        {/* Loan Management */}
+        <Route path="loans/applications" element={<LoanApplications />} />
+        <Route path="loans/active" element={<ActiveLoans />} />
+        <Route path="loans/payments" element={<LoanPayments />} />
+        <Route path="loans/defaults" element={<LoanDefaults />} />
+        
+        {/* Reports */}
+        <Route path="reports/financial" element={<FinancialReports />} />
+        <Route path="reports/user-activity" element={<UserActivityReport />} />
+        <Route path="reports/loan-stats" element={<LoanStatistics />} />
+        
+        {/* Notifications */}
+        <Route path="notifications" element={<NotificationCenter />} />
+        <Route path="notifications/templates" element={<NotificationTemplates />} />
+        
         {/* Email */}
         <Route path="email" element={<EmailCompose />} />
         
         {/* Profile */}
         <Route path="profile" element={<Profile />} />
+        
+        {/* Developer Guide */}
+        <Route path="developer-guide" element={<DeveloperGuide />} />
       </Route>
       
       {/* Catch all */}

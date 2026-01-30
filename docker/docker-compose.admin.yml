@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # AdminApp WildFly - Independent container
+  admin-wildfly:
+    container_name: admin-wildfly
+    build:
+      context: .
+      dockerfile: Dockerfile.wildfly
+    ports:
+      - "8083:8080"      # App port
+      - "9992:9990"      # Management port
+    volumes:
+      - ./deployments:/opt/jboss/wildfly/standalone/deployments
+      - ./standalone.xml:/opt/jboss/wildfly/standalone/configuration/standalone.xml
+    environment:
+      - DB_HOST=temco-mariadb
+      - DB_PORT=3306
+      - DB_NAME=temco_aborigen
+      - DB_USER=temco
+      - DB_PASSWORD=temco123
+      - JAVA_OPTS=-Xms512m -Xmx1024m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m
+    networks:
+      - temco-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/temco-admin/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # AdminApp Maven Builder (for CI/CD)
+  admin-maven:
+    container_name: admin-maven
+    image: maven:3.9-eclipse-temurin-17
+    volumes:
+      - ../Backend:/app
+      - admin-maven-repo:/root/.m2
+    working_dir: /app
+    command: ["tail", "-f", "/dev/null"]
+    networks:
+      - temco-network
+
+volumes:
+  admin-maven-repo:
+
+networks:
+  temco-network:
+    external: true

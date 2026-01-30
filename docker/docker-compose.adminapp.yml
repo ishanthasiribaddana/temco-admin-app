@@ -1,0 +1,57 @@
+version: '3.8'
+
+# =============================================================================
+# ADMIN APP - Independent deployment
+# Deploy: docker-compose -f docker-compose.adminapp.yml up -d
+# Restart: docker-compose -f docker-compose.adminapp.yml restart
+# Logs: docker logs -f admin-wildfly
+# =============================================================================
+
+services:
+  admin-wildfly:
+    build:
+      context: .
+      dockerfile: Dockerfile.wildfly
+    container_name: admin-wildfly
+    restart: unless-stopped
+    ports:
+      - "8083:8080"   # HTTP (unique port)
+      - "9992:9990"   # Admin Console
+      - "8789:8787"   # Debug
+    environment:
+      - WILDFLY_USER=admin
+      - WILDFLY_PASSWORD=admin123
+      - DB_HOST=temco-mariadb
+      - DB_PORT=3306
+      - DB_NAME=temco_aborigen
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - JAVA_OPTS=-Xms512m -Xmx1024m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m
+    volumes:
+      - ./deployments/admin:/opt/jboss/wildfly/standalone/deployments
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/temco-admin/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - temco-network
+
+  # Maven builder for AdminApp (optional - for CI/CD)
+  admin-maven:
+    image: maven:3.9-eclipse-temurin-17
+    container_name: admin-maven
+    working_dir: /app
+    volumes:
+      - ../Backend:/app
+      - admin-maven-repo:/root/.m2    # SEPARATE maven repo
+    command: tail -f /dev/null
+    networks:
+      - temco-network
+
+volumes:
+  admin-maven-repo:    # Isolated from other apps
+
+networks:
+  temco-network:
+    external: true     # Use existing shared network

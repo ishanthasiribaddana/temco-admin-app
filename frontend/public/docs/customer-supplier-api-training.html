@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer-Supplier API Architecture - Developer Training</title>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --secondary: #64748b;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .meta {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .toc {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .toc h2 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .toc ol {
+            columns: 2;
+            column-gap: 2rem;
+        }
+        
+        .toc li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .toc a {
+            color: var(--text);
+            text-decoration: none;
+        }
+        
+        .toc a:hover {
+            color: var(--primary);
+        }
+        
+        section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        h3 {
+            color: var(--text);
+            font-size: 1.2rem;
+            margin: 1.5rem 0 0.75rem 0;
+        }
+        
+        h4 {
+            color: var(--secondary);
+            font-size: 1rem;
+            margin: 1rem 0 0.5rem 0;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid var(--border);
+        }
+        
+        th {
+            background: var(--bg);
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: var(--bg);
+        }
+        
+        code {
+            background: #f1f5f9;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Monaco', monospace;
+            font-size: 0.85rem;
+        }
+        
+        pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+        
+        .diagram {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            overflow-x: auto;
+            white-space: pre;
+            line-height: 1.4;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-success { background: #dcfce7; color: #166534; }
+        .badge-danger { background: #fee2e2; color: #991b1b; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-info { background: #dbeafe; color: #1e40af; }
+        
+        .callout {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .callout-info {
+            background: #eff6ff;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .callout-warning {
+            background: #fffbeb;
+            border-left: 4px solid var(--warning);
+        }
+        
+        .callout-danger {
+            background: #fef2f2;
+            border-left: 4px solid var(--danger);
+        }
+        
+        .callout-success {
+            background: #f0fdf4;
+            border-left: 4px solid var(--success);
+        }
+        
+        ul, ol {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .quick-ref {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        
+        .quick-ref h3 {
+            color: white;
+            margin-top: 0;
+        }
+        
+        .quick-ref code {
+            background: rgba(255,255,255,0.1);
+            color: #93c5fd;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            header { padding: 2rem 1rem; }
+            header h1 { font-size: 1.75rem; }
+            .toc ol { columns: 1; }
+            .meta { flex-direction: column; gap: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Customer-Supplier API Architecture</h1>
+            <p>Developer Training Manual - TEMCO Bank</p>
+            <div class="meta">
+                <span>📘 Version 1.0</span>
+                <span>📅 January 2026</span>
+                <span>👥 TEMCO Architecture Team</span>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <nav class="toc">
+            <h2>📑 Table of Contents</h2>
+            <ol>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#core-concepts">Core Concepts</a></li>
+                <li><a href="#ownership">Module Ownership Model</a></li>
+                <li><a href="#pattern">Customer-Supplier Pattern</a></li>
+                <li><a href="#api-design">Internal API Design Rules</a></li>
+                <li><a href="#implementation">Step-by-Step Implementation</a></li>
+                <li><a href="#examples">Code Examples</a></li>
+                <li><a href="#dos-donts">Do's and Don'ts</a></li>
+                <li><a href="#testing">Testing Guidelines</a></li>
+                <li><a href="#cicd">Deployment & CI/CD</a></li>
+                <li><a href="#troubleshooting">Troubleshooting</a></li>
+                <li><a href="#glossary">Glossary</a></li>
+            </ol>
+        </nav>
+        
+        <section id="introduction">
+            <h2>1. Introduction</h2>
+            
+            <h3>1.1 What is this Architecture?</h3>
+            <p>TEMCO Bank uses a <strong>Customer-Supplier API Model</strong> - a design pattern where:</p>
+            <ul>
+                <li><strong>Modules OWN their tables</strong> (Suppliers)</li>
+                <li><strong>Modules REQUEST data via APIs</strong> (Customers)</li>
+                <li><strong>No direct cross-module table access</strong></li>
+            </ul>
+            
+            <h3>1.2 Why This Approach?</h3>
+            <table>
+                <tr>
+                    <th>Traditional Approach</th>
+                    <th>Our Approach</th>
+                </tr>
+                <tr>
+                    <td>Any code can access any table</td>
+                    <td>Only owner module accesses its tables</td>
+                </tr>
+                <tr>
+                    <td>Database changes break multiple apps</td>
+                    <td>Database changes isolated to owner</td>
+                </tr>
+                <tr>
+                    <td>Hard to track who modifies what</td>
+                    <td>Clear ownership and responsibility</td>
+                </tr>
+                <tr>
+                    <td>Tight coupling</td>
+                    <td>Loose coupling via APIs</td>
+                </tr>
+            </table>
+            
+            <h3>1.3 Business Benefits</h3>
+            <ul>
+                <li><span class="badge badge-success">✅</span> <strong>Independent Deployments</strong> - Change one module without affecting others</li>
+                <li><span class="badge badge-success">✅</span> <strong>Clear Accountability</strong> - Each team owns their data</li>
+                <li><span class="badge badge-success">✅</span> <strong>Future-Proof</strong> - Can split into microservices later</li>
+                <li><span class="badge badge-success">✅</span> <strong>Audit Compliance</strong> - Clear data access patterns</li>
+            </ul>
+        </section>
+        
+        <section id="core-concepts">
+            <h2>2. Core Concepts</h2>
+            
+            <h3>2.1 The Three Pillars</h3>
+            <div class="diagram">┌─────────────────────────────────────────────────────────────┐
+│                    THREE PILLARS                             │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  1. TABLE OWNERSHIP                                         │
+│     └── Each table belongs to ONE module only               │
+│                                                              │
+│  2. INTERNAL APIs                                           │
+│     └── Cross-module communication via REST APIs            │
+│                                                              │
+│  3. DATA CONTRACTS                                          │
+│     └── API responses define what data is shared            │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>2.2 Key Terminology</h3>
+            <table>
+                <tr><th>Term</th><th>Definition</th></tr>
+                <tr><td><strong>Supplier</strong></td><td>Module that OWNS tables and PROVIDES data via API</td></tr>
+                <tr><td><strong>Customer</strong></td><td>Module that CONSUMES data via Supplier's API</td></tr>
+                <tr><td><strong>Owner</strong></td><td>The module responsible for a set of tables</td></tr>
+                <tr><td><strong>Internal API</strong></td><td>API endpoint for inter-module communication</td></tr>
+                <tr><td><strong>Data Contract</strong></td><td>The agreed structure of API request/response</td></tr>
+                <tr><td><strong>Bounded Context</strong></td><td>The boundary around a module's responsibility</td></tr>
+            </table>
+        </section>
+        
+        <section id="ownership">
+            <h2>3. Module Ownership Model</h2>
+            
+            <h3>3.1 TEMCO Module Map</h3>
+            <div class="diagram">┌────────────────────────────────────────────────────────────────────┐
+│                      TEMCO SYSTEM MODULES                          │
+├────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐                │
+│  │   ADMIN     │  │    LOAN     │  │   FINANCE   │                │
+│  │   MODULE    │  │   MODULE    │  │   MODULE    │                │
+│  │             │  │             │  │             │                │
+│  │ Owns:       │  │ Owns:       │  │ Owns:       │                │
+│  │ - user_*    │  │ - loan      │  │ - voucher   │                │
+│  │ - role_*    │  │ - loan_*    │  │ - journal_* │                │
+│  │ - settings  │  │ - collateral│  │ - chart_of_*│                │
+│  │ - reference │  │ - guarantee │  │ - ledger_*  │                │
+│  └─────────────┘  └─────────────┘  └─────────────┘                │
+│                                                                     │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐                │
+│  │   MEMBER    │  │  TRANSFER   │  │  DOCUMENT   │                │
+│  │   MODULE    │  │   MODULE    │  │   MODULE    │                │
+│  │             │  │             │  │             │                │
+│  │ Owns:       │  │ Owns:       │  │ Owns:       │                │
+│  │ - member    │  │ - pay_order │  │ - document_*│                │
+│  │ - profile_* │  │ - reconcile │  │ - template_*│                │
+│  │ - kyc_*     │  │ - transfer_*│  │ - upload_*  │                │
+│  └─────────────┘  └─────────────┘  └─────────────┘                │
+│                                                                     │
+└────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>3.2 Ownership Rules</h3>
+            <div class="callout callout-info">
+                <strong>RULE 1:</strong> One table = One owner<br>
+                <code>✅ CORRECT: loan table owned by LOAN MODULE</code><br>
+                <code>❌ WRONG: loan table accessed directly by ADMIN MODULE</code>
+            </div>
+            
+            <div class="callout callout-info">
+                <strong>RULE 2:</strong> Owner has full CRUD access<br>
+                <code>LOAN MODULE can: SELECT, INSERT, UPDATE, DELETE on loan table</code>
+            </div>
+            
+            <div class="callout callout-info">
+                <strong>RULE 3:</strong> Non-owners use APIs only<br>
+                <code>ADMIN MODULE wants loan data → Calls LOAN MODULE API</code><br>
+                <code>ADMIN MODULE does NOT → SELECT * FROM loan</code>
+            </div>
+            
+            <h3>3.3 Admin App Ownership Summary</h3>
+            <table>
+                <tr><th>Category</th><th>Tables Owned</th><th>Access Level</th></tr>
+                <tr><td>COMMON</td><td>5 tables (status, priority, settings...)</td><td>READ/WRITE</td></tr>
+                <tr><td>CORE</td><td>16 tables (user_*, role_*, use_case_*...)</td><td>READ/WRITE</td></tr>
+                <tr><td>AUDIT</td><td>2 tables (security_activity_logs...)</td><td>READ/WRITE</td></tr>
+                <tr><td>REFERENCE</td><td>28 tables (country, province, bank...)</td><td>READ/WRITE</td></tr>
+                <tr style="background:#dbeafe;"><td><strong>TOTAL OWNED</strong></td><td><strong>51 tables</strong></td><td><strong>Full Access</strong></td></tr>
+            </table>
+        </section>
+        
+        <section id="pattern">
+            <h2>4. Customer-Supplier Pattern</h2>
+            
+            <h3>4.1 Pattern Overview</h3>
+            <div class="diagram">SUPPLIER MODULE                          CUSTOMER MODULE
+(Data Owner)                             (Data Consumer)
+                                         
+┌──────────────────┐                     ┌──────────────────┐
+│                  │                     │                  │
+│  ┌────────────┐  │    HTTP Request     │                  │
+│  │   Tables   │  │  ◄──────────────    │   Needs loan     │
+│  │  (owned)   │  │                     │   data for       │
+│  └─────┬──────┘  │                     │   dashboard      │
+│        │         │                     │                  │
+│        ▼         │                     │                  │
+│  ┌────────────┐  │    HTTP Response    │  ┌────────────┐  │
+│  │  Internal  │  │  ──────────────►    │  │  Receives  │  │
+│  │    API     │  │   (JSON Data)       │  │  JSON Data │  │
+│  └────────────┘  │                     │  └────────────┘  │
+│                  │                     │                  │
+│   LOAN MODULE    │                     │   ADMIN MODULE   │
+└──────────────────┘                     └──────────────────┘</div>
+            
+            <h3>4.2 Request-Response Flow</h3>
+            <ol>
+                <li><strong>Step 1:</strong> Customer identifies data need → Admin App needs loan summary for dashboard</li>
+                <li><strong>Step 2:</strong> Customer calls Supplier's API → <code>GET /api/loan/summary/12345</code></li>
+                <li><strong>Step 3:</strong> Supplier queries its own tables → <code>SELECT from loan, loan_status, loan_payment</code></li>
+                <li><strong>Step 4:</strong> Supplier builds response object → <code>LoanSummaryResponse { id, amount, status, borrower }</code></li>
+                <li><strong>Step 5:</strong> Supplier returns JSON response → <code>{ "loanId": 12345, "amount": 50000, "status": "Active" }</code></li>
+                <li><strong>Step 6:</strong> Customer uses the data → Admin App displays on dashboard</li>
+            </ol>
+            
+            <h3>4.3 Why Not Direct Table Access?</h3>
+            
+            <div class="callout callout-danger">
+                <strong>❌ WRONG WAY (Direct Access):</strong>
+                <pre><code>// Admin App directly queries loan table
+@Repository
+public class AdminDashboardRepo {
+    @Query("SELECT COUNT(*) FROM loan WHERE status_id = 1")
+    int getActiveLoanCount();  // VIOLATION!
+}</code></pre>
+            </div>
+            
+            <div class="callout callout-success">
+                <strong>✅ CORRECT WAY (API Call):</strong>
+                <pre><code>// Admin App calls Loan Module API
+@Service
+public class AdminDashboardService {
+    @Autowired
+    private LoanApiClient loanApi;
+    
+    public int getActiveLoanCount() {
+        return loanApi.getStats().getActiveCount();
+    }
+}</code></pre>
+            </div>
+        </section>
+        
+        <section id="api-design">
+            <h2>5. Internal API Design Rules</h2>
+            
+            <h3>5.1 API Naming Convention</h3>
+            <pre><code>Format: /api/{module}/{resource}/{action}
+
+Examples:
+  /api/loan/summary/{loanId}         - Get loan summary
+  /api/loan/stats                    - Get loan statistics
+  /api/member/profile/{nic}          - Get member profile
+  /api/finance/reconciliation/{date} - Get reconciliation data</code></pre>
+            
+            <h3>5.2 HTTP Methods</h3>
+            <table>
+                <tr><th>Method</th><th>Purpose</th><th>Example</th></tr>
+                <tr><td>GET</td><td>Retrieve data</td><td><code>GET /api/loan/summary/123</code></td></tr>
+                <tr><td>POST</td><td>Create new record</td><td><code>POST /api/loan/application</code></td></tr>
+                <tr><td>PUT</td><td>Update record</td><td><code>PUT /api/loan/status/123</code></td></tr>
+                <tr><td>DELETE</td><td>Remove record</td><td><code>DELETE /api/loan/draft/123</code></td></tr>
+            </table>
+            
+            <h3>5.3 Response Structure Standard</h3>
+            <pre><code>{
+  "success": true,
+  "timestamp": "2026-01-30T14:30:00Z",
+  "data": {
+    // Actual response data here
+  },
+  "error": null
+}</code></pre>
+        </section>
+        
+        <section id="implementation">
+            <h2>6. Step-by-Step Implementation Guide</h2>
+            
+            <h3>Step 1: Identify Your Module's Ownership</h3>
+            <p>Before writing any code, answer:</p>
+            <ul>
+                <li>Which tables does my module OWN?</li>
+                <li>Which tables does my module NEED from others?</li>
+            </ul>
+            
+            <h3>Step 2: Create Entity Classes (For Owned Tables Only)</h3>
+            <pre><code>@Entity
+@Table(name = "user_login")
+public class UserLogin {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    private String username;
+    private String password;
+    private Boolean isActive;
+    
+    @ManyToOne
+    @JoinColumn(name = "user_role_id")
+    private UserRole userRole;
+}</code></pre>
+            
+            <h3>Step 3: Create Repository (For Owned Tables Only)</h3>
+            <pre><code>@Repository
+public interface UserLoginRepository extends JpaRepository&lt;UserLogin, Long&gt; {
+    Optional&lt;UserLogin&gt; findByUsername(String username);
+    List&lt;UserLogin&gt; findByUserRoleId(Long roleId);
+}</code></pre>
+            
+            <h3>Step 4: Create Internal API Endpoint (As Supplier)</h3>
+            <pre><code>@RestController
+@RequestMapping("/api/admin/user")
+public class UserInternalApi {
+    
+    @Autowired
+    private UserLoginRepository userRepo;
+    
+    @GetMapping("/{userId}")
+    public ApiResponse&lt;UserDTO&gt; getUserById(@PathVariable Long userId) {
+        UserLogin user = userRepo.findById(userId)
+            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        
+        UserDTO dto = UserDTO.builder()
+            .userId(user.getId())
+            .username(user.getUsername())
+            .roleName(user.getUserRole().getName())
+            .build();
+        
+        return ApiResponse.success(dto);
+    }
+}</code></pre>
+            
+            <h3>Step 5: Create API Client (As Customer)</h3>
+            <pre><code>@Component
+public class AdminApiClient {
+    
+    @Autowired
+    private RestTemplate restTemplate;
+    
+    @Value("${admin.api.base-url}")
+    private String adminApiBaseUrl;
+    
+    public UserDTO getUserById(Long userId) {
+        String url = adminApiBaseUrl + "/api/admin/user/" + userId;
+        ResponseEntity&lt;ApiResponse&lt;UserDTO&gt;&gt; response = restTemplate.exchange(
+            url, HttpMethod.GET, null,
+            new ParameterizedTypeReference&lt;ApiResponse&lt;UserDTO&gt;&gt;() {}
+        );
+        return response.getBody().getData();
+    }
+}</code></pre>
+            
+            <h3>Step 6: Use API Client in Your Service</h3>
+            <pre><code>@Service
+public class LoanService {
+    
+    @Autowired
+    private LoanRepository loanRepo;  // Own table - direct access
+    
+    @Autowired
+    private AdminApiClient adminApi;  // Other module - API access
+    
+    public LoanDetailResponse getLoanDetail(Long loanId) {
+        Loan loan = loanRepo.findById(loanId).orElseThrow();
+        UserDTO createdBy = adminApi.getUserById(loan.getCreatedByUserId());
+        
+        return LoanDetailResponse.builder()
+            .loanId(loan.getId())
+            .createdByUsername(createdBy.getUsername())
+            .build();
+    }
+}</code></pre>
+        </section>
+        
+        <section id="dos-donts">
+            <h2>8. Do's and Don'ts</h2>
+            
+            <h3>✅ DO's</h3>
+            <table>
+                <tr><th>Rule</th><th>Example</th></tr>
+                <tr><td>DO access only your owned tables directly</td><td><code>loanRepo.findById(id)</code> in LOAN MODULE</td></tr>
+                <tr><td>DO create APIs for data other modules need</td><td><code>/api/loan/summary/{id}</code></td></tr>
+                <tr><td>DO use DTOs in API responses</td><td>Return <code>LoanSummaryDTO</code>, not <code>Loan</code> entity</td></tr>
+                <tr><td>DO validate inputs at API boundary</td><td>Check <code>loanId != null</code></td></tr>
+                <tr><td>DO handle API errors gracefully</td><td>Try-catch with meaningful messages</td></tr>
+                <tr><td>DO version your APIs</td><td><code>/api/v1/loan/*</code></td></tr>
+            </table>
+            
+            <h3>❌ DON'Ts</h3>
+            <table>
+                <tr><th>Rule</th><th>Bad Example</th></tr>
+                <tr><td>DON'T access other module's tables</td><td>Admin Module doing <code>SELECT * FROM loan</code></td></tr>
+                <tr><td>DON'T expose Entity classes in API</td><td>Returning <code>Loan</code> entity with all fields</td></tr>
+                <tr><td>DON'T bypass API for "performance"</td><td>"It's faster to query directly" - NO!</td></tr>
+                <tr><td>DON'T hardcode API URLs</td><td>Use configuration: <code>${loan.api.url}</code></td></tr>
+                <tr><td>DON'T change API contract without versioning</td><td>Breaking change = new version</td></tr>
+            </table>
+        </section>
+        
+        <section id="testing">
+            <h2>9. Testing Guidelines</h2>
+            
+            <h3>9.1 Unit Testing Supplier APIs</h3>
+            <pre><code>@WebMvcTest(ReconciliationSupplierApi.class)
+class ReconciliationSupplierApiTest {
+    
+    @Autowired
+    private MockMvc mockMvc;
+    
+    @MockBean
+    private BankStatementRepository bankStatementRepo;
+    
+    @Test
+    void getReconciliation_ShouldReturnData_WhenDateValid() throws Exception {
+        when(bankStatementRepo.findByDate(any())).thenReturn(List.of(...));
+        
+        mockMvc.perform(get("/api/v1/finance/reconciliation/2026-01-30"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.success").value(true));
+    }
+}</code></pre>
+            
+            <h3>9.2 Unit Testing Customer Services</h3>
+            <pre><code>@ExtendWith(MockitoExtension.class)
+class AdminDashboardServiceTest {
+    
+    @Mock
+    private LoanApiClient loanApi;
+    
+    @InjectMocks
+    private AdminDashboardService dashboardService;
+    
+    @Test
+    void getDashboard_ShouldAggregateDataFromAllSources() {
+        when(loanApi.getStats()).thenReturn(mockLoanStats);
+        
+        DashboardResponse result = dashboardService.getDashboard();
+        
+        assertEquals(50, result.getTotalLoans());
+        verify(loanApi).getStats();
+    }
+}</code></pre>
+        </section>
+        
+        <section id="cicd">
+            <h2>10. Deployment & CI/CD</h2>
+            
+            <h3>10.1 Why This Architecture Helps CI/CD</h3>
+            <table>
+                <tr><th>Traditional</th><th>Customer-Supplier</th></tr>
+                <tr><td>Change table → Rebuild all apps</td><td>Change table → Rebuild only owner module</td></tr>
+                <tr><td>Deploy all modules together</td><td>Deploy modules independently</td></tr>
+                <tr><td>One failure breaks everything</td><td>Isolated failures</td></tr>
+            </table>
+            
+            <h3>10.2 Deployment Order</h3>
+            <div class="diagram">1. INFRASTRUCTURE (Database, Message Queue)
+        │
+        ▼
+2. SUPPLIER MODULES (ADMIN, LOAN, FINANCE, MEMBER)
+        │
+        ▼
+3. CUSTOMER MODULES / FRONTEND APPS</div>
+        </section>
+        
+        <section id="troubleshooting">
+            <h2>11. Troubleshooting</h2>
+            
+            <h3>Common Issues</h3>
+            <table>
+                <tr><th>Issue</th><th>Cause</th><th>Solution</th></tr>
+                <tr><td>API returns 404</td><td>Wrong URL or module not deployed</td><td>Check URL and module status</td></tr>
+                <tr><td>API returns 500</td><td>Supplier internal error</td><td>Check Supplier logs</td></tr>
+                <tr><td>Circular dependency</td><td>Module A → B → A</td><td>Redesign boundaries</td></tr>
+                <tr><td>Slow API response</td><td>Too much data returned</td><td>Paginate or filter</td></tr>
+            </table>
+        </section>
+        
+        <section id="glossary">
+            <h2>12. Glossary</h2>
+            <table>
+                <tr><th>Term</th><th>Definition</th></tr>
+                <tr><td><strong>API</strong></td><td>Application Programming Interface - a way for software to communicate</td></tr>
+                <tr><td><strong>Bounded Context</strong></td><td>A boundary within which a particular model is defined</td></tr>
+                <tr><td><strong>Customer</strong></td><td>A module that consumes data from another module via API</td></tr>
+                <tr><td><strong>DTO</strong></td><td>Data Transfer Object - carries data between processes</td></tr>
+                <tr><td><strong>Entity</strong></td><td>A Java class that maps directly to a database table</td></tr>
+                <tr><td><strong>Internal API</strong></td><td>API for communication between modules within the same system</td></tr>
+                <tr><td><strong>Ownership</strong></td><td>The responsibility of a module over database tables</td></tr>
+                <tr><td><strong>Repository</strong></td><td>A class that handles database operations for an entity</td></tr>
+                <tr><td><strong>Supplier</strong></td><td>A module that owns data and provides it via API</td></tr>
+            </table>
+        </section>
+        
+        <div class="quick-ref">
+            <h3>📋 Quick Reference Card</h3>
+            <pre><code>MY MODULE OWNS TABLE?
+├── YES → Use Repository (direct access)
+└── NO  → Use API Client (call owner's API)
+
+CREATING NEW TABLE?
+└── Add to your module's ownership list
+
+OTHER MODULE NEEDS MY DATA?
+└── Create Internal API endpoint
+
+API URL FORMAT:
+└── /api/v{version}/{module}/{resource}/{action}</code></pre>
+        </div>
+    </div>
+    
+    <footer>
+        <p><strong>TEMCO Bank</strong> - Developer Training Manual v1.0</p>
+        <p>Document Version: 1.0 | Last Updated: January 2026</p>
+    </footer>
+</body>
+</html>

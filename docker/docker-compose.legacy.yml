@@ -1,0 +1,57 @@
+version: '3.8'
+
+# =============================================================================
+# LEGACY APP (temco-bank-system-project) - Independent deployment
+# Deploy: docker-compose -f docker-compose.legacy.yml up -d
+# Restart: docker-compose -f docker-compose.legacy.yml restart
+# Logs: docker logs -f temco-wildfly-legacy
+# =============================================================================
+
+services:
+  wildfly-legacy:
+    build:
+      context: .
+      dockerfile: Dockerfile.wildfly
+    container_name: temco-wildfly-legacy
+    restart: unless-stopped
+    ports:
+      - "8082:8080"   # HTTP (unique port)
+      - "9991:9990"   # Admin Console
+      - "8788:8787"   # Debug
+    environment:
+      - WILDFLY_USER=admin
+      - WILDFLY_PASSWORD=admin123
+      - DB_HOST=temco-mariadb
+      - DB_PORT=3306
+      - DB_NAME=temco_aborigen
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - JAVA_OPTS=-Xms512m -Xmx1024m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m
+    volumes:
+      - ./deployments/legacy:/opt/jboss/wildfly/standalone/deployments
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/temco-bank-system-project/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - temco-network
+
+  # Maven builder for Legacy (optional - for CI/CD)
+  legacy-maven:
+    image: maven:3.9-eclipse-temurin-17
+    container_name: legacy-maven
+    working_dir: /app
+    volumes:
+      - ../legacy/temco-loan-system:/app
+      - legacy-maven-repo:/root/.m2    # SEPARATE maven repo
+    command: tail -f /dev/null
+    networks:
+      - temco-network
+
+volumes:
+  legacy-maven-repo:    # Isolated from other apps
+
+networks:
+  temco-network:
+    external: true     # Use existing shared network
