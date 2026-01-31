@@ -1,7 +1,7 @@
 # TEMCO AdminApp - Development Status
 
-**Last Updated:** January 29, 2026 3:27 AM (UTC+05:30)
-**Version:** v1.1.0
+**Last Updated:** January 31, 2026 1:15 PM (UTC+05:30)
+**Version:** v1.2.0
 
 ---
 
@@ -13,7 +13,7 @@
 | **Backend (temco-admin.war)** | ✅ Running | WildFly Docker container |
 | **API Backend (temco-api.war)** | ✅ Running | WildFly Docker container |
 | **Database** | ✅ Connected | MariaDB via temco-api |
-| **Git Tag** | ✅ v1.1.0 | https://github.com/ishanthasiribaddana/temco-admin-app |
+| **Git Tag** | ⚠️ Local tag created (push blocked) | https://github.com/ishanthasiribaddana/temco-admin-app |
 
 ### Nginx Configuration
 - Frontend served from `/usr/share/nginx/html/admin/`
@@ -24,6 +24,22 @@
 ---
 
 ## ✅ Completed Tasks
+
+### 0. Finance Team Roles UI + Setup Page
+- Finance roles grouped into a dedicated card: Accountant → Finance Controller → Finance Auditor
+- Card navigates to Finance Team Setup page: `/roles/finance-team`
+- Finance Team Setup page includes:
+  - Role hierarchy overview
+  - Full permission matrix (76 tasks across 9 categories)
+  - User creation modal with role selection + user-level customizations
+
+### 0.1 Finance User NIC + General User Profile (GUP) workflow
+- Added NIC field at the top of Create Finance User modal
+- NIC search triggers lookup for existing `general_user_profile` by NIC
+- If found: auto-fills First Name / Last Name / Email / Mobile No (read-only)
+- If not found: allows entering details and creates new `general_user_profile` on save (API-dependent)
+- Verified FK relationship:
+  - `user_login.general_user_profile_id` → `general_user_profile.id` (`UserLogin` → `GeneralUserProfile`)
 
 ### 1. Member Authentication System
 - Backend authentication with JWT tokens
@@ -188,32 +204,21 @@ Reply-To: secretary@temcobanklanka.com
 
 ---
 
-## � Recent Fixes (v1.1.0)
+## 🧾 Git / Release Notes (Jan 31, 2026)
 
-### Null Safety for API Responses
-Fixed "Cannot read properties of undefined" errors on page refresh:
-- `UserList.tsx` - `response?.content || []`
-- `RoleList.tsx` - `response?.content || []`
-- `EmailCompose.tsx` - Array validation with fallback
-- `AuditLogs.tsx` - `response?.content || []`
-- `DataChangeLogs.tsx` - `response?.content || []`
-- `Impersonation.tsx` - `response?.content || []`
+- Latest commit: `47434a5` (Finance Team Setup NIC/GUP integration)
+- Local tag created: `v1.3.0` (not pushed)
+- Push currently blocked by GitHub secret scanning:
+  - Secret detected in repo history: `src/main/webapp/WEB-INF/instant-guard-434810-f9-23872c4aab5b.json`
+  - Origin commit containing secret: `c57909c` ("first commit")
 
-### Hibernate Duplicate JoinColumn Fixes
-Fixed deployment errors in legacy backend entities:
-- `DataChangedLogManager.java`
-- `LoginSession.java`
-- `UserLogin.java`
-- `Voucher.java`
-- `VoucherItem.java`
-- `GeneralOrganizationProfile.java`
-
-### Error Boundary
-Added React Error Boundary to `main.tsx` for better error handling.
+Recommended remediation:
+- Revoke the exposed Google Cloud service account key (owner: Ravindu / project: instant-guard-434810-f9)
+- Clean repo history (BFG / filter-repo) OR explicitly allow the secret in GitHub if acceptable
 
 ---
 
-## �📋 Potential Next Tasks
+## 📋 Potential Next Tasks
 
 - [ ] Implement Customer Portal impersonation handler (read URL params, auto-login)
 - [ ] Add email history/logs page
@@ -223,6 +228,8 @@ Added React Error Boundary to `main.tsx` for better error handling.
 - [ ] Add SMS notifications integration
 - [ ] Implement real authentication (replace mock login)
 - [ ] Add backend endpoints for roles, audit logs, data change logs
+- [ ] Implement backend endpoints for GUP NIC lookup + create (`/api/v1/general-user-profile/*`)
+- [ ] Remove Google Cloud credentials JSON from git history and re-push clean history
 
 ---
 

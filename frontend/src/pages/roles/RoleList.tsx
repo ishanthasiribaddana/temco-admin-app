@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { Plus, Search, Shield, Edit, Trash2, Users, Loader2, Wallet, ChevronRight } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Plus, Search, Shield, Edit, Trash2, Users, Loader2, Wallet } from 'lucide-react'
 import { roleService, Role } from '../../api/roleService'
 import toast from 'react-hot-toast'
 
@@ -19,6 +19,7 @@ const mockRoles = [
 const FINANCE_ROLE_CODES = ['ACCOUNTANT', 'FINANCE_CONTROLLER', 'FINANCE_AUDITOR']
 
 export default function RoleList() {
+  const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
   const [roles, setRoles] = useState<Role[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -57,12 +58,18 @@ export default function RoleList() {
     }
   }
 
-  const filteredRoles = roles.filter((role) =>
-    role.roleName.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredRoles = roles.filter(role => 
+    role.roleName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    role.roleCode.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   const financeRoles = filteredRoles.filter(role => FINANCE_ROLE_CODES.includes(role.roleCode))
   const otherRoles = filteredRoles.filter(role => !FINANCE_ROLE_CODES.includes(role.roleCode))
+
+  const getFinanceRole = (roleCode: string) => financeRoles.find(r => r.roleCode === roleCode)
+  const accountantRole = getFinanceRole('ACCOUNTANT')
+  const controllerRole = getFinanceRole('FINANCE_CONTROLLER')
+  const auditorRole = getFinanceRole('FINANCE_AUDITOR')
 
   return (
     <div className="space-y-6">
@@ -108,8 +115,11 @@ export default function RoleList() {
 
       {/* Finance Team Card */}
       {!isLoading && financeRoles.length > 0 && (
-        <div className="card border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-white hover:shadow-lg transition-shadow">
-          <Link to="/roles/finance-team" className="card-body block">
+        <div 
+          className="card border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-white hover:shadow-lg transition-shadow cursor-pointer"
+          onClick={() => navigate('/roles/finance-team')}
+        >
+          <div className="card-body block">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-3 bg-emerald-100 rounded-xl">
@@ -127,36 +137,105 @@ export default function RoleList() {
                 <p className="text-xs text-emerald-500 mt-1">Click to manage →</p>
               </div>
             </div>
-            
+
             <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-              {financeRoles.map((role, index) => (
-                <div key={role.id} className="relative">
-                  {index < financeRoles.length - 1 && (
-                    <ChevronRight className="hidden md:block absolute -right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-emerald-400 z-10" />
-                  )}
-                  <div className="bg-white rounded-lg border border-emerald-200 p-4 hover:shadow-md transition-shadow">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-semibold text-secondary-900">{role.roleName}</h3>
-                      <div className="flex gap-1">
-                        <Link
-                          to={`/roles/${role.id}/edit`}
-                          className="p-1.5 hover:bg-emerald-50 rounded"
-                        >
-                          <Edit className="h-3.5 w-3.5 text-emerald-600" />
-                        </Link>
-                      </div>
-                    </div>
-                    <p className="text-xs text-secondary-500 mb-3">{role.description}</p>
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="flex items-center text-secondary-600">
-                        <Users className="h-3.5 w-3.5 mr-1" />
-                        {role.userCount} users
-                      </span>
-                      <span className="text-emerald-600 font-medium">{role.permissionCount} perms</span>
-                    </div>
+              <div className="bg-slate-100 rounded-lg p-4 border-2 border-slate-300 relative">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-slate-700" />
+                    <h3 className="font-bold text-slate-800">{auditorRole?.roleName || 'FINANCE AUDITOR'}</h3>
                   </div>
+                  {auditorRole && (
+                    <Link
+                      to={`/roles/${auditorRole.id}/edit`}
+                      className="p-1.5 hover:bg-slate-200 rounded"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Edit className="h-3.5 w-3.5 text-slate-700" />
+                    </Link>
+                  )}
                 </div>
-              ))}
+                <p className="text-xs text-slate-600 mb-3">{auditorRole?.description || 'Financial audit and compliance review'}</p>
+                <ul className="text-xs text-slate-600 space-y-1">
+                  <li>• Reviews all actions</li>
+                  <li>• Flags issues</li>
+                  <li>• Cannot modify data</li>
+                  <li>• Complete visibility</li>
+                </ul>
+                <div className="mt-2 text-center text-slate-400">↓ Reviews</div>
+                <div className="mt-3 pt-3 border-t border-slate-300 flex items-center justify-between text-xs">
+                  <span className="flex items-center text-slate-600">
+                    <Users className="h-3.5 w-3.5 mr-1" />
+                    {auditorRole?.userCount ?? 0} users
+                  </span>
+                  <span className="text-slate-700 font-medium">{auditorRole?.permissionCount ?? 0} perms</span>
+                </div>
+              </div>
+
+              <div className="bg-blue-100 rounded-lg p-4 border-2 border-blue-300 relative">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-blue-700" />
+                    <h3 className="font-bold text-blue-800">{controllerRole?.roleName || 'FINANCE CONTROLLER'}</h3>
+                  </div>
+                  {controllerRole && (
+                    <Link
+                      to={`/roles/${controllerRole.id}/edit`}
+                      className="p-1.5 hover:bg-blue-200 rounded"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Edit className="h-3.5 w-3.5 text-blue-700" />
+                    </Link>
+                  )}
+                </div>
+                <p className="text-xs text-blue-700/80 mb-3">{controllerRole?.description || 'Financial verification and approvals'}</p>
+                <ul className="text-xs text-blue-700 space-y-1">
+                  <li>• Approves/Rejects</li>
+                  <li>• Final verification</li>
+                  <li>• Can override</li>
+                  <li>• Closes periods</li>
+                </ul>
+                <div className="mt-2 text-center text-blue-500">↓ Verifies</div>
+                <div className="mt-3 pt-3 border-t border-blue-300 flex items-center justify-between text-xs">
+                  <span className="flex items-center text-blue-700/80">
+                    <Users className="h-3.5 w-3.5 mr-1" />
+                    {controllerRole?.userCount ?? 0} users
+                  </span>
+                  <span className="text-blue-800 font-medium">{controllerRole?.permissionCount ?? 0} perms</span>
+                </div>
+              </div>
+
+              <div className="bg-green-100 rounded-lg p-4 border-2 border-green-300 relative">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <Shield className="h-5 w-5 text-green-700" />
+                    <h3 className="font-bold text-green-800">{accountantRole?.roleName || 'ACCOUNTANT'}</h3>
+                  </div>
+                  {accountantRole && (
+                    <Link
+                      to={`/roles/${accountantRole.id}/edit`}
+                      className="p-1.5 hover:bg-green-200 rounded"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Edit className="h-3.5 w-3.5 text-green-700" />
+                    </Link>
+                  )}
+                </div>
+                <p className="text-xs text-green-700/80 mb-3">{accountantRole?.description || 'Financial operations and data entry'}</p>
+                <ul className="text-xs text-green-700 space-y-1">
+                  <li>• Daily data entry</li>
+                  <li>• Initial verification</li>
+                  <li>• Reconciliation matching</li>
+                  <li>• Report generation</li>
+                </ul>
+                <div className="mt-3 pt-3 border-t border-green-300 flex items-center justify-between text-xs">
+                  <span className="flex items-center text-green-700/80">
+                    <Users className="h-3.5 w-3.5 mr-1" />
+                    {accountantRole?.userCount ?? 0} users
+                  </span>
+                  <span className="text-green-800 font-medium">{accountantRole?.permissionCount ?? 0} perms</span>
+                </div>
+              </div>
             </div>
 
             <div className="mt-4 pt-4 border-t border-emerald-200">
@@ -164,7 +243,7 @@ export default function RoleList() {
                 <strong>Workflow:</strong> Accountant enters data → Finance Controller verifies → Finance Auditor reviews & approves
               </p>
             </div>
-          </Link>
+          </div>
         </div>
       )}
 
