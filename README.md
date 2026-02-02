@@ -1,4 +1,4 @@
-# 🏦 TEMCO Bank Student Loan Management System
+# 🏦 TEMCO Bank Student Loan Management System Admin App
 
 ## 📊 Overview
 
