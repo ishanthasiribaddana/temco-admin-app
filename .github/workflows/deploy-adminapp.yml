@@ -95,35 +95,34 @@ jobs:
           name: frontend-dist
           path: ./artifacts/frontend
 
-      - name: Setup SSH key
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add server to known hosts
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-          echo "Host *" > ~/.ssh/config
-          echo "  StrictHostKeyChecking no" >> ~/.ssh/config
-          echo "  UserKnownHostsFile=/dev/null" >> ~/.ssh/config
-          chmod 644 ~/.ssh/config
+          ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
       - name: Test SSH connection
         run: |
-          ssh -i ~/.ssh/id_ed25519 -o ConnectTimeout=10 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "echo 'SSH OK'"
+          ssh -o ConnectTimeout=10 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "echo 'SSH OK'"
 
       - name: Deploy WAR to server
         run: |
-          scp -i ~/.ssh/id_ed25519 \
-            ./artifacts/backend/*.war \
+          scp ./artifacts/backend/*.war \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/root/adminapp-isolated/deployments/admin/temco-admin.war
 
       - name: Deploy frontend to server
         run: |
-          rsync -avz --delete -e "ssh -i ~/.ssh/id_ed25519" \
+          rsync -avz --delete \
             ./artifacts/frontend/ \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/root/adminapp-isolated/admin-html/
 
       - name: Restart containers
         run: |
-          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
             # Deploy WAR to WildFly
             docker exec admin-wildfly /opt/jboss/wildfly/bin/jboss-cli.sh -c \
               --commands='deploy /opt/jboss/wildfly/standalone/deployments/temco-admin.war --force'
