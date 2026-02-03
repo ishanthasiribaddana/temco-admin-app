@@ -1,0 +1,28 @@
+# WinSCP Script - Upload AdminApp to Server
+# Run: winscp.com /script=upload-to-server.txt
+
+open sftp://root@109.123.227.166 -hostkey=*
+
+# Create directories on server
+call mkdir -p /root/adminapp-isolated/deployments/admin
+call mkdir -p /root/adminapp-isolated/admin-html/assets
+call mkdir -p /root/adminapp-isolated/admin-html/docs
+
+# Upload docker configs
+put docker-compose.adminapp.yml /root/adminapp-isolated/
+put admin-nginx.conf /root/adminapp-isolated/
+put Dockerfile.wildfly /root/adminapp-isolated/
+put standalone.xml /root/adminapp-isolated/
+
+# Upload WAR file
+put deployments\admin\temco-admin.war /root/adminapp-isolated/deployments/admin/
+
+# Upload frontend
+put admin-html\* /root/adminapp-isolated/admin-html/
+put admin-html\assets\* /root/adminapp-isolated/admin-html/assets/
+put admin-html\docs\* /root/adminapp-isolated/admin-html/docs/
+
+# Upload nginx config (requires confirmation)
+put host-nginx-adminpanel.conf /etc/nginx/conf.d/adminpanel.conf
+
+exit
