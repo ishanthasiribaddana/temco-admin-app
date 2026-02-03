@@ -1,7 +1,42 @@
 # TEMCO AdminApp - Development Status
 
-**Last Updated:** January 31, 2026 1:15 PM (UTC+05:30)
-**Version:** v1.2.0
+**Last Updated:** February 2, 2026 11:55 PM (UTC+05:30)
+**Version:** v1.8.0
+
+---
+
+## 🖥️ Local Development Setup (Active)
+
+| Component | Status | URL/Access |
+|-----------|--------|------------|
+| **Frontend (Vite)** | ✅ Running | http://localhost:3000 |
+| **MariaDB (Docker)** | ✅ Running | localhost:3306 |
+| **Database** | ✅ Imported | temco_system (from production backup) |
+| **phpMyAdmin** | ⏸️ Available | Start with: `docker compose -f docker-compose.dev.yml up -d phpmyadmin` → http://localhost:8081 |
+
+### Quick Start Commands
+```bash
+# Start MariaDB (if not running)
+cd F:\TemcoERP\AdminApp
+docker compose -f docker-compose.dev.yml up -d mariadb
+
+# Start Frontend
+cd F:\TemcoERP\AdminApp\frontend
+npm run dev
+
+# Access phpMyAdmin (optional)
+docker compose -f docker-compose.dev.yml up -d phpmyadmin
+# Then open http://localhost:8081 (root / 6qZB6d@pIvj)
+```
+
+### Database Credentials (Local Docker)
+```
+Host: localhost
+Port: 3306
+User: root
+Password: 6qZB6d@pIvj
+Database: temco_system
+```
 
 ---
 
@@ -13,7 +48,7 @@
 | **Backend (temco-admin.war)** | ✅ Running | WildFly Docker container |
 | **API Backend (temco-api.war)** | ✅ Running | WildFly Docker container |
 | **Database** | ✅ Connected | MariaDB via temco-api |
-| **Git Tag** | ⚠️ Local tag created (push blocked) | https://github.com/ishanthasiribaddana/temco-admin-app |
+| **Git (temco-loan-system)** | ⚠️ Local commit created (push blocked) | git@github.com:ExonSoftware/temco-loan-system.git |
 
 ### Nginx Configuration
 - Frontend served from `/usr/share/nginx/html/admin/`
@@ -40,6 +75,13 @@
 - If not found: allows entering details and creates new `general_user_profile` on save (API-dependent)
 - Verified FK relationship:
   - `user_login.general_user_profile_id` → `general_user_profile.id` (`UserLogin` → `GeneralUserProfile`)
+
+#### Production verification (temco-api)
+- `GET /api/v1/general-user-profile/nic/{nic}` verified live (returns 404 when missing)
+- `POST /api/v1/general-user-profile` verified live
+- Verified MariaDB insert:
+  - `general_user_profile.id=226` with `nic=621703366V`
+- Verified no automatic linkage created in `user_login` for `general_user_profile_id=226` (expected to be handled by finance user creation flow)
 
 ### 1. Member Authentication System
 - Backend authentication with JWT tokens
@@ -186,20 +228,21 @@ Reply-To: secretary@temcobanklanka.com
 
 ## 🚀 To Resume Development
 
-1. **Start Dev Server:**
+1. **Start Docker + MariaDB:**
+   ```bash
+   # Start Docker Desktop first, then:
+   cd F:\TemcoERP\AdminApp
+   docker compose -f docker-compose.dev.yml up -d mariadb
+   ```
+
+2. **Start Frontend:**
    ```bash
    cd F:\TemcoERP\AdminApp\frontend
    npm run dev
    ```
 
-2. **Rebuild Backend (if needed):**
-   ```bash
-   cd F:\TemcoERP\AdminApp
-   docker-compose build && docker-compose up -d
-   ```
-
 3. **Access AdminApp:**
-   - Local: http://localhost:5173
+   - Local: http://localhost:3000
    - Login: admin / admin (mock auth)
 
 ---
@@ -212,14 +255,33 @@ Reply-To: secretary@temcobanklanka.com
   - Secret detected in repo history: `src/main/webapp/WEB-INF/instant-guard-434810-f9-23872c4aab5b.json`
   - Origin commit containing secret: `c57909c` ("first commit")
 
+### Backend (temco-loan-system) - Feb 1, 2026
+- Local commit: `1458a9d` (JPA join mapping fixes + `GeneralUserProfileController`)
+- Push/tag blocked due to GitHub SSH auth:
+  - `git push origin master` failed with `Permission denied (publickey)`
+
 Recommended remediation:
 - Revoke the exposed Google Cloud service account key (owner: Ravindu / project: instant-guard-434810-f9)
 - Clean repo history (BFG / filter-repo) OR explicitly allow the secret in GitHub if acceptable
 
 ---
 
-## 📋 Potential Next Tasks
+## � Pending Issues
 
+### Lending App Login (lending.temcobank.com)
+- **Status:** ❌ Login fails with "Bad padding" decryption error
+- **Root Cause:** Unknown - password encryption/decryption mismatch despite correct Security.java parameters
+- **Tested:** Multiple freshly encrypted passwords, GlassFish restart, verified DB values
+- **Next Steps:**
+  - Check if Security.class in deployed WAR differs from source
+  - Verify Base64 encoding consistency
+  - Consider redeploying with debug logging in AdminLogin.java
+
+---
+
+## �📋 Potential Next Tasks
+
+- [ ] **Fix lending.temcobank.com login** (priority)
 - [ ] Implement Customer Portal impersonation handler (read URL params, auto-login)
 - [ ] Add email history/logs page
 - [ ] Connect Dashboard statistics to real database
@@ -228,8 +290,8 @@ Recommended remediation:
 - [ ] Add SMS notifications integration
 - [ ] Implement real authentication (replace mock login)
 - [ ] Add backend endpoints for roles, audit logs, data change logs
-- [ ] Implement backend endpoints for GUP NIC lookup + create (`/api/v1/general-user-profile/*`)
 - [ ] Remove Google Cloud credentials JSON from git history and re-push clean history
+- [ ] Design dockerized isolation for legacy lending app
 
 ---
 

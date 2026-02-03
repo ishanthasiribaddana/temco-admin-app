@@ -31,6 +31,7 @@ import LoanStatistics from './pages/reports/LoanStatistics'
 import NotificationCenter from './pages/notifications/NotificationCenter'
 import NotificationTemplates from './pages/notifications/NotificationTemplates'
 import DeveloperGuide from './pages/developer/DeveloperGuide'
+import CICDGuide from './pages/developer/CICDGuide'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuthStore()
@@ -114,6 +115,7 @@ function App() {
         
         {/* Developer Guide */}
         <Route path="developer-guide" element={<DeveloperGuide />} />
+        <Route path="developer-guide/cicd" element={<CICDGuide />} />
       </Route>
       
       {/* Catch all */}

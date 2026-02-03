@@ -88,7 +88,7 @@ const guideCards: GuideCard[] = [
     description: 'Docker containerization, CI/CD pipelines, environment configuration, and release management.',
     icon: <Terminal className="h-8 w-8" />,
     color: 'bg-teal-500',
-    comingSoon: true
+    link: '/developer-guide/cicd'
   },
   {
     id: 'module-ownership',
@@ -131,11 +131,11 @@ const DeveloperGuide: React.FC = () => {
           <div className="text-sm text-secondary-500">Guide Topics</div>
         </div>
         <div className="bg-white rounded-xl p-4 shadow-sm border border-secondary-200">
-          <div className="text-3xl font-bold text-green-600">1</div>
+          <div className="text-3xl font-bold text-green-600">3</div>
           <div className="text-sm text-secondary-500">Available Now</div>
         </div>
         <div className="bg-white rounded-xl p-4 shadow-sm border border-secondary-200">
-          <div className="text-3xl font-bold text-orange-600">7</div>
+          <div className="text-3xl font-bold text-orange-600">6</div>
           <div className="text-sm text-secondary-500">Coming Soon</div>
         </div>
         <div className="bg-white rounded-xl p-4 shadow-sm border border-secondary-200">
