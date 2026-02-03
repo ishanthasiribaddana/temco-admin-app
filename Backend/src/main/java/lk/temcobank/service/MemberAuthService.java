@@ -11,7 +11,7 @@ import java.util.List;
 @Stateless
 public class MemberAuthService {
 
-    @PersistenceContext(unitName = "temco_loan_system_JNDI")
+    @PersistenceContext(unitName = "TemcoBankPU")
     private EntityManager em;
 
     /**

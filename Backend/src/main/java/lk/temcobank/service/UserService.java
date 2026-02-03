@@ -13,7 +13,7 @@ import java.util.List;
 @Stateless
 public class UserService {
 
-    @PersistenceContext(unitName = "temco_loan_system_JNDI")
+    @PersistenceContext(unitName = "TemcoBankPU")
     private EntityManager em;
 
     public List<UserDTO> getUsers(int page, int size, String search, String status) {

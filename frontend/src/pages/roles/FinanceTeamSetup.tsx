@@ -247,6 +247,8 @@ export default function FinanceTeamSetup() {
   const [nicSearching, setNicSearching] = useState(false)
   const [gupFound, setGupFound] = useState<GeneralUserProfile | null>(null)
   const [gupNotFound, setGupNotFound] = useState(false)
+  const [gupEditing, setGupEditing] = useState(false)
+  const [gupSaving, setGupSaving] = useState(false)
   const [formData, setFormData] = useState({
     nic: '',
     firstName: '',
@@ -286,6 +288,7 @@ export default function FinanceTeamSetup() {
     setNicSearching(true)
     setGupFound(null)
     setGupNotFound(false)
+    setGupEditing(false)
     
     try {
       const response = await fetch(`/api/v1/general-user-profile/nic/${formData.nic}`)
@@ -316,6 +319,53 @@ export default function FinanceTeamSetup() {
     }
   }
 
+  const handleSaveGup = async () => {
+    if (!gupFound || !formData.generalUserProfileId) {
+      toast.error('No profile selected to update')
+      return
+    }
+    if (!formData.firstName || !formData.lastName || !formData.email) {
+      toast.error('Please fill in all required fields')
+      return
+    }
+
+    setGupSaving(true)
+    try {
+      const response = await fetch(`/api/v1/general-user-profile/${formData.generalUserProfileId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          fullName: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email,
+          mobileNo: formData.mobileNo,
+        }),
+      })
+
+      if (!response.ok) {
+        toast.error('Failed to update profile')
+        return
+      }
+
+      const updated: GeneralUserProfile = await response.json()
+      setGupFound(updated)
+      setFormData(prev => ({
+        ...prev,
+        firstName: updated.firstName || '',
+        lastName: updated.lastName || '',
+        email: updated.email || '',
+        mobileNo: updated.mobileNo || '',
+      }))
+      setGupEditing(false)
+      toast.success('Profile updated successfully')
+    } catch (error) {
+      toast.error('Failed to update profile')
+    } finally {
+      setGupSaving(false)
+    }
+  }
+
   const resetForm = () => {
     setFormData({
       nic: '',
@@ -330,6 +380,8 @@ export default function FinanceTeamSetup() {
     })
     setGupFound(null)
     setGupNotFound(false)
+    setGupEditing(false)
+    setGupSaving(false)
   }
 
   const handleCreateUser = async () => {
@@ -606,6 +658,52 @@ export default function FinanceTeamSetup() {
                     </span>
                   </div>
                 )}
+                {gupFound && (
+                  <div className="mt-3 flex items-center justify-end gap-2">
+                    {!gupEditing ? (
+                      <button
+                        type="button"
+                        onClick={() => setGupEditing(true)}
+                        className="btn-secondary"
+                      >
+                        Edit Profile
+                      </button>
+                    ) : (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setGupEditing(false)
+                            setFormData(prev => ({
+                              ...prev,
+                              firstName: gupFound.firstName || '',
+                              lastName: gupFound.lastName || '',
+                              email: gupFound.email || '',
+                              mobileNo: gupFound.mobileNo || '',
+                            }))
+                          }}
+                          disabled={gupSaving}
+                          className="btn-secondary"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleSaveGup}
+                          disabled={gupSaving}
+                          className="btn-primary"
+                        >
+                          {gupSaving ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Save className="h-4 w-4" />
+                          )}
+                          Save Profile
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
                 {gupNotFound && (
                   <div className="mt-3 flex items-center gap-2 text-blue-700 bg-blue-100 px-3 py-2 rounded-lg">
                     <UserPlus className="h-5 w-5" />
@@ -628,7 +726,7 @@ export default function FinanceTeamSetup() {
                         onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                         className="input"
                         placeholder="Enter first name"
-                        readOnly={!!gupFound}
+                        readOnly={!!gupFound && !gupEditing}
                       />
                     </div>
                     <div>
@@ -639,7 +737,7 @@ export default function FinanceTeamSetup() {
                         onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                         className="input"
                         placeholder="Enter last name"
-                        readOnly={!!gupFound}
+                        readOnly={!!gupFound && !gupEditing}
                       />
                     </div>
                   </div>
@@ -653,7 +751,7 @@ export default function FinanceTeamSetup() {
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         className="input"
                         placeholder="user@temcobank.com"
-                        readOnly={!!gupFound}
+                        readOnly={!!gupFound && !gupEditing}
                       />
                     </div>
                     <div>
@@ -664,7 +762,7 @@ export default function FinanceTeamSetup() {
                         onChange={(e) => setFormData({ ...formData, mobileNo: e.target.value })}
                         className="input"
                         placeholder="07XXXXXXXX"
-                        readOnly={!!gupFound}
+                        readOnly={!!gupFound && !gupEditing}
                       />
                     </div>
                   </div>

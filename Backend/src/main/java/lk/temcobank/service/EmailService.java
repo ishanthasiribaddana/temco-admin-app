@@ -17,7 +17,7 @@ public class EmailService {
 
     private static final Logger LOGGER = Logger.getLogger(EmailService.class.getName());
 
-    @PersistenceContext(unitName = "temcoPU")
+    @PersistenceContext(unitName = "TemcoBankPU")
     private EntityManager em;
 
     // Default Mailtrap config (from existing system)
@@ -157,7 +157,7 @@ public class EmailService {
             
             for (Object[] row : results) {
                 MemberDTO dto = new MemberDTO();
-                dto.setId(((Number) row[0]).intValue());
+                dto.setId(((Number) row[0]).longValue());
                 dto.setMembershipNo((String) row[1]);
                 dto.setFirstName((String) row[2]);
                 dto.setLastName((String) row[3]);

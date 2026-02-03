@@ -30,11 +30,11 @@
         <!-- Jackson JSON -->
         <jackson.version>2.15.3</jackson.version>
         
-        <!-- BCrypt for Password Hashing -->
-        <bcrypt.version>0.10.2</bcrypt.version>
+        <!-- BCrypt for Password Hashing (jbcrypt) -->
+        <jbcrypt.version>0.4</jbcrypt.version>
         
-        <!-- JWT for Authentication -->
-        <jwt.version>4.4.0</jwt.version>
+        <!-- JWT for Authentication (jjwt) -->
+        <jjwt.version>0.11.5</jjwt.version>
         
         <!-- JasperReports for PDF -->
         <jasperreports.version>6.20.6</jasperreports.version>
@@ -99,21 +99,33 @@
         </dependency>
 
         <!-- ============================================== -->
-        <!-- BCrypt Password Hashing -->
+        <!-- BCrypt Password Hashing (jbcrypt) -->
         <!-- ============================================== -->
         <dependency>
-            <groupId>at.favre.lib</groupId>
-            <artifactId>bcrypt</artifactId>
-            <version>${bcrypt.version}</version>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>${jbcrypt.version}</version>
         </dependency>
 
         <!-- ============================================== -->
-        <!-- JWT Authentication -->
+        <!-- JWT Authentication (jjwt) -->
         <!-- ============================================== -->
         <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>java-jwt</artifactId>
-            <version>${jwt.version}</version>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jjwt.version}</version>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- ============================================== -->

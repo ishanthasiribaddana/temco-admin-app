@@ -87,7 +87,7 @@ public class EmailQueueProcessor {
     /**
      * Send email via SMTP.
      */
-    private void sendEmail(String recipient, String subject, String bodyHtml) throws MessagingException {
+    private void sendEmail(String recipient, String subject, String bodyHtml) throws MessagingException, java.io.UnsupportedEncodingException {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");

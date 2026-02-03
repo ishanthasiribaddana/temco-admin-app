@@ -1,0 +1,146 @@
+name: Deploy AdminApp
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+env:
+  JAVA_VERSION: '17'
+  NODE_VERSION: '20'
+
+jobs:
+  build-backend:
+    name: Build Backend WAR
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build with Maven
+        working-directory: ./Backend
+        run: mvn clean package -DskipTests -B
+
+      - name: Upload WAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-war
+          path: Backend/target/*.war
+          retention-days: 5
+
+  build-frontend:
+    name: Build Frontend SPA
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: ./frontend
+        run: npm run build
+
+      - name: Upload frontend artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist/
+          retention-days: 5
+
+  deploy:
+    name: Deploy to Production
+    needs: [build-backend, build-frontend]
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+      - name: Download backend artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-war
+          path: ./artifacts/backend
+
+      - name: Download frontend artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: ./artifacts/frontend
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy WAR to server
+        run: |
+          scp -i ~/.ssh/id_ed25519 \
+            ./artifacts/backend/*.war \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/root/adminapp-isolated/deployments/admin/temco-admin.war
+
+      - name: Deploy frontend to server
+        run: |
+          rsync -avz --delete -e "ssh -i ~/.ssh/id_ed25519" \
+            ./artifacts/frontend/ \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/root/adminapp-isolated/admin-html/
+
+      - name: Restart containers
+        run: |
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+            # Deploy WAR to WildFly
+            docker exec admin-wildfly /opt/jboss/wildfly/bin/jboss-cli.sh -c \
+              --commands='deploy /opt/jboss/wildfly/standalone/deployments/temco-admin.war --force'
+            
+            # Restart frontend container
+            docker restart admin-frontend
+            
+            # Wait for services
+            sleep 10
+            
+            # Health check
+            BACKEND_STATUS=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8085/temco-admin/)
+            FRONTEND_STATUS=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8089/)
+            
+            echo "Backend status: $BACKEND_STATUS"
+            echo "Frontend status: $FRONTEND_STATUS"
+            
+            if [ "$FRONTEND_STATUS" != "200" ]; then
+              echo "Frontend health check failed!"
+              exit 1
+            fi
+          EOF
+
+      - name: Deployment complete
+        run: |
+          echo "✅ AdminApp deployed successfully!"
+          echo "🔗 https://adminpanel.temcobank.com"

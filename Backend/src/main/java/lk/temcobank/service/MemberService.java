@@ -12,7 +12,7 @@ import java.util.List;
 @Stateless
 public class MemberService {
 
-    @PersistenceContext(unitName = "temco_loan_system_JNDI")
+    @PersistenceContext(unitName = "TemcoBankPU")
     private EntityManager em;
 
     public List<MemberDTO> getMembers(int page, int size, String search) {
