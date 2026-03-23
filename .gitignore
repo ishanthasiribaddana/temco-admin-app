@@ -12,6 +12,11 @@ frontend/node_modules/
 .idea/
 *.iml
 .vscode/
+nb-configuration.xml
+*.NavData
+
+# Old Docker files (superseded by base/local/prod structure)
+docker-compose.dev.yml
 
 # Environment
 .env

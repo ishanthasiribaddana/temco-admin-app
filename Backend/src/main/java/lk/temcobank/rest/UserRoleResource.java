@@ -44,7 +44,7 @@ public class UserRoleResource {
         @APIResponse(responseCode = "200", description = "Role details"),
         @APIResponse(responseCode = "404", description = "Role not found")
     })
-    public Response getRoleById(@PathParam("id") Long id) {
+    public Response getRoleById(@PathParam("id") Integer id) {
         try {
             UserRoleDTO role = roleService.findById(id);
             return Response.ok(role).build();
@@ -73,7 +73,7 @@ public class UserRoleResource {
         @APIResponse(responseCode = "200", description = "Role updated"),
         @APIResponse(responseCode = "404", description = "Role not found")
     })
-    public Response updateRole(@PathParam("id") Long id, @Valid UserRoleDTO dto) {
+    public Response updateRole(@PathParam("id") Integer id, @Valid UserRoleDTO dto) {
         try {
             UserRoleDTO updated = roleService.update(id, dto);
             return Response.ok(updated).build();
@@ -86,12 +86,12 @@ public class UserRoleResource {
 
     @DELETE
     @Path("/{id}")
-    @Operation(summary = "Delete role", description = "Soft delete a role")
+    @Operation(summary = "Delete role", description = "Delete a role")
     @APIResponses({
         @APIResponse(responseCode = "204", description = "Role deleted"),
         @APIResponse(responseCode = "404", description = "Role not found")
     })
-    public Response deleteRole(@PathParam("id") Long id) {
+    public Response deleteRole(@PathParam("id") Integer id) {
         try {
             roleService.delete(id);
             return Response.noContent().build();

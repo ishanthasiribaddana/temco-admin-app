@@ -6,14 +6,18 @@ export interface LoginRequest {
 }
 
 export interface AuthResponse {
-  userId: number
-  username: string
-  email: string
-  fullName: string
-  roleName: string
-  permissions: string[]
-  accessToken: string
-  refreshToken: string
+  success: boolean
+  token: string
+  user: {
+    id: number
+    username: string
+    email: string
+    fullName: string
+    nic: string
+    roleId?: number
+    roleName?: string | null
+  }
+  error?: string
 }
 
 export const authService = {

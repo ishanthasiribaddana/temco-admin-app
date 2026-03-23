@@ -1,0 +1,46 @@
+# =============================================================================
+# BASE CONFIGURATION - Shared between all environments
+# =============================================================================
+# This file contains the common service definitions.
+# Environment-specific settings are in override files.
+#
+# Local Dev:  docker-compose -f docker-compose.base.yml -f docker-compose.local.yml up -d
+# Production: docker-compose -f docker-compose.base.yml -f docker-compose.prod.yml up -d
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # BACKEND (WildFly) - JAX-RS API Server
+  # ---------------------------------------------------------------------------
+  wildfly:
+    build:
+      context: .
+      dockerfile: Dockerfile.wildfly
+    restart: unless-stopped
+    environment:
+      - DB_PORT=3306
+      - DB_NAME=temco_system
+      - DB_USER=root
+      - JAVA_OPTS=-Xms512m -Xmx1024m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/temco-bank/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+    networks:
+      - temco-network
+
+  # ---------------------------------------------------------------------------
+  # REDIS (Optional Cache)
+  # ---------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    networks:
+      - temco-network
+
+networks:
+  temco-network:
+    driver: bridge
+    name: temco-network

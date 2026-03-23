@@ -7,21 +7,20 @@ import jakarta.persistence.PersistenceContext;
 import lk.temcobank.dto.AuthRequest;
 import lk.temcobank.dto.AuthResponse;
 import lk.temcobank.entity.UserAccount;
-import lk.temcobank.entity.UserAccountRole;
-import lk.temcobank.entity.UserLoginHistory;
-import lk.temcobank.entity.UserSession;
 import lk.temcobank.exception.AuthenticationException;
 import lk.temcobank.security.JwtUtil;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Authentication service for login/logout operations.
+ * Authenticates against the user_login table (mapped as UserAccount entity).
+ * User identity comes from general_user_profile via the FK relationship.
+ * JWT is stateless — no server-side session table needed.
  */
 @Stateless
 public class AuthenticationService {
@@ -40,30 +39,26 @@ public class AuthenticationService {
     public AuthResponse login(AuthRequest request, String ipAddress, String userAgent) {
         logger.info("Login attempt for user: {}", request.getUsername());
 
-        // Find user by username
+        // Find user_login by username
         UserAccount user = findUserByUsername(request.getUsername());
         if (user == null) {
-            recordLoginHistory(null, ipAddress, userAgent, "FAILED", "User not found");
             throw new AuthenticationException("Invalid username or password");
         }
 
-        // Check if account is locked
+        // Check if account is locked (exceeded max login attempts)
         if (user.isLocked()) {
-            recordLoginHistory(user, ipAddress, userAgent, "BLOCKED", "Account locked");
-            throw new AuthenticationException("Account is locked. Please try again later.");
+            throw new AuthenticationException("Account is locked. Please contact administrator.");
         }
 
         // Check if account is active
-        if (!"ACTIVE".equals(user.getAccountStatus())) {
-            recordLoginHistory(user, ipAddress, userAgent, "FAILED", "Account not active");
+        if (user.getIsActive() == null || user.getIsActive() != 1) {
             throw new AuthenticationException("Account is not active. Please contact administrator.");
         }
 
-        // Verify password
-        if (!verifyPassword(request.getPassword(), user.getPasswordHash())) {
+        // Verify password (supports both BCrypt and legacy Base64 formats)
+        if (!verifyPassword(request.getPassword(), user.getPassword())) {
             user.recordFailedLogin();
             entityManager.merge(user);
-            recordLoginHistory(user, ipAddress, userAgent, "FAILED", "Invalid password");
             throw new AuthenticationException("Invalid username or password");
         }
 
@@ -71,50 +66,37 @@ public class AuthenticationService {
         user.recordSuccessfulLogin();
         entityManager.merge(user);
 
-        // Get user roles
-        List<String> roles = user.getUserRoles().stream()
-                .map(uar -> uar.getUserRole().getRoleCode())
-                .collect(Collectors.toList());
+        // Role from user_login → user_role
+        List<String> roles = user.getRoleName() != null 
+                ? Collections.singletonList(user.getRoleName()) 
+                : Collections.emptyList();
 
         // Generate tokens
-        String accessToken = jwtUtil.generateToken(user.getId(), user.getUsername(), roles);
+        String accessToken = jwtUtil.generateToken(
+                user.getId().longValue(), user.getUsername(), roles);
         String refreshToken = jwtUtil.generateRefreshToken(user.getUsername());
-
-        // Create session
-        createUserSession(user, accessToken, ipAddress, userAgent);
-
-        // Record successful login
-        recordLoginHistory(user, ipAddress, userAgent, "SUCCESS", null);
 
         logger.info("Login successful for user: {}", request.getUsername());
 
         return new AuthResponse(
                 accessToken,
                 refreshToken,
-                user.getId(),
+                user.getId().longValue(),
                 user.getUsername(),
                 user.getFullName(),
                 user.getEmail(),
                 roles,
-                user.getMustChangePassword()
+                false
         );
     }
 
     /**
-     * Logout user and invalidate session.
+     * Logout user — JWT is stateless, so just log it.
      */
     public void logout(String token) {
         try {
             String username = jwtUtil.extractUsername(token);
-            
-            // Invalidate all sessions for user
-            entityManager.createQuery(
-                    "UPDATE UserSession s SET s.sessionStatus = 'LOGGED_OUT' " +
-                    "WHERE s.userAccount.username = :username AND s.sessionStatus = 'ACTIVE'")
-                    .setParameter("username", username)
-                    .executeUpdate();
-
-            logger.info("Logout successful for user: {}", username);
+            logger.info("Logout for user: {}", username);
         } catch (Exception e) {
             logger.error("Logout error: {}", e.getMessage());
         }
@@ -130,51 +112,52 @@ public class AuthenticationService {
 
         String username = jwtUtil.extractUsername(refreshToken);
         UserAccount user = findUserByUsername(username);
-        
-        if (user == null || !"ACTIVE".equals(user.getAccountStatus())) {
+
+        if (user == null || user.getIsActive() == null || user.getIsActive() != 1) {
             throw new AuthenticationException("User not found or inactive");
         }
 
-        List<String> roles = user.getUserRoles().stream()
-                .map(uar -> uar.getUserRole().getRoleCode())
-                .collect(Collectors.toList());
+        List<String> roles = user.getRoleName() != null 
+                ? Collections.singletonList(user.getRoleName()) 
+                : Collections.emptyList();
 
-        String newAccessToken = jwtUtil.generateToken(user.getId(), user.getUsername(), roles);
+        String newAccessToken = jwtUtil.generateToken(
+                user.getId().longValue(), user.getUsername(), roles);
         String newRefreshToken = jwtUtil.generateRefreshToken(user.getUsername());
 
         return new AuthResponse(
                 newAccessToken,
                 newRefreshToken,
-                user.getId(),
+                user.getId().longValue(),
                 user.getUsername(),
                 user.getFullName(),
                 user.getEmail(),
                 roles,
-                user.getMustChangePassword()
+                false
         );
     }
 
     /**
-     * Change user password.
+     * Change user password (stores as BCrypt).
      */
     public void changePassword(Long userId, String oldPassword, String newPassword) {
-        UserAccount user = entityManager.find(UserAccount.class, userId);
+        UserAccount user = entityManager.find(UserAccount.class, userId.intValue());
         if (user == null) {
             throw new AuthenticationException("User not found");
         }
 
-        if (!verifyPassword(oldPassword, user.getPasswordHash())) {
+        if (!verifyPassword(oldPassword, user.getPassword())) {
             throw new AuthenticationException("Current password is incorrect");
         }
 
-        user.changePassword(hashPassword(newPassword).getBytes());
+        user.setPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt(12)));
         entityManager.merge(user);
-        
+
         logger.info("Password changed for user: {}", user.getUsername());
     }
 
     /**
-     * Get current user details.
+     * Get current user details from token.
      */
     public AuthResponse getCurrentUser(String token) {
         if (!jwtUtil.validateToken(token)) {
@@ -182,24 +165,24 @@ public class AuthenticationService {
         }
 
         Long userId = jwtUtil.extractUserId(token);
-        UserAccount user = entityManager.find(UserAccount.class, userId);
-        
+        UserAccount user = entityManager.find(UserAccount.class, userId.intValue());
+
         if (user == null) {
             throw new AuthenticationException("User not found");
         }
 
-        List<String> roles = user.getUserRoles().stream()
-                .map(uar -> uar.getUserRole().getRoleCode())
-                .collect(Collectors.toList());
+        List<String> roles = user.getRoleName() != null 
+                ? Collections.singletonList(user.getRoleName()) 
+                : Collections.emptyList();
 
         return new AuthResponse(
                 null, null,
-                user.getId(),
+                user.getId().longValue(),
                 user.getUsername(),
                 user.getFullName(),
                 user.getEmail(),
                 roles,
-                user.getMustChangePassword()
+                false
         );
     }
 
@@ -208,7 +191,7 @@ public class AuthenticationService {
     private UserAccount findUserByUsername(String username) {
         try {
             return entityManager.createQuery(
-                    "SELECT u FROM UserAccount u WHERE u.username = :username AND u.isDeleted = false",
+                    "SELECT u FROM UserAccount u WHERE u.username = :username AND u.isActive = 1",
                     UserAccount.class)
                     .setParameter("username", username)
                     .getSingleResult();
@@ -217,45 +200,18 @@ public class AuthenticationService {
         }
     }
 
-    private boolean verifyPassword(String plainPassword, byte[] hashedPassword) {
+    /**
+     * Verify password using BCrypt.
+     */
+    private boolean verifyPassword(String plainPassword, String storedPassword) {
+        if (storedPassword == null || storedPassword.isEmpty()) {
+            return false;
+        }
         try {
-            String hash = new String(hashedPassword);
-            return BCrypt.checkpw(plainPassword, hash);
+            return BCrypt.checkpw(plainPassword, storedPassword);
         } catch (Exception e) {
             logger.error("Password verification error: {}", e.getMessage());
             return false;
-        }
-    }
-
-    private String hashPassword(String password) {
-        return BCrypt.hashpw(password, BCrypt.gensalt(12));
-    }
-
-    private void createUserSession(UserAccount user, String token, String ipAddress, String userAgent) {
-        UserSession session = new UserSession();
-        session.setUserAccount(user);
-        session.setSessionToken(token);
-        session.setLoginTime(LocalDateTime.now());
-        session.setLastActivityTime(LocalDateTime.now());
-        session.setExpiryTime(LocalDateTime.now().plusHours(24));
-        session.setIpAddress(ipAddress);
-        session.setUserAgent(userAgent);
-        session.setSessionStatus("ACTIVE");
-        entityManager.persist(session);
-    }
-
-    private void recordLoginHistory(UserAccount user, String ipAddress, String userAgent, 
-                                    String status, String failureReason) {
-        UserLoginHistory history = new UserLoginHistory();
-        history.setUserAccount(user);
-        history.setLoginTime(LocalDateTime.now());
-        history.setIpAddress(ipAddress);
-        history.setUserAgent(userAgent);
-        history.setLoginStatus(status);
-        history.setFailureReason(failureReason);
-        
-        if (user != null) {
-            entityManager.persist(history);
         }
     }
 }

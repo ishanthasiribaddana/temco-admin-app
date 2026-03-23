@@ -23,6 +23,7 @@ import {
   BarChart3,
   BellRing,
   BookOpen,
+  MessageSquare,
 } from 'lucide-react'
 import clsx from 'clsx'
 
@@ -98,6 +99,7 @@ const navigation: NavItem[] = [
     ],
   },
   { name: 'Email', href: '/email', icon: Mail },
+  { name: 'Contact Messages', href: '/messages', icon: MessageSquare },
   { name: 'Developer Guide', href: '/developer-guide', icon: BookOpen },
   { name: 'Settings', href: '/settings', icon: Settings },
   { name: 'Impersonation', href: '/impersonation', icon: UserCog },

@@ -45,10 +45,7 @@
         <class>lk.temcobank.entity.PaymentHistory</class>
         <class>lk.temcobank.entity.LatePaymentPenalty</class>
         
-        <!-- Invoice & Cashier Entities -->
-        <class>lk.temcobank.entity.Cashier</class>
-        <class>lk.temcobank.entity.CashierSession</class>
-        <class>lk.temcobank.entity.CashierTransactionLog</class>
+        <!-- Invoice & Payment Entities -->
         <class>lk.temcobank.entity.Invoice</class>
         <class>lk.temcobank.entity.InvoiceLineItem</class>
         <class>lk.temcobank.entity.PaymentGateway</class>
@@ -57,20 +54,18 @@
         <class>lk.temcobank.entity.StudentDocument</class>
         <class>lk.temcobank.entity.ApiTransactionLog</class>
         
-        <!-- User Management Entities -->
+        <!-- User Management Entities (mapped to user_login + user_role) -->
         <class>lk.temcobank.entity.UserAccount</class>
         <class>lk.temcobank.entity.UserRole</class>
-        <class>lk.temcobank.entity.UserPermission</class>
-        <class>lk.temcobank.entity.UserRolePermission</class>
-        <class>lk.temcobank.entity.UserAccountRole</class>
-        <class>lk.temcobank.entity.UserSession</class>
-        <class>lk.temcobank.entity.UserLoginHistory</class>
         
         <!-- Notification Entities -->
         <class>lk.temcobank.entity.NotificationTemplate</class>
         <class>lk.temcobank.entity.EmailQueue</class>
         <class>lk.temcobank.entity.SmsQueue</class>
         <class>lk.temcobank.entity.NotificationLog</class>
+        
+        <!-- Contact Messages -->
+        <class>lk.temcobank.entity.ContactMessage</class>
         
         <!-- Audit & Job Entities -->
         <class>lk.temcobank.entity.AuditLog</class>

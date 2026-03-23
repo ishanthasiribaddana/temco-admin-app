@@ -11,6 +11,9 @@ import lk.temcobank.entity.UserRole;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Service for user_role table (id, name).
+ */
 @Stateless
 public class UserRoleService {
 
@@ -18,16 +21,16 @@ public class UserRoleService {
     private EntityManager em;
 
     public PageResponse<UserRoleDTO> findAll(int page, int size, String search) {
-        String baseQuery = "SELECT r FROM UserRole r WHERE r.isDeleted = false";
-        String countQuery = "SELECT COUNT(r) FROM UserRole r WHERE r.isDeleted = false";
+        String baseQuery = "SELECT r FROM UserRole r";
+        String countQuery = "SELECT COUNT(r) FROM UserRole r";
         
         if (search != null && !search.isEmpty()) {
-            String searchFilter = " AND (LOWER(r.roleName) LIKE :search OR LOWER(r.roleCode) LIKE :search)";
+            String searchFilter = " WHERE LOWER(r.name) LIKE :search";
             baseQuery += searchFilter;
             countQuery += searchFilter;
         }
         
-        baseQuery += " ORDER BY r.roleName";
+        baseQuery += " ORDER BY r.name";
         
         TypedQuery<UserRole> query = em.createQuery(baseQuery, UserRole.class);
         TypedQuery<Long> countQ = em.createQuery(countQuery, Long.class);
@@ -50,9 +53,9 @@ public class UserRoleService {
         return new PageResponse<>(roles, page, size, total);
     }
 
-    public UserRoleDTO findById(Long id) {
+    public UserRoleDTO findById(Integer id) {
         UserRole role = em.find(UserRole.class, id);
-        if (role == null || role.getIsDeleted()) {
+        if (role == null) {
             throw new IllegalArgumentException("Role not found: " + id);
         }
         return toDTO(role);
@@ -60,10 +63,7 @@ public class UserRoleService {
 
     public UserRoleDTO create(UserRoleDTO dto) {
         UserRole role = new UserRole();
-        role.setRoleCode(dto.getRoleCode());
-        role.setRoleName(dto.getRoleName());
-        role.setDescription(dto.getDescription());
-        role.setIsDeleted(false);
+        role.setName(dto.getName());
         
         em.persist(role);
         em.flush();
@@ -71,52 +71,37 @@ public class UserRoleService {
         return toDTO(role);
     }
 
-    public UserRoleDTO update(Long id, UserRoleDTO dto) {
-        UserRole role = em.find(UserRole.class, id);
-        if (role == null || role.getIsDeleted()) {
-            throw new IllegalArgumentException("Role not found: " + id);
-        }
-        
-        role.setRoleCode(dto.getRoleCode());
-        role.setRoleName(dto.getRoleName());
-        role.setDescription(dto.getDescription());
-        
-        em.merge(role);
-        
-        return toDTO(role);
-    }
-
-    public void delete(Long id) {
+    public UserRoleDTO update(Integer id, UserRoleDTO dto) {
         UserRole role = em.find(UserRole.class, id);
         if (role == null) {
             throw new IllegalArgumentException("Role not found: " + id);
         }
         
-        role.setIsDeleted(true);
+        role.setName(dto.getName());
         em.merge(role);
+        
+        return toDTO(role);
+    }
+
+    public void delete(Integer id) {
+        UserRole role = em.find(UserRole.class, id);
+        if (role == null) {
+            throw new IllegalArgumentException("Role not found: " + id);
+        }
+        em.remove(role);
     }
 
     private UserRoleDTO toDTO(UserRole role) {
         UserRoleDTO dto = new UserRoleDTO();
         dto.setId(role.getId());
-        dto.setRoleCode(role.getRoleCode());
-        dto.setRoleName(role.getRoleName());
-        dto.setDescription(role.getDescription());
-        dto.setIsActive(!role.getIsDeleted());
+        dto.setName(role.getName());
         
-        // Count users with this role
+        // Count users (user_login records) with this role
         Long userCount = em.createQuery(
-            "SELECT COUNT(uar) FROM UserAccountRole uar WHERE uar.userRole.id = :roleId", Long.class)
+            "SELECT COUNT(u) FROM UserAccount u WHERE u.userRole.id = :roleId AND u.isActive = 1", Long.class)
             .setParameter("roleId", role.getId())
             .getSingleResult();
         dto.setUserCount(userCount.intValue());
-        
-        // Count permissions for this role
-        Long permCount = em.createQuery(
-            "SELECT COUNT(rp) FROM UserRolePermission rp WHERE rp.userRole.id = :roleId", Long.class)
-            .setParameter("roleId", role.getId())
-            .getSingleResult();
-        dto.setPermissionCount(permCount.intValue());
         
         return dto;
     }
