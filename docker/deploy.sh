@@ -17,18 +17,18 @@ echo "[1/5] Pulling latest code..."
 cd "$PROJECT_DIR"
 git pull origin main
 
-# Step 2: Build Backend WAR
-echo "[2/5] Building Backend WAR..."
+# Step 2: Build AdminApp WAR (root POM: temco_loan_system → temco-admin context)
+echo "[2/5] Building AdminApp WAR..."
 docker run --rm \
-    -v "$PROJECT_DIR/Backend:/app" \
+    -v "$PROJECT_DIR:/app" \
     -v admin-maven-repo:/root/.m2 \
     maven:3.9-eclipse-temurin-17 \
     mvn -f /app/pom.xml clean package -DskipTests
 
-# Step 3: Copy WAR to deployments
+# Step 3: Copy WAR to WildFly admin deployments
 echo "[3/5] Copying WAR to deployments..."
-mkdir -p "$DEPLOY_DIR"
-cp "$PROJECT_DIR/Backend/target/temco-admin.war" "$DEPLOY_DIR/"
+mkdir -p "$DEPLOY_DIR/admin"
+cp "$PROJECT_DIR/target/temco_loan_system-1.8.1.war" "$DEPLOY_DIR/admin/temco-admin.war"
 
 # Step 4: Build Frontend
 echo "[4/5] Building Frontend..."
