@@ -66,15 +66,10 @@ public class UserLogin implements Serializable {
     private Date lastLoginAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userLoginId")
     private Collection<UserLoginHasSystemInterface> userLoginHasSystemInterfaceCollection;
-    @JoinColumns({
-        @JoinColumn(name = "general_organization_profile_id", referencedColumnName = "id"),
-        @JoinColumn(name = "general_organization_profile_id", referencedColumnName = "id"),
-        @JoinColumn(name = "general_organization_profile_id", referencedColumnName = "id")})
+    @JoinColumn(name = "general_organization_profile_id", referencedColumnName = "id")
     @ManyToOne
     private GeneralOrganizationProfile generalOrganizationProfile;
-    @JoinColumns({
-        @JoinColumn(name = "general_user_profile_id", referencedColumnName = "id"),
-        @JoinColumn(name = "general_user_profile_id", referencedColumnName = "id")})
+    @JoinColumn(name = "general_user_profile_id", referencedColumnName = "id")
     @ManyToOne
     private GeneralUserProfile generalUserProfile;
     @JoinColumn(name = "user_role_id", referencedColumnName = "id")

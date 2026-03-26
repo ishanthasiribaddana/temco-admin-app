@@ -33,3 +33,7 @@ Backend/target/
 !tsconfig.json
 !tsconfig.node.json
 instant-guard*.json
+
+# Docker local deploy artifacts & backup compose files
+docker/deployments/
+docker/**/*.bak*

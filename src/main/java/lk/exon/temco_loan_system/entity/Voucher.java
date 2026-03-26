@@ -68,14 +68,10 @@ public class Voucher implements Serializable {
     @JoinColumn(name = "bank_account_id", referencedColumnName = "id")
     @ManyToOne
     private BankAccount bankAccountId;
-    @JoinColumns({
-        @JoinColumn(name = "general_user_profile_id", referencedColumnName = "id"),
-        @JoinColumn(name = "general_user_profile_id", referencedColumnName = "id")})
+    @JoinColumn(name = "general_user_profile_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private GeneralUserProfile generalUserProfile;
-    @JoinColumns({
-        @JoinColumn(name = "login_session_id", referencedColumnName = "id"),
-        @JoinColumn(name = "login_session_id", referencedColumnName = "id")})
+    @JoinColumn(name = "login_session_id", referencedColumnName = "id")
     @ManyToOne
     private LoginSession loginSession;
     @JoinColumn(name = "org_departments_id", referencedColumnName = "id")

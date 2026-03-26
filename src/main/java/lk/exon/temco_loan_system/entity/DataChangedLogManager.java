@@ -51,9 +51,7 @@ public class DataChangedLogManager implements Serializable {
     private String comment;
     @Column(name = "referance")
     private String referance;
-    @JoinColumns({
-        @JoinColumn(name = "table_manager_id", referencedColumnName = "id"),
-        @JoinColumn(name = "table_manager_id", referencedColumnName = "id")})
+    @JoinColumn(name = "table_manager_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private TableManager tableManager;
     @JoinColumn(name = "user_login_id", referencedColumnName = "id")

@@ -51,9 +51,7 @@ public class VoucherItem implements Serializable {
     private Date enteredDate;
     @Column(name = "is_active")
     private Short isActive;
-    @JoinColumns({
-        @JoinColumn(name = "voucher_id", referencedColumnName = "id"),
-        @JoinColumn(name = "voucher_id", referencedColumnName = "id")})
+    @JoinColumn(name = "voucher_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Voucher voucher;
     @OneToMany(mappedBy = "voucherItemId")

@@ -89,7 +89,6 @@ public class GeneralOrganizationProfile implements Serializable {
     @Column(name = "header")
     private String header;
     @JoinTable(name = "interface_menu_gop_manager", joinColumns = {
-        @JoinColumn(name = "general_organization_profile_id", referencedColumnName = "id"),
         @JoinColumn(name = "general_organization_profile_id", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "interface_menu_id", referencedColumnName = "id")})
     @ManyToMany
